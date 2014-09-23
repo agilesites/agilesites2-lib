@@ -1,0 +1,15 @@
+target/
+project/target/
+core/core*/src/main/java/wcs/core/tag/
+.cache
+.classpath
+.project
+.settings/
+.metadata
+*.class
+*.log
+*.bak
+*.old
+.history
+.DS_Store
+report.xml
