@@ -58,7 +58,6 @@ public class Recommendation {
 			rec.collection(name);
 
 		rec.set(args).run(i);
-
 		log.debug("found " + e.GetList(output));
 
 		List<Id> result = new ArrayList<Id>();

@@ -7,6 +7,7 @@ import static wcs.Api.tmp;
 import static wcs.Api.toDate;
 import static wcs.Api.toInt;
 import static wcs.Api.toLong;
+import static wcs.Api.toDouble;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -481,7 +482,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	 */
 	@Override
 	public Long getLong(String attribute) {
-		throw new RuntimeException("this is not a bound asset");
+		return e.getLong(at(attribute), "value");
 	}
 
 	/**
@@ -493,9 +494,34 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	 */
 	@Override
 	public Long getLong(String attribute, int n) {
-		throw new RuntimeException("this is not a bound asset");
+		return e.getLong(at(attribute), n, "value");
+	}
+	
+	/**
+	 * Return the first attribute of the the attribute list as a double, or null
+	 * if not found
+	 * 
+	 * @param attribute
+	 * @return
+	 */
+	@Override
+	public Double getDouble(String attribute) {
+		return e.getDouble(at(attribute), "value");
 	}
 
+	/**
+	 * Return the nth attribute of the the attribute list as a double, or null if
+	 * not found
+	 * 
+	 * @param attribute
+	 * @return
+	 */
+	@Override
+	public Double getDouble(String attribute, int n) {
+		return e.getDouble(at(attribute), n, "value");
+	}
+
+	
 	/**
 	 * Return the first attribute of the the attribute list as a date, or null
 	 * if not found
@@ -507,7 +533,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	public Date getDate(String attribute) {
 		return e.getDate(at(attribute), "value");
 	}
-
+	
 	/**
 	 * Range of an asset association
 	 */

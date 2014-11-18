@@ -2,7 +2,6 @@ package wcs.api;
 
 import java.util.List;
 
-
 import COM.FutureTense.Interfaces.ICS;
 
 public interface Env extends Content {
@@ -101,6 +100,14 @@ public interface Env extends Content {
 	public abstract Long getLong(String var);
 
 	/**
+	 * Get variable as Double or null
+	 * 
+	 * @param var
+	 * @return
+	 */
+	public abstract Double getDouble(String var);
+	
+	/**
 	 * Get field as date or null
 	 * 
 	 * @param ls
@@ -108,6 +115,16 @@ public interface Env extends Content {
 	 * @return
 	 */
 	public abstract java.util.Date getDate(String ls, String field);
+
+	
+	/**
+	 * Get field as a double or null
+	 * 
+	 * @param ls
+	 * @param field
+	 * @return
+	 */
+	public abstract Double getDouble(String ls, String field);
 
 	/**
 	 * Get field as long or null
@@ -167,6 +184,27 @@ public interface Env extends Content {
 	 */
 	public abstract Long getLong(String ls, int pos);
 
+	
+	/**
+	 * Get field at given position as a double, or null
+	 * 
+	 * @param ls
+	 * @param field
+	 * @param pos
+	 * @return
+	 */
+	public abstract Double getDouble(String ls, int pos, String field);
+
+	/**
+	 * Get field "value" at given position as a double, or null
+	 * 
+	 * @param ls
+	 * @param field
+	 * @param pos
+	 * @return
+	 */
+	public abstract Double getDouble(String ls, int pos);
+
 	/**
 	 * Get field at given position as an int, or null
 	 * 
@@ -188,7 +226,7 @@ public interface Env extends Content {
 	public abstract Integer getInt(String ls, int pos);
 
 	/**
-	 * Get Error nummber
+	 * Get Error number
 	 */
 	public abstract int getError();
 

@@ -31,8 +31,8 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		.compile("^.*?/(ContentServer|BlobServer|Satellite)(/([a-z0-9]+)(/(.*))?)$");
 	private Pattern flexBlobs = Pattern.compile("^/[a-z0-9]+/(\\d{6,})/.*$");
 	private Pattern staticBlobs = Pattern.compile("^.*\\.(\\w+)$");
-	private Pattern hashedBlob = Pattern.compile("^.*_[a-h0-9]{32}\\..*$");
-	private Set staticSet;
+	private Pattern hashedBlob = Pattern.compile("^.*_([a-h0-9]{32})\\..*$");
+	private Set<String> staticSet;
 
 	public Assembler() {
 		initStaticSet("js,json,css,map,gif,png,jpg,jpeg,ico");
@@ -177,7 +177,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	// blobcol / blobkey / blobwhere / blobtable / blobnocache
 	// http://localhost:8080/ss/Satellite?blobkey=id&blobnocache=true&blobwhere=1251873748810&blobheader=image%2Fpng&blobcol=urldata&blobtable=StaticFile
 	// http://localhost:8080/ss/Satellite/urldata/id/1251873748810/StaticFile/true/hello.png
-	private Definition blobDef(URI uri, String key, boolean isSt) {
+	private Definition blobDef(URI uri, String key, boolean isSt, String mimeType) {
 	    // hashedBlob: "^.*_[a-h0-9]{32}\\..*$"
 		Simple def = new Simple(false, //
 				Definition.SatelliteContext.SATELLITE_SERVER, //
@@ -187,21 +187,25 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 				Definition.AppType.BLOB_SERVER, //
 				uri.getFragment());
 
-		boolean isHash = hashedBlob.matcher(key).find();
-		String blobwhere = key ;
+		Matcher m = hashedBlob.matcher(key);
+		boolean isHash = m.find();
+		String blobwhere = isSt? (isHash? m.group(1) : key) : key ;
 		String blobcol = isSt? "url" : "urldata";
-		String blobkey = isSt ? (isHash ? "hashfilepath" : "filepath") : "id";
+		String blobkey = isSt ? (isHash ? "hash" : "filepath") : "id";
 		String blobtable = isSt ? "Static" : "MungoBlobs" ;
+		String blobheader = mimeType;
 
 		def.setQueryStringParameter("blobcol", blobcol);
 		def.setQueryStringParameter("blobkey", blobkey);
 		def.setQueryStringParameter("blobwhere", blobwhere);
 		def.setQueryStringParameter("blobtable", blobtable);
 		def.setQueryStringParameter("ssbinary", "true");
+		//def.setQueryStringParameter("blobnocache", "true");
+		def.setQueryStringParameter("blobheader", blobheader);
 
 		if (log.trace())
-			log.trace("blobcol=%s blobkey=%s blowhere=%s blobtable=%s",
-					blobcol, blobkey, blobwhere, blobtable);
+			log.trace("/cs/BlobServer?blobcol=%s&blobkey=%s&blobwhere=%s&blobtable=%s&blobheader=%s",
+					blobcol, blobkey, blobwhere, blobtable, blobheader);
 
 		addQueryString(def, uri.getQuery());
 		return def;
@@ -221,7 +225,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		if (mFlex.find()) {
 			if (log.trace())
 				log.trace("flexBlob path=%s", path);
-			return blobDef(uri, mFlex.group(1), false);
+			return blobDef(uri, mFlex.group(1), false, MimeTypes.mimeType(path));
 		}
 		return null;
 	}
@@ -242,7 +246,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		if (m.find() && staticSet.contains(m.group(1).toLowerCase())) {
 			if (log.trace())
 				log.trace("staticBlob subpath=%s", path);
-			return blobDef(uri, path, true);
+			return blobDef(uri, path, true, MimeTypes.mimeType(path));
 		}
 		return null;
 	}

@@ -1,11 +1,5 @@
 package wcs;
 
-import java.io.CharArrayWriter;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
 import wcs.api.Arg;
 import wcs.api.Args;
 import wcs.api.Call;
@@ -15,6 +9,11 @@ import wcs.api.Id;
 import wcs.api.Log;
 import wcs.api.Model;
 import wcs.core.Sequencer;
+import java.io.CharArrayWriter;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import COM.FutureTense.Interfaces.ICS;
 import COM.FutureTense.Interfaces.IList;
 
@@ -152,8 +151,7 @@ public class Api {
 			"yyyy-MM-dd HH:mm:ss");
 
 	/**
-	 * Convert as a date, eventually the day 0 of the epoch if you cannot
-	 * convert
+	 * Convert as a date, null if error
 	 */
 	public static java.util.Date toDate(String s) {
 		if (s != null) {
@@ -167,7 +165,7 @@ public class Api {
 
 	/**
 	 * 
-	 * Convert in a long, 0l if errors
+	 * Convert in a long, null if errors
 	 * 
 	 * @param l
 	 * @return
@@ -187,7 +185,29 @@ public class Api {
 	}
 
 	/**
-	 * Convert in a int, 0 if erros
+	 * 
+	 * Convert in a double, null if errors
+	 * 
+	 * @param l
+	 * @return
+	 */
+	public static Double toDouble(String l) {
+		if (l == null)
+			return null;
+		try {
+			double dd = Double.parseDouble(l);
+			return new Double(dd);
+		} catch (NumberFormatException ex) {
+			return null;
+		} catch (Exception ex) {
+			// log.warn(ex, "unexpected");
+		}
+		return null;
+	}
+
+	
+	/**
+	 * Convert in a int, null if erros
 	 * 
 	 * @param l
 	 * @return

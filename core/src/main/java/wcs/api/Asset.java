@@ -286,6 +286,25 @@ public interface Asset extends Content {
 	 */
 	public abstract Long getLong(String attribute, int n);
 
+	
+	/**
+	 * Return the first attribute of the the attribute list as a double, or null
+	 * if not found
+	 * 
+	 * @param asset
+	 * @return
+	 */
+	public abstract Double getDouble(String attribute);
+
+	/**
+	 * Return the nth attribute of the the attribute list as a double, or null if
+	 * not found
+	 * 
+	 * @param asset
+	 * @return
+	 */
+	public abstract Double getDouble(String attribute, int n);
+	
 	/**
 	 * Return the first attribute of the the attribute list as an int, or null
 	 * if not found

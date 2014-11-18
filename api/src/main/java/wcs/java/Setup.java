@@ -1,10 +1,5 @@
 package wcs.java;
 
-import wcs.Api;
-import wcs.api.Log;
-import wcs.core.tag.AssetTag;
-import wcs.java.util.Util;
-
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
@@ -12,20 +7,20 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import wcs.Api;
+import wcs.api.Log;
+import wcs.core.tag.AssetTag;
+import wcs.java.util.Util;
+import COM.FutureTense.Interfaces.ICS;
+
 import com.fatwire.assetapi.common.AssetAccessException;
 import com.fatwire.assetapi.data.AssetData;
 import com.fatwire.assetapi.data.AssetDataManager;
 import com.fatwire.assetapi.data.AssetId;
 import com.fatwire.assetapi.data.MutableAssetData;
-import com.fatwire.assetapi.query.Condition;
-import com.fatwire.assetapi.query.ConditionFactory;
-import com.fatwire.assetapi.query.OpTypeEnum;
-import com.fatwire.assetapi.query.SimpleQuery;
 import com.fatwire.system.Session;
 import com.fatwire.system.SessionFactory;
 import com.openmarket.xcelerate.asset.AssetIdImpl;
-
-import COM.FutureTense.Interfaces.ICS;
 
 /**
  * The setup class. Invoking the setup method will initialize templates and
@@ -163,7 +158,7 @@ abstract public class Setup implements wcs.core.Setup {
 		log.debug("findByName " + name + ":" + type + " / " + subtype);
 
 		String tmp = Api.tmp();
-		if (subtype != null) {
+		if (subtype != null && subtype.trim().length() >0) {
 			AssetTag.list().type(type).field1("name").value1(name)
 					.field2("subtype").value2(subtype).list(tmp).run(ics);
 		} else {

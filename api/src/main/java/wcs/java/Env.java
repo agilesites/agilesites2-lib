@@ -5,6 +5,7 @@ import static wcs.Api.tmp;
 import static wcs.Api.toDate;
 import static wcs.Api.toInt;
 import static wcs.Api.toLong;
+import static wcs.Api.toDouble;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -199,6 +200,17 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	/*
 	 * (non-Javadoc)
 	 * 
+	 * @see wcs.java.IEnv#getDouble(java.lang.String)
+	 */
+	@Override
+	public Double getDouble(String var) {
+		return toDouble(getString(var));
+	}
+
+	
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see wcs.java.IEnv#getDate(java.lang.String, java.lang.String)
 	 */
 	@Override
@@ -206,6 +218,17 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		return toDate(getString(ls, field));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see wcs.java.IEnv#getDouble(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Double getDouble(String ls, String field) {
+		return toDouble(getString(ls, field));
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -225,7 +248,29 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	public Long getLong(String ls, String field) {
 		return toLong(getString(ls, field));
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see wcs.java.IEnv#getDouble(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Double getDouble(String ls, int field) {
+		return toDouble(getString(ls, field));
+	}
 
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see wcs.java.IEnv#getDouble(java.lang.String, int, java.lang.String)
+	 */
+	@Override
+	public Double getDouble(String ls, int pos, String field) {
+		return toDouble(getString(ls, pos, field));
+	}
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -236,6 +281,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		return toDate(getString(ls, pos, field));
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -541,6 +587,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		String ls = tmp();
 		list.type(type).list(ls);
 		list.pubid(getSiteId());
+		list.excludevoided("true");
 		int n = 1;
 		for (Arg arg : args) {
 			switch (n) {

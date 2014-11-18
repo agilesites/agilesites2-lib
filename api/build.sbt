@@ -6,21 +6,23 @@ def settingsByVersion(ver: String) = Seq(
     version := ver + "_" + v,
     scalaVersion := "2.10.4",
     crossPaths := false,
+    javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
 	unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
-    libraryDependencies ++= Seq(
-      "com.sciabarra" % "agilesites2-core" % version.value % "provided",
-      "junit" % "junit" % "4.11",
-      "com.novocode" % "junit-interface" % "0.9" % "test",
-      "log4j" % "log4j" % "1.2.16" % "provided",
-      "com.oracle.sites" % "cs-core" % ver % "provided",
-      "com.oracle.sites" % "cs" % ver % "provided",
-      "com.oracle.sites" % "xcelerate" % ver % "provided",
-      "com.oracle.sites" % "assetapi" % ver % "provided",
-      "com.oracle.sites" % "assetapi-impl" % ver % "provided",
-      "com.oracle.sites" % "jsoup" % ver % "provided",
-      "com.oracle.sites" % "xstream" % ver % "provided") ++
-      (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
+  	unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources", 
+    	libraryDependencies ++= Seq(
+         "com.sciabarra" % "agilesites2-core" % version.value % "provided",
+         "junit" % "junit" % "4.11",
+         "com.novocode" % "junit-interface" % "0.9" % "test",
+         "log4j" % "log4j" % "1.2.16" % "provided",
+         "com.oracle.sites" % "cs-core" % ver % "provided",
+         "com.oracle.sites" % "cs" % ver % "provided",
+         "com.oracle.sites" % "xcelerate" % ver % "provided",
+         "com.oracle.sites" % "assetapi" % ver % "provided", 
+         "com.oracle.sites" % "assetapi-impl" % ver % "provided",
+         "com.oracle.sites" % "jsoup" % ver % "provided",
+         "com.oracle.sites" % "xstream" % ver % "provided") ++
+         (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
  
 val btsettings = bintrayPublishSettings ++ Seq(
 	bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
@@ -31,7 +33,7 @@ val btsettings = bintrayPublishSettings ++ Seq(
 	publishArtifact in Test := false)
 
 val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
-
+    
 val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 
 val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
