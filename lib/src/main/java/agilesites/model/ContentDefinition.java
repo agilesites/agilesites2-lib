@@ -1,6 +1,5 @@
 package agilesites.model;
 
-
 public class ContentDefinition extends ParentDefinition implements HasSetData {
 	
 	private String type;

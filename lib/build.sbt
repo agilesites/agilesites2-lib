@@ -1,6 +1,6 @@
 val v = scala.io.Source.fromFile( (file("..")/"version2.txt").getAbsolutePath).getLines.next.trim
 
-def settingsByVersion(ver: String) = Seq(
+def settingsByVersion(ver: String, extraDir: File) = Seq(
     name := "agilesites2-lib",
     organization := "com.sciabarra",
     version := ver + "_" + v,
@@ -8,8 +8,8 @@ def settingsByVersion(ver: String) = Seq(
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
-	unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
-  	unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources", 
+	unmanagedSourceDirectories in Compile += extraDir / "src" / "main" / "java",
+  	unmanagedResourceDirectories in Compile += extraDir/ "src" / "main" / "resources", 
     	libraryDependencies ++= Seq(
          "junit" % "junit" % "4.11",
          "com.novocode" % "junit-interface" % "0.9" % "test",
@@ -31,11 +31,10 @@ val btsettings = bintrayPublishSettings ++ Seq(
 	publishArtifact in packageDoc := false,
 	publishArtifact in Test := false)
 
-val lib118 = project.in(file("lib118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
+val here = file(".").getAbsoluteFile
     
-val lib116 = project.in(file("lib116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
+val lib116 = project.in(file("lib116")).settings(settingsByVersion("11.1.1.6.0", here): _*).settings(btsettings: _*)
 
-val lib762 = project.in(file("lib762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
+val lib762 = project.in(file("lib762")).settings(settingsByVersion("7.5.0", here): _*).settings(btsettings: _*)
 
-val lib = project.in(file(".")).aggregate(lib118,lib116,lib762).settings(sources in Compile :=
-Seq())
+//val lib118 = project.in(file(".")).settings(settingsByVersion("11.1.1.8.0", here / "lib118" ): _*)
