@@ -1,4 +1,4 @@
-val v = scala.io.Source.fromFile( (file("..")/"version2.txt").getAbsolutePath).getLines.next.trim
+val v = "2.0-M1-SNAPSHOT"
 
 def settingsByVersion(ver: String, extraDir: File) = Seq(
     name := "agilesites2-lib",
@@ -6,7 +6,7 @@ def settingsByVersion(ver: String, extraDir: File) = Seq(
     version := ver + "_" + v,
     scalaVersion := "2.10.4",
     crossPaths := false,
-    javacOptions in Compile += "-g",
+    //javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
 	unmanagedSourceDirectories in Compile += extraDir / "src" / "main" / "java",
   	unmanagedResourceDirectories in Compile += extraDir/ "src" / "main" / "resources", 
@@ -37,4 +37,4 @@ val lib116 = project.in(file("lib116")).settings(settingsByVersion("11.1.1.6.0",
 
 val lib762 = project.in(file("lib762")).settings(settingsByVersion("7.5.0", here): _*).settings(btsettings: _*)
 
-//val lib118 = project.in(file(".")).settings(settingsByVersion("11.1.1.8.0", here / "lib118" ): _*)
+val lib118 = project.in(file(".")).settings(settingsByVersion("11.1.1.8.0", here / "lib118" ): _*)
