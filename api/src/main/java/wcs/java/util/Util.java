@@ -218,15 +218,15 @@ public class Util {
 
 			String className = br.readLine();
 			while (className != null) {
-				if(className.trim().startsWith("#"))
-					continue;
-				log.debug("read " + className);
-				try {
+				if(className.trim().startsWith("#")) {
+				  log.debug("read " + className);
+				  try {
 					if (className.trim().length() > 0)
 						classList.add(Class.forName(className));
-				} catch (Exception e) {
+				   } catch (Exception e) {
 					log.warn("oops! cannot create " + className);
-				}
+				   }
+ 				}
 				className = br.readLine();
 			}
 		} catch (Exception e) {
