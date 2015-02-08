@@ -13,3 +13,5 @@ core/core*/src/main/java/wcs/core/tag/
 .history
 .DS_Store
 report.xml
+.idea/
+*.iml
