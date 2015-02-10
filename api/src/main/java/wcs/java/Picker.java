@@ -376,6 +376,13 @@ public class Picker {
 		return this;
 	}
 
+    /**
+     * Get attribute
+     */
+    public String getAttr(String where, String attr) {
+        return top.select(where).attr(attr);
+    }
+
 	/**
 	 * Set attribute prefix for all the attributes found
 	 */

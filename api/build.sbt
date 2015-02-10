@@ -13,6 +13,9 @@ def settingsByVersion(ver: String) = Seq(
     	libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
+         "org.mockito" % "mockito-core" % "1.9.5" % "test",
+         "org.powermock" % "powermock-api-mockito" % "1.6.1" % "test",
+         "org.powermock" % "powermock-module-junit4" % "1.6.1" % "test",
          "com.novocode" % "junit-interface" % "0.9" % "test",
          "log4j" % "log4j" % "1.2.16" % "provided",
          "com.oracle.sites" % "cs-core" % ver % "provided",

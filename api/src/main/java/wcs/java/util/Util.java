@@ -218,7 +218,7 @@ public class Util {
 
 			String className = br.readLine();
 			while (className != null) {
-				if(className.trim().startsWith("#")) {
+				if(!className.trim().startsWith("#")) {
 				  log.debug("read " + className);
 				  try {
 					if (className.trim().length() > 0)
@@ -282,7 +282,6 @@ public class Util {
 	/**
 	 * Read a configuration attribute
 	 * 
-	 * @param name
 	 * @param config
 	 * @return
 	 */

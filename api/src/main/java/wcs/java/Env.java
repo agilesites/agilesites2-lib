@@ -7,13 +7,12 @@ import static wcs.Api.toInt;
 import static wcs.Api.toLong;
 import static wcs.Api.toDouble;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import wcs.Api;
 import wcs.api.Arg;
 import wcs.api.Asset;
@@ -51,7 +50,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	private boolean preview;
 
 	/**
-	 * Build the env - with this costructor you have an invalid env that still
+	 * Build the env - with this constructor you have an invalid env that still
 	 * needs to be initialized with init to be usable
 	 */
 	public Env() {
@@ -60,7 +59,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	/**
 	 * Build the env from the ICS and initialize it
 	 * 
-	 * @param ics
+	 * @param ics ICS
 	 */
 	public Env(ICS ics) {
 		init(ics);
@@ -69,7 +68,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	/**
 	 * Initialize the env - second step constructor
 	 * 
-	 * @param ics
+	 * @param ics ICS
 	 */
 	public void init(ICS ics) {
 		super.init(ics);
@@ -104,17 +103,17 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		if (ls.numRows() == 0)
 			return null;
 		try {
-			return ls.getValue(field);
-		} catch (NoSuchFieldException e) {
+            return parseEmbeddedAssets(field, ls);
+        } catch (NoSuchFieldException e) {
 			return null;
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see wcs.java.IEnv#getString(java.lang.String, int, java.lang.String)
-	 */
+    /*
+     * (non-Javadoc)
+     *
+     * @see wcs.java.IEnv#getString(java.lang.String, int, java.lang.String)
+     */
 	@Override
 	public String getString(String list, int row, String field) {
 		IList ls = ics.GetList(list);
@@ -125,8 +124,8 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		else
 			return null;
 		try {
-			return ls.getValue(field);
-		} catch (NoSuchFieldException e) {
+            return parseEmbeddedAssets(field, ls);
+        } catch (NoSuchFieldException e) {
 			return null;
 		}
 	}
@@ -618,7 +617,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		}
 
 		list.run(ics);
-		List<Id> result = new ArrayList<Id>();
+		List<Id> result = new ArrayList<>();
 		for (Integer pos : getRange(ls)) {
 			result.add(new Id(type, getLong(ls, pos, "id")));
 		}
@@ -781,13 +780,81 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	 * unpacks a var and puts it in ICS. temporary workaround for the
 	 * render:unpagkargs tag wrapper that's not working
 	 * 
-	 * @param var
-	 * @param packed
+	 * @param var var
+	 * @param packed packed
 	 */
 	public void unpackVar(String var, String packed) {
-		Map<String, String> m = new HashMap<String, String>();
+		Map<String, String> m = new HashMap<>();
 		ics.decode(packed, m);
 		String value = m.get(var);
 		ics.SetVar(var, value);
 	}
+
+
+    private String parseEmbeddedAssets(String field, IList ls) throws NoSuchFieldException {
+        String value =  ls.getValue(field);
+        if (!value.contains("_CSEMBEDTYPE_"))
+            return value;
+        log.debug(String.format("found embedded content inside %s attribute", field));
+        return renderEmbeddedContent(value);
+    }
+
+    private String renderEmbeddedContent(String text) {
+        String linkPattern = "a[href^=_CSEMBEDTYPE_]";
+        String includePattern = "span[id^=_CSEMBEDTYPE_]";
+        Document doc = Jsoup.parse(text);
+        Elements links = doc.select(linkPattern);
+        Elements includes = doc.select(includePattern);
+        log.debug(String.format("found %s embedded assets", includes.size()));
+        for (org.jsoup.nodes.Element include : includes) {
+            String includedAsset = renderEmbeddedAsset(include.attr("id"), false);
+            TextNode textNode = new TextNode(includedAsset, "");
+            include.replaceWith(textNode);
+        }
+        log.debug(String.format("found %s embedded assets", links.size()));
+        for (Element link : links) {
+            String embeddedLink = renderEmbeddedAsset(link.attr("href"), true);
+            link.attr("href", embeddedLink);
+        }
+        return doc.body().html();
+    }
+
+    private String renderEmbeddedAsset(String assetInfo, boolean renderAsLink) {
+        String toReturn = null;
+        if (assetInfo != null && !assetInfo.isEmpty()) {
+            String[] info = assetInfo.split("&");
+            String site = null;
+            String subType = null;
+            String template = null;
+            String cid = null;
+            String c = null;
+            for (String infoPart : info) {
+                if (infoPart.contains("_PAGENAME_")) {
+                    String pageNameData = infoPart.split("=")[1];
+                    String[] pageDatas = pageNameData.split("%2F");
+                    site = pageDatas[0];
+                    subType = pageDatas[1];
+                    template = pageDatas[2];
+                } else if (infoPart.contains("_cid_")) {
+                    cid = infoPart.split("=")[1];
+                } else if (infoPart.contains("_c_")) {
+                    c = infoPart.split("=")[1];
+                }
+            }
+            if (site != null && subType != null && template != null && cid != null && c != null) {
+                wcs.api.Asset assetToRender = getAsset(new Id(c, Long.valueOf(cid)));
+                if (assetToRender != null) {
+                    if (renderAsLink) {
+                        toReturn = assetToRender.getUrl();
+                    }
+                    else {
+                        toReturn = assetToRender.call(template);
+                    }
+                }
+            }
+        }
+        return toReturn;
+    }
+
+
 }
