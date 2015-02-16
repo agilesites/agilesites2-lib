@@ -4,13 +4,13 @@ def settingsByVersion(ver: String) = Seq(
     name := "agilesites2-api",
     organization := "com.sciabarra",
     version := ver + "_" + v,
-    scalaVersion := "2.10.4",
+    scalaVersion := "2.11.5",
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
-	unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
+	  unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
   	unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources", 
-    	libraryDependencies ++= Seq(
+    libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
          "org.mockito" % "mockito-core" % "1.9.5" % "test",
@@ -28,15 +28,15 @@ def settingsByVersion(ver: String) = Seq(
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
  
 val btsettings = bintrayPublishSettings ++ Seq(
-	bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
-	bintray.Keys.repository in bintray.Keys.bintray := "maven",
-	licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-	publishMavenStyle := true,
-	publishArtifact in packageDoc := false,
-	publishArtifact in Test := false)
+	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
+	   bintray.Keys.repository in bintray.Keys.bintray := "maven",
+	   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+	   publishMavenStyle := true,
+	   publishArtifact in packageDoc := false,
+	   publishArtifact in Test := false)
 
 val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
-    
+
 val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 
 val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
