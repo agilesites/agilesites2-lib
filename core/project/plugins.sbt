@@ -1,13 +1,11 @@
-/*
 resolvers += Resolver.url(
   "bintray-sbt-plugin-releases",
     url("http://dl.bintray.com/content/sciabarra/sbt-plugins/"))(
         Resolver.ivyStylePatterns)
 
 addSbtPlugin("com.sciabarra" % "agilesites2-build" % "1.9-M10")
-*/
 
-val plugin = project.in(file(".")).dependsOn( (file("..") / ".." / "agilesites2-build").toURI)
+//val plugin = project.in(file(".")).dependsOn( (file("..") / ".." / "agilesites2-build").toURI)
 
 addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "2.5.0")
 
