@@ -24,7 +24,7 @@ def settingsByVersion(ver: String) = Seq(
          "com.oracle.sites" % "xstream" % ver % "provided") ++
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
  
-val btsettings = bintrayPublishSettings ++ Seq(
+val btSettings = bintrayPublishSettings ++ Seq(
 	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
 	   bintray.Keys.repository in bintray.Keys.bintray := "maven",
 	   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
@@ -32,10 +32,10 @@ val btsettings = bintrayPublishSettings ++ Seq(
 	   publishArtifact in packageDoc := false,
 	   publishArtifact in Test := false)
 
-val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
+val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btSettings: _*)
 
-val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
+val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btSettings: _*)
 
-val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
+val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btSettings: _*)
 
 val api = project.in(file(".")).aggregate(api118,api116,api762).settings(sources in Compile := Seq())
