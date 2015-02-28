@@ -6,19 +6,24 @@ def settingsByVersion(ver: String) = Seq(
   version := ver + "_"+v,
   scalaVersion := "2.11.5",
   crossPaths := false,
-  resolvers += Resolver.mavenLocal,
-  unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
-  unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources",
+  //resolvers += Resolver.mavenLocal,
+  unmanagedSourceDirectories in Compile ++= Seq(
+        baseDirectory.value.getParentFile / "src" / "main" / "java"),
+  unmanagedResourceDirectories in Compile ++= Seq(
+       baseDirectory.value.getParentFile / "src" / "main" / "resources"),
   libraryDependencies ++= Seq(
-       "com.novocode" % "junit-interface" % "0.9" % "test",
-       "org.xeustechnologies" % "jcl-core" % "2.2.1",
+       //"com.novocode" % "junit-interface" % "0.9" % "test",
+        //"org.xeustechnologies" % "jcl-core" % "2.2.1",
+       "javax.servlet" % "servlet-api" % "2.5" % "provided",
        "log4j" % "log4j" % "1.2.16" % "provided",
        "com.oracle.sites" % "cs-core" % ver % "provided",
        "com.oracle.sites" % "cs" % ver % "provided",
        "com.oracle.sites" % "xcelerate" % ver % "provided",
        "com.oracle.sites" % "assetapi" % ver % "provided",
        "com.oracle.sites" % "assetapi-impl" % ver % "provided") ++
-       (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
+       (if(ver.startsWith("11.")) 
+         Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") 
+       else Seq()))
 
 val btSettings = bintrayPublishSettings ++ Seq(
 	bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
