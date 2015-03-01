@@ -35,13 +35,13 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	private Set<String> staticSet;
 
 	public Assembler() {
-		initStaticSet("js,json,css,map,gif,png,jpg,jpeg,ico");
+		initStaticSet(null /*"js,json,css,map,gif,png,jpg,jpeg,ico"*/);
 	}
 
 	public void initStaticSet(String exts) {
+        staticSet = new HashSet<String>();
 		if(exts!=null) {
 			StringTokenizer st = new StringTokenizer(exts, ",");
-			staticSet = new HashSet<String>();
 			while(st.hasMoreTokens())
 				staticSet.add(st.nextToken());
 		}
@@ -145,7 +145,6 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 			log.trace("%s=%s %s=%s q=%s", "site", site, "url", path, q);
 
 		return def;
-
 	}
 
 	private void addQueryString(Simple def, String query) {
@@ -200,8 +199,8 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		def.setQueryStringParameter("blobwhere", blobwhere);
 		def.setQueryStringParameter("blobtable", blobtable);
 		def.setQueryStringParameter("ssbinary", "true");
-		//def.setQueryStringParameter("blobnocache", "true");
 		def.setQueryStringParameter("blobheader", blobheader);
+        //def.setQueryStringParameter("blobnocache", "true");
 
 		if (log.trace())
 			log.trace("/cs/BlobServer?blobcol=%s&blobkey=%s&blobwhere=%s&blobtable=%s&blobheader=%s",
@@ -239,7 +238,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	 */
 	private Definition disassembleStatic(URI uri, String path) {
 	    // staticBlobs: "^.*\\.(\\w+)$"
-		if (path == null)
+		if (path == null || staticSet.isEmpty())
 			return null;
 
 		Matcher m = staticBlobs.matcher(path);
