@@ -218,8 +218,10 @@ public class Util {
 
 			String className = br.readLine();
 			while (className != null) {
-				if(className.trim().startsWith("#"))
-					continue;
+				if(className.trim().startsWith("#")) {
+                    className = br.readLine();
+                    continue;
+                }
 				log.debug("read " + className);
 				try {
 					if (className.trim().length() > 0)
