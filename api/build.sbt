@@ -13,6 +13,9 @@ def settingsByVersion(ver: String) = Seq(
     libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
+         "org.mockito" % "mockito-core" % "1.9.5" % "test",
+         "org.powermock" % "powermock-api-mockito" % "1.6.1" % "test",
+         "org.powermock" % "powermock-module-junit4" % "1.6.1" % "test",
          "com.novocode" % "junit-interface" % "0.9" % "test",
          "log4j" % "log4j" % "1.2.16" % "provided",
          "com.oracle.sites" % "cs-core" % ver % "provided",
@@ -21,10 +24,11 @@ def settingsByVersion(ver: String) = Seq(
          "com.oracle.sites" % "assetapi" % ver % "provided", 
          "com.oracle.sites" % "assetapi-impl" % ver % "provided",
          "com.oracle.sites" % "jsoup" % ver % "provided",
-         "com.oracle.sites" % "xstream" % ver % "provided") ++
+         "com.oracle.sites" % "xstream" % ver % "provided"),
+         "com.oracle.sites" % "basic" % ver % "provided") ++
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
  
-val btSettings = bintrayPublishSettings ++ Seq(
+val btsettings = bintrayPublishSettings ++ Seq(
 	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
 	   bintray.Keys.repository in bintray.Keys.bintray := "maven",
 	   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
@@ -32,10 +36,10 @@ val btSettings = bintrayPublishSettings ++ Seq(
 	   publishArtifact in packageDoc := false,
 	   publishArtifact in Test := false)
 
-val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btSettings: _*)
+val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
 
-val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btSettings: _*)
+val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 
-val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btSettings: _*)
+val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
 
 val api = project.in(file(".")).aggregate(api118,api116,api762).settings(sources in Compile := Seq())
