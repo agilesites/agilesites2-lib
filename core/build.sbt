@@ -1,6 +1,22 @@
 val v = scala.io.Source.fromFile( (file("..")/"version.txt").getAbsolutePath).getLines.next.trim
 
-def settingsByVersion(ver: String) = Seq(
+val asPackage = taskKey[Unit]("deploy the lib to destination")
+
+val asPackageTask = asPackage := {
+  val location = file("target.txt")
+  if(!location.exists)
+    throw new java.io.FileNotFoundException("Not found 'target.txt' - Please create one to specify destination.")
+  val dst = file(scala.io.Source.fromFile(location).getLines.next.trim)
+  val src = (Keys.`package` in Compile).value
+  IO.copyFile(src, dst)
+  println(s"+++ ${dst}")
+  println(
+    """ ***************************************************
+      | **** You need to restart to use the new jar!!! ****
+      | ***************************************************""".stripMargin)
+}
+
+def settingsByVersion(ver: String) = Seq(asPackageTask,
   name := "agilesites2-core",
   organization := "com.sciabarra",
   version := ver + "_"+v,
@@ -39,5 +55,4 @@ val core116 = project.in(file("core116")).enablePlugins(AgileSitesLibPlugin).set
 
 val core762 = project.in(file("core762")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("7.5.0"): _*).settings(btSettings: _*)
 
-val core = project.in(file(".")).aggregate(core118, core116, core762).
-           settings(sources in Compile := Seq())
+val core = project.in(file(".")).settings(sources in Compile := Seq())

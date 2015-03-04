@@ -1,6 +1,18 @@
 val v = scala.io.Source.fromFile( (file("..")/"version.txt").getAbsolutePath).getLines.next.trim
 
-def settingsByVersion(ver: String) = Seq(
+val asPackage = taskKey[Unit]("deploy the lib to destination")
+
+asPackage in Compile := { println("use one of the subprojects")}
+
+def settingsByVersion(ver: String) = Seq(asPackage := {
+  val location = file("target.txt")
+  if(!location.exists)
+    throw new java.io.FileNotFoundException("Not found 'target.txt' - Please create one to specify destination.")
+  val dst = file(scala.io.Source.fromFile(location).getLines.next.trim)
+  val src = (Keys.`package` in Compile).value
+  IO.copyFile(src, dst)
+  println(s"+++ ${dst}")
+},
     name := "agilesites2-api",
     organization := "com.sciabarra",
     version := ver + "_" + v,
