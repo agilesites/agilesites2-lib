@@ -10,6 +10,7 @@ import wcs.java.model.type.WCSAttributeType;
 import wcs.java.util.IdBeautifier;
 import wcs.java.util.NamingUtil;
 import wcs.java.util.StringUtils;
+import wcs.java.util.Util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -20,6 +21,11 @@ import static wcs.Api.getLog;
 public class AssetDefinitionLoader extends DefinitionLoader {
     final static Log log = getLog(AssetDefinitionLoader.class);
     private Map<Class<? extends WCSDefinition>, Set<DefinitionContainer>> defMap = new LinkedHashMap<>();
+
+    public AssetDefinitionLoader(String site) {
+        super(site);
+        initialize();
+    }
 
     /**
      * Save attributes which are being used by assets.

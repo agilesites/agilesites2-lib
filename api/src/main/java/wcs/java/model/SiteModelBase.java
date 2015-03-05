@@ -10,6 +10,7 @@ import com.fatwire.assetapi.site.SiteInfo;
 import com.fatwire.assetapi.site.SiteManager;
 import com.fatwire.system.Session;
 import com.fatwire.system.SessionFactory;
+import com.openmarket.gator.interfaces.FlexTypeManagerFactory;
 import wcs.core.tag.UserTag;
 
 import java.io.File;
@@ -66,7 +67,13 @@ public abstract class SiteModelBase {
 		startMenus = startMenuModel;
 	}
 
-	public String setup(ICS ics, String username, String password) {
+    FlexFamilyModelBase[] families = null;
+
+    public void setFlexFamilies(FlexFamilyModelBase... _flexFamilies) {
+        families = _flexFamilies;
+    }
+
+    public String setup(ICS ics, String username, String password) {
 		UserTag.login().username(username).password(password).run(ics);
 		Session ses = SessionFactory.newSession(username, password);
 		SiteManager sim = (SiteManager) ses.getManager(SiteManager.class
@@ -77,10 +84,15 @@ public abstract class SiteModelBase {
 		AssetTypeDefManager atdm = (AssetTypeDefManager) ses
 				.getManager(AssetTypeDefManager.class.getName());
 
-		StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
 		sb.append("\n=== SITE ===\n");
 		sb.append(build(ics, sim, atdm)).append("\n");
+
+        sb.append("\n=== FLEX FAMILIES ===\n");
+        for (FlexFamilyModelBase flexFamilyModel : families) {
+            sb.append(flexFamilyModel.build(ics, atdm)).append("\n");;
+        }
 
 		sb.append("\n=== ATTRIBUTES ===\n");
 		for (AttributeModelBase attributeModel : attributes)
@@ -152,7 +164,8 @@ public abstract class SiteModelBase {
 			sb.append("</ASSET>\n");
 			statics.mkdirs();
 			atdm.createAssetMakerAssetType("Static", "Static.xml",
-					sb.toString(), false, false);
+                    sb.toString(), false, false);
+            System.out.println("families:" + families);
 
 		} catch (AssetAccessException e1) {
 			// System.out.println(e1.getMessage());

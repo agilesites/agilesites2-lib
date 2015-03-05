@@ -11,6 +11,7 @@ import wcs.java.model.definition.WCSDefinition;
 import wcs.java.model.type.WCSAttributeType;
 import wcs.java.util.IdBeautifier;
 import wcs.java.util.StringUtils;
+import wcs.java.util.Util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -28,7 +29,11 @@ import static wcs.Api.getLog;
 public abstract class DefinitionLoader {
     final static Log log = getLog(DefinitionLoader.class);
 
-    protected Class<? extends WCSDefinition>[] classList;// = (Class<? extends WCSDefinition>[]) Util.classesFromResource("Telmore", "definitions.txt");
+    protected Class<? extends WCSDefinition>[] classList;
+
+    public DefinitionLoader(String site) {
+        this.classList = (Class<? extends WCSDefinition>[]) Util.classesFromResource(site, "definitions.txt");
+    }
 
     abstract public void saveAttributes(AttributeModelBase modelBase);
 

@@ -6,6 +6,7 @@ import wcs.java.model.definition.WCSDefinition;
 import wcs.java.model.type.WCSAttributeType;
 import wcs.java.util.IdBeautifier;
 import wcs.java.util.StringUtils;
+import wcs.java.util.Util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -15,7 +16,8 @@ public class PageDefinitionLoader extends DefinitionLoader {
 
     private  Map<Class<? extends WCSDefinition>, Set<DefinitionContainer>> defMap;
 
-    public void PageDefinitionLoader() {
+    public PageDefinitionLoader(String site) {
+        super(site);
         initialize();
     }
 
