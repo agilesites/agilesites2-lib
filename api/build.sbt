@@ -20,7 +20,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
-	  unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
+	unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
   	unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources", 
     libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
