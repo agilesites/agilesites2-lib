@@ -1,10 +1,7 @@
 package wcs.java.model.definition.loader;
 
 import wcs.api.Log;
-import wcs.java.model.AttributeModelBase;
-import wcs.java.model.DefinitionContainer;
-import wcs.java.model.DefinitionModelBase;
-import wcs.java.model.StartMenuModelBase;
+import wcs.java.model.*;
 import wcs.java.model.annotation.StartMenu;
 import wcs.java.model.annotation.StartMenuItem;
 import wcs.java.model.definition.WCSDefinition;
