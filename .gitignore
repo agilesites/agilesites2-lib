@@ -1,3 +1,4 @@
+webapps/
 target/
 project/target/
 core/core*/src/main/java/wcs/core/tag/
