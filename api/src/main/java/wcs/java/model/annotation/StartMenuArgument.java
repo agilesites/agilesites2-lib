@@ -9,10 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StartMenuItem {
+public @interface StartMenuArgument {
     String name();
-    StartMenuTypeEnum type();
-    String assetType();
-    StartMenuArgument[] args() default {};
-
+    String value();
 }

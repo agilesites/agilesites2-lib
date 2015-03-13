@@ -2,6 +2,7 @@ package wcs.java.model;
 
 import com.fatwire.assetapi.data.AssetData;
 import com.fatwire.assetapi.data.AssetDataManager;
+import wcs.api.Arg;
 
 public class StartMenu implements HasSetData {
 	long id;
@@ -10,6 +11,7 @@ public class StartMenu implements HasSetData {
 	String type;
 	String assetType;
 	String assetSubtype;
+    Arg[] arguments;
 
 	public StartMenu(long id, String name, String description, String type, String assetType, String assetSubtype) {
 		this.id = id;
@@ -29,7 +31,12 @@ public class StartMenu implements HasSetData {
 		this.assetSubtype = subtype;
 	}
 
-	@Override
+    public StartMenu(String type, DefinitionContainer dc, String subtype, Arg... args) {
+        this(type,dc,subtype);
+        this.arguments = args;
+    }
+
+    @Override
 	public void setData(AssetData ad) {
 	}
 

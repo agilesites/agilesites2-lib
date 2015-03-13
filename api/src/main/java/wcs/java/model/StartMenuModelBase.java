@@ -11,6 +11,11 @@ import com.openmarket.xcelerate.common.RoleList;
 import com.openmarket.xcelerate.common.SiteList;
 import com.openmarket.xcelerate.interfaces.*;
 import com.openmarket.xcelerate.startmenu.InputArgList;
+import wcs.api.Arg;
+import wcs.java.model.enums.AssetTypeNames;
+import wcs.java.model.enums.StartMenuTypeEnum;
+import wcs.java.util.IdBeautifier;
+import wcs.java.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -19,12 +24,25 @@ import java.util.List;
 /**
  * Base of attribute model classes
  * 
- * @author msciab
+ * @author jelerak
  * 
  */
 public class StartMenuModelBase extends ModelBase {
 
 	private List<StartMenu> menuItems = new LinkedList<>();
+
+    public void createDefaultStartMenus() {
+        for (AssetTypeNames assetTypeNames : AssetTypeNames.values()) {
+            String menuName = "New " + assetTypeNames.toString();
+            long id = IdBeautifier.generateUniqueStartMenuId(StringUtils.capitalize(menuName));
+            StartMenu smNew = new StartMenu(id, menuName, menuName, StartMenuTypeEnum.MENU_TYPE_NEW.toString(), assetTypeNames.toString(),"");
+            menuItems.add(smNew);
+            menuName = "Find " + assetTypeNames.toString();
+            id = IdBeautifier.generateUniqueStartMenuId(StringUtils.capitalize(menuName));
+            StartMenu smFind = new StartMenu(id, menuName, menuName, StartMenuTypeEnum.MENU_TYPE_FIND.toString(), assetTypeNames.toString(),"");
+            menuItems.add(smFind);
+        }
+    }
 
 	public StartMenu startMenu(String type, DefinitionContainer dc, String subtype) {
 		StartMenu sm = new StartMenu(type, dc, subtype);
@@ -38,6 +56,11 @@ public class StartMenuModelBase extends ModelBase {
 		return sm;
 	}
 
+    public StartMenu startMenu(String type, DefinitionContainer dc, String subtype, Arg... args) {
+        StartMenu sm = new StartMenu(type, dc, subtype, args);
+        menuItems.add(sm);
+        return sm;
+    }
 
 	@Override
 	List<HasSetData> getAssetData() {
@@ -78,10 +101,15 @@ public class StartMenuModelBase extends ModelBase {
 				startMenuItem.setLegalSites(siteList);
 				startMenuItem.setLegalRoles(roleList);
 
-				IArgumentList argumentList = new ArgumentList();
-				argumentList.set("subtype", assetSubtype);
-				startMenuItem.setArguments(argumentList);
+				IArgumentList argumentList = startMenuItem.getArguments();
 
+				//argumentList.set("subtype", assetSubtype);
+                if (menuItem.arguments != null) {
+                    for (Arg argument : menuItem.arguments) {
+                        argumentList.set(argument.name,argument.value);
+                    }
+                }
+                //startMenuItem.setArguments(argumentList);
 				IInputArgList inputArgList = new InputArgList();
 				inputArgList.add("subtype",false);
 				inputArgList.add("Group_%", false);
