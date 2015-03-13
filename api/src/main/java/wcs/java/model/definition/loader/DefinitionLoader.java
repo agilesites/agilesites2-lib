@@ -1,8 +1,10 @@
 package wcs.java.model.definition.loader;
 
+import wcs.api.Arg;
 import wcs.api.Log;
 import wcs.java.model.*;
 import wcs.java.model.annotation.StartMenu;
+import wcs.java.model.annotation.StartMenuArgument;
 import wcs.java.model.annotation.StartMenuItem;
 import wcs.java.model.definition.WCSDefinition;
 import wcs.java.model.type.WCSAttributeType;
@@ -12,6 +14,10 @@ import wcs.java.util.Util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static wcs.Api.getLog;
 
@@ -28,8 +34,14 @@ public abstract class DefinitionLoader {
 
     protected Class<? extends WCSDefinition>[] classList;
 
+    protected static Map<String, AttributeEnum> editors = new HashMap<>();
+
     public DefinitionLoader(String site) {
         this.classList = (Class<? extends WCSDefinition>[]) Util.classesFromResource(site, "definitions.txt");
+    }
+
+    public static void addEditor(AttributeEnum editorType) {
+        editors.put(editorType.getDescription(),editorType);
     }
 
     abstract public void saveAttributes(AttributeModelBase modelBase);
@@ -51,7 +63,12 @@ public abstract class DefinitionLoader {
                                     // description = name
                                     startMenu.name(),
                                     startMenu.assetType());
-                    modelbase.startMenu(startMenu.type().toString(),dc,clazz.getSimpleName());
+                    List<Arg> args = new ArrayList<>();
+                    for (StartMenuArgument startMenuArgument : startMenu.args()) {
+                        Arg arg = new Arg(startMenuArgument.name(), startMenuArgument.value());
+                        args.add(arg);
+                    }
+                    modelbase.startMenu(startMenu.type().toString(),dc,clazz.getSimpleName(),args.toArray(new Arg[]{}));
 
                 }
             }

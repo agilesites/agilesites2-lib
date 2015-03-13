@@ -20,8 +20,8 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
-	unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
-  	unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources", 
+	  unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
+    unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources",
     libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
@@ -37,6 +37,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
          "com.oracle.sites" % "assetapi-impl" % ver % "provided",
          "com.oracle.sites" % "jsoup" % ver % "provided",
          "com.oracle.sites" % "xstream" % ver % "provided",
+         "com.oracle.sites" % "gator" % ver % "provided",
          "com.oracle.sites" % "basic" % ver % "provided") ++
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
  

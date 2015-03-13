@@ -52,7 +52,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                     if(a.annotationType() == Multiple.class) mul = Attribute.Mul.MULTIPLE;
                     if(a.annotationType() == Editor.class) {
                         Editor editor = (Editor) a;
-                        editorName = new EditorAttribute(editor.description(),editor.name());
+                        editorName = editors.get(editor.value());
                     }
                     if(a.annotationType() == AssetType.class) {
                         AssetType assetType = (AssetType) a;

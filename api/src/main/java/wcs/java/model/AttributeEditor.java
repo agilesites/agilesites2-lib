@@ -16,23 +16,23 @@ public class AttributeEditor implements HasSetData {
 		this.id = dc.getId();
 		this.name = dc.toString();
 		this.description = dc.getDescription();
-		initXml(xml);
+		initXml(dc.toString(),xml);
 	}
 
 	AttributeEditor(AttributeEnum dc, String xml) {
 		this.id = dc.getId();
 		this.name = dc.toString();
 		this.description = dc.getDescription();
-		initXml(xml);
+		initXml(name, xml);
 	}
 
-	private void initXml(String xml) {
+	private void initXml(String name, String xml) {
 		if (xml.startsWith("<?xml"))
 			this.xml = xml;
 		else
 			this.xml = "<?xml version=\"1.0\"?>\n"
 					+ "<!DOCTYPE PRESENTATIONOBJECT SYSTEM \"presentationobject.dtd\">\n"
-					+ "<PRESENTATIONOBJECT NAME=\"RichText\">\n" + xml
+					+ "<PRESENTATIONOBJECT NAME=\""+name+"\">\n" + xml
 					+ "</PRESENTATIONOBJECT>";
 	}
 
