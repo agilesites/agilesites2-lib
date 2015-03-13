@@ -33,6 +33,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
          "com.oracle.sites" % "cs-core" % ver % "provided",
          "com.oracle.sites" % "cs" % ver % "provided",
          "com.oracle.sites" % "xcelerate" % ver % "provided",
+         "com.oracle.sites" % "gator" % ver % "provided",
          "com.oracle.sites" % "assetapi" % ver % "provided", 
          "com.oracle.sites" % "assetapi-impl" % ver % "provided",
          "com.oracle.sites" % "jsoup" % ver % "provided",
