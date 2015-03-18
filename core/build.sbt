@@ -22,7 +22,7 @@ def settingsByVersion(ver: String) = Seq(asPackageTask,
   version := ver + "_"+v,
   scalaVersion := "2.11.5",
   crossPaths := false,
-  //resolvers += Resolver.mavenLocal,
+  resolvers += Resolver.mavenLocal,
   unmanagedSourceDirectories in Compile ++= Seq(
         baseDirectory.value.getParentFile / "src" / "main" / "java"),
   unmanagedResourceDirectories in Compile ++= Seq(
