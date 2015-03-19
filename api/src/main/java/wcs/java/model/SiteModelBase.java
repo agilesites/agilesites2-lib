@@ -85,14 +85,14 @@ public abstract class SiteModelBase {
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("\n=== SITE ===\n");
-        sb.append(build(ics, sim, atdm)).append("\n");
-
         sb.append("\n=== FLEX FAMILIES ===\n");
         for (FlexFamilyModelBase flexFamilyModel : families) {
             sb.append(flexFamilyModel.build(ics, username, password)).append("\n");
             ;
         }
+
+        sb.append("\n=== SITE ===\n");
+        sb.append(build(ics, sim, atdm)).append("\n");
 
         sb.append("\n=== ATTRIBUTES ===\n");
         for (AttributeModelBase attributeModel : attributes)
@@ -105,11 +105,6 @@ public abstract class SiteModelBase {
         sb.append("\n=== START MENUS ===\n");
         for (StartMenuModelBase menuItemModel : startMenus)
             sb.append(menuItemModel.build(name, id, adm, ics)).append("\n");
-
-
-        // sb.append("\n=== FILTERS ===\n");
-        // for (FilterModelBase filterModel : filters)
-        // sb.append(filterModel.build(adm)).append("\n");
 
         return sb.toString();
     }
