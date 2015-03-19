@@ -1,7 +1,8 @@
 webapps/
 target/
 project/target/
-core/core*/src/main/java/wcs/core/tag/
+core/*/src/main/java/wcs/core/tag/
+webapps/
 .cache
 .classpath
 .project

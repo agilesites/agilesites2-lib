@@ -1,7 +1,7 @@
 @echo off
 cd core
-call sbt "core762/publish-local" "core762/publishM2"
+call sbt -Dver=7.5.0 "publish-local" 
 cd ..
 cd api
-call sbt "api762/publish-local" "api762/publishM2"
+call sbt -Dver=7.5.0 "publish-local"
 cd ..

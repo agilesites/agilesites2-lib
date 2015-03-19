@@ -1,6 +1,6 @@
 cd core
-sbt "core118/publish-local" 
+sbt -Dver=11.1.1.8.0 "publish-local" 
 cd ..
 cd api
-sbt "api118/publish-local" 
+sbt -Dver=11.1.1.8.0 "publish-local" 
 cd ..

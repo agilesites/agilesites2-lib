@@ -1,6 +1,6 @@
 cd core
-sbt "core762/publish-local" "core762/publishM2"
+sbt -Dver=7.5.0 "publish-local"
 cd ..
 cd api
-sbt "api762/publish-local" "api762/publishM2"
+sbt -Dver=7.5.0 "publish-local" 
 cd ..

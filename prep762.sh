@@ -1,6 +1,5 @@
-set -x
 v=7.5.0
-export jsk=${1?cs webapp}
+export jsk=${1-$PWD/webapps/cs762}
 export h="$jsk/WEB-INF/lib"
 if ! test -e  $h/systemtools-7.6.2.jar 
 then echo "No Sites $v found" ; exit
@@ -18,8 +17,5 @@ mvn install:install-file -Dfile="$h/basic.jar" -DgroupId=com.oracle.sites -Darti
 mvn install:install-file -Dfile="$h/gator.jar" -DgroupId=com.oracle.sites -DartifactId=gator -Dversion=$v -Dpackaging=jar
 
 cd core
-case "$jsk" in
-   /*) sbt "core762/sitesTagWrapperGen $jsk" ;;
-   *) sbt "core762/sitesTagWrapperGen $PWD/../$jsk" ;;
-esac
+sbt "sitesTagWrapperGen $jsk $v"
 cd ..
