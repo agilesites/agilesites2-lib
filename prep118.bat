@@ -1,5 +1,9 @@
 @echo off
+<<<<<<< HEAD
+set jsk=%CD%\webapps\cs118
+=======
 set jsk=D:\Devel\webapps\cs118
+>>>>>>> abc47f3e6bec43d653318308d38f993798e80065
 set v=11.1.1.8.0
 set h="%jsk%\WEB-INF\lib"
 if not exist %h%\systemtools-11.1.1.8.0.jar goto nofile
@@ -14,7 +18,7 @@ call mvn install:install-file -Dfile="%h%\xstream-1.4.2.jar" -DgroupId=com.oracl
 call mvn install:install-file -Dfile="%h%\basic.jar" -DgroupId=com.oracle.sites -DartifactId=basic -Dversion=%v% -Dpackaging=jar
 call mvn install:install-file -Dfile="%h%\gator.jar" -DgroupId=com.oracle.sites -DartifactId=gator -Dversion=%v% -Dpackaging=jar
 cd core
-call sbt "core118/sitesTagWrapperGen %jsk%"
+call sbt "sitesTagWrapperGen %jsk% %v%"
 cd ..
 goto end
 :nofile

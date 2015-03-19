@@ -16,12 +16,12 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
     name := "agilesites2-api",
     organization := "com.sciabarra",
     version := ver + "_" + v,
+    javacOptions ++= Seq("-g", "-Xlint:unchecked", "-source", "1.6", "-target", "1.6"),
+    scalacOptions ++= Seq("-target:jvm-1.6"),
     scalaVersion := "2.11.5",
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
-	  unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
-    unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources",
     libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
@@ -42,7 +42,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
          "com.oracle.sites" % "basic" % ver % "provided") ++
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
  
-val btsettings = bintrayPublishSettings ++ Seq(
+val btSettings = bintrayPublishSettings ++ Seq(
 	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
 	   bintray.Keys.repository in bintray.Keys.bintray := "maven",
 	   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
@@ -50,10 +50,6 @@ val btsettings = bintrayPublishSettings ++ Seq(
 	   publishArtifact in packageDoc := false,
 	   publishArtifact in Test := false)
 
-val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
-
-val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
-
-val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
-
-val api = project.in(file(".")).aggregate(api118,api116,api762).settings(sources in Compile := Seq())
+val api = project.in(file(".")).
+  settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
+  settings(btSettings: _*)

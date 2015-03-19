@@ -1,5 +1,5 @@
 @echo off
-set jsk=D:\Devel\webapps\cs116
+set jsk=%CD%\webapps\cs
 set v=11.1.1.6.0
 set h="%jsk%\WEB-INF\lib"
 if not exist %h%\systemtools-1.1.2.jar goto nofile
@@ -15,7 +15,7 @@ call mvn install:install-file -Dfile="%h%\basic.jar" -DgroupId=com.oracle.sites 
 call mvn install:install-file -Dfile="%h%\gator.jar" -DgroupId=com.oracle.sites -DartifactId=gator -Dversion=%v% -Dpackaging=jar
 
 cd core
-call sbt "core116/sitesTagWrapperGen %jsk%"
+call sbt "sitesTagWrapperGen %jsk% %v%"
 cd ..
 goto end
 :nofile

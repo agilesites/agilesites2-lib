@@ -159,14 +159,14 @@ public static %s %s() {
 
   lazy val sitesTagWrapperGenTask = sitesTagWrapperGen := {
     val args: Seq[String] = Def.spaceDelimited("<arg>").parsed
-    if (args.size == 0)
-      println("usage: siteTagWrapperGen <sites-webapp-folder>")
+    if (args.size < 2)
+      println("usage: siteTagWrapperGen <sites-webapp-folder> <target-folder-project>")
     else {
       val tldDir = file(args.head) / "WEB-INF" / "futuretense_cs"
       if (!tldDir.isDirectory)
         println("no tld founds in " + tldDir)
       else {
-        val dstDir = (if (args.size == 1) (javaSource in Compile).value else file(args(1))) / "wcs" / "core" / "tag"
+        val dstDir = file(args(1)) / "src" / "main" / "java" / "wcs" / "core" / "tag"
         for {
           tld <- tldDir.listFiles
           if tld.getName.endsWith(".tld")
