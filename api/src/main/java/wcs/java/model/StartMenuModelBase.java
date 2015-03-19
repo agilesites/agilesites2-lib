@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class StartMenuModelBase extends ModelBase {
 
-	private List<StartMenu> menuItems = new LinkedList<>();
+	private List<StartMenu> menuItems = new LinkedList<StartMenu>();
 
     public void createDefaultStartMenus() {
         for (AssetTypeNames assetTypeNames : AssetTypeNames.values()) {

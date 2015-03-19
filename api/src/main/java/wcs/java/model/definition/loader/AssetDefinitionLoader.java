@@ -20,7 +20,7 @@ import static wcs.Api.getLog;
 
 public class AssetDefinitionLoader extends DefinitionLoader {
     final static Log log = getLog(AssetDefinitionLoader.class);
-    private Map<Class<? extends WCSDefinition>, Set<DefinitionContainer>> defMap = new LinkedHashMap<>();
+    private Map<Class<? extends WCSDefinition>, Set<DefinitionContainer>> defMap = new LinkedHashMap<Class<? extends WCSDefinition>, Set<DefinitionContainer>>();
 
     public AssetDefinitionLoader(String site) {
         super(site);
@@ -165,9 +165,9 @@ public class AssetDefinitionLoader extends DefinitionLoader {
      */
     @Override
     protected void initialize() {
-        defMap = new LinkedHashMap<>();
+        defMap = new LinkedHashMap<Class<? extends WCSDefinition>, Set<DefinitionContainer>>();
         for(Class<? extends WCSDefinition> clazz : classList) {
-            Set<DefinitionContainer> definitionContainerSet = new LinkedHashSet<>();
+            Set<DefinitionContainer> definitionContainerSet = new LinkedHashSet<DefinitionContainer>();
             processFieldsFromSet(definitionContainerSet, clazz);
             defMap.put(clazz, definitionContainerSet);
         }

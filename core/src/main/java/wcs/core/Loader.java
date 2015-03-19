@@ -5,20 +5,17 @@ package wcs.core;
 // change it at your own risk.
 // **********************
 
+import org.apache.commons.io.FileUtils;
+import org.xeustechnologies.jcl.JarClassLoader;
+import wcs.api.Log;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.xeustechnologies.jcl.JarClassLoader;
-
-import wcs.api.Log;
 
 /**
  * Load a pool of jars using a classloader. It caches the classloader and check
@@ -61,8 +58,8 @@ public class Loader {
 		jarDir = dir;
 		libDir = new File(dir, "lib");
 		try {
-			tmpDir = Files.createTempDirectory("agilesites").toFile();
-			tmpDir.mkdirs();
+			tmpDir = createTempDirectory("agilesites");
+            tmpDir.mkdirs();
 		} catch (IOException e) {
 			log.error("cannot create temp dir - nothing will work...");
 		}
@@ -89,7 +86,6 @@ public class Loader {
 	/**
 	 * Build a default loader
 	 * 
-	 * @param file
 	 */
 	public Loader() {
 		jarDir = null;
@@ -104,17 +100,16 @@ public class Loader {
 	}
 
 	private boolean copy(File src, File dst) {
-		Path ps = src.toPath();
-		Path pd = dst.toPath();
-
 		try {
 			if (dst.exists())
-				Files.copy(ps, pd, StandardCopyOption.REPLACE_EXISTING);
+                FileUtils.copyFile(src, dst, false);
+				//Files.copy(ps, pd, StandardCopyOption.REPLACE_EXISTING);
 			else
-				Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
-			pd.toFile().setLastModified(System.currentTimeMillis());
+                FileUtils.copyFile(src, dst, false);
+				//Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
+			    dst.setLastModified(System.currentTimeMillis());
 			if (log.trace())
-				log.trace("copied %s", pd);
+				log.trace("copied %s", dst.getAbsolutePath());
 			return true;
 		} catch (IOException e) {
 			log.error(e, "Loader.copyJar");
@@ -256,7 +251,6 @@ public class Loader {
 	 * Return the jars to use only for the classloader if some of them has been
 	 * modified Check only once in a given interval.
 	 * 
-	 * @param jar
 	 * @return
 	 * @throws MalformedURLException
 	 */
@@ -335,4 +329,14 @@ public class Loader {
 			return null;
 		}
 	}
+
+
+    private static File createTempDirectory(String prefix) throws IOException {
+
+        String tmpDir = System.getProperty("java.io.tmpdir");
+        final File tmp = new File(tmpDir+ "/" + prefix);
+        tmp.mkdir();
+        FileUtils.forceDeleteOnExit(tmp);
+        return tmp;
+    }
 }

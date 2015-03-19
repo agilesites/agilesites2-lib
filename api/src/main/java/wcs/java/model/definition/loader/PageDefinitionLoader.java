@@ -127,9 +127,9 @@ public class PageDefinitionLoader extends DefinitionLoader {
      */
     @Override
     protected void initialize() {
-        defMap = new LinkedHashMap<>();
+        defMap = new LinkedHashMap<Class<? extends WCSDefinition>, Set<DefinitionContainer>>();
         for(Class<? extends WCSDefinition> clazz : classList) {
-            Set<DefinitionContainer> definitionContainerSet = new LinkedHashSet<>();
+            Set<DefinitionContainer> definitionContainerSet = new LinkedHashSet<DefinitionContainer>();
             processPageFieldsFromSet(definitionContainerSet, clazz);
             defMap.put(clazz, definitionContainerSet);
         }

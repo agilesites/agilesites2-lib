@@ -13,7 +13,7 @@ public class PullDownEditor extends AbstractAttributeEditor {
     private static final String PULLDOWN_ITEM_START = "<ITEM>";
     private static final String PULLDOWN_ITEM_END = "</ITEM>";
 
-    protected List<String> itemList = new ArrayList<>();
+    protected List<String> itemList = new ArrayList<String>();
 
     public PullDownEditor(String name) {
         super(name) ;

@@ -34,7 +34,7 @@ public abstract class DefinitionLoader {
 
     protected Class<? extends WCSDefinition>[] classList;
 
-    protected static Map<String, AttributeEnum> editors = new HashMap<>();
+    protected static Map<String, AttributeEnum> editors = new HashMap<String, AttributeEnum>();
 
     public DefinitionLoader(String site) {
         this.classList = (Class<? extends WCSDefinition>[]) Util.classesFromResource(site, "definitions.txt");
@@ -63,7 +63,7 @@ public abstract class DefinitionLoader {
                                     // description = name
                                     startMenu.name(),
                                     startMenu.assetType());
-                    List<Arg> args = new ArrayList<>();
+                    List<Arg> args = new ArrayList<Arg>();
                     for (StartMenuArgument startMenuArgument : startMenu.args()) {
                         Arg arg = new Arg(startMenuArgument.name(), startMenuArgument.value());
                         args.add(arg);

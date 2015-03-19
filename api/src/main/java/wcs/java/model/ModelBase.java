@@ -26,7 +26,7 @@ abstract public class ModelBase {
 
 	private boolean assetExist(AssetDataManager adm, AssetId aid)
 			throws AssetAccessException {
-		List<AssetId> ls = new ArrayList<>();
+		List<AssetId> ls = new ArrayList<AssetId>();
 		ls.add(aid);
 		try {
 			return adm.read(ls).iterator().hasNext();
@@ -77,7 +77,7 @@ abstract public class ModelBase {
 				data.setAdm(sitename, adm);
 				data.setData(ad);
 
-				List<AssetData> la = new LinkedList<>();
+				List<AssetData> la = new LinkedList<AssetData>();
 				la.add(ad);
 
 				// insert/update

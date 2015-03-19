@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DefinitionModelBase extends ModelBase {
 
-	private List<HasSetData> definitions = new LinkedList<>();
+	private List<HasSetData> definitions = new LinkedList<HasSetData>();
 	private String contentDefinitionType;
 	private String parentDefinitionType;
 	private String attributeType;

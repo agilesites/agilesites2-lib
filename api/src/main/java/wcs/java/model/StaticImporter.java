@@ -39,7 +39,7 @@ public class StaticImporter {
 		assets = "/" + wcs.core.WCS.normalizeSiteName(sitename) + "/assets.txt";
 	}
 
-	Map<String, String> mimeTypeMap = new HashMap<>();
+	Map<String, String> mimeTypeMap = new HashMap<String, String>();
 
 	// load mimetypes
 	private void loadMime(ICS ics) {

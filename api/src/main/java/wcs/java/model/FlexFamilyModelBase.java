@@ -10,7 +10,7 @@ import java.util.List;
 
 public class FlexFamilyModelBase {
 
-    private List<FlexAssetFamilyInfo> families = new LinkedList<>();
+    private List<FlexAssetFamilyInfo> families = new LinkedList<FlexAssetFamilyInfo>();
 
 
 	public FlexFamilyModelBase() {

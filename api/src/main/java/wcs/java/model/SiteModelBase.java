@@ -36,7 +36,7 @@ public abstract class SiteModelBase {
         assetTypes = Arrays.asList(_assetTypes);
     }
 
-    Map<String, List<String>> userRoles = new HashMap<>();
+    Map<String, List<String>> userRoles = new HashMap<String, List<String>>();
 
     public void addUserRoles(String user, String... _userRoles) {
         userRoles.put(user, Arrays.asList(_userRoles));
