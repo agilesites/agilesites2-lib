@@ -88,7 +88,6 @@ public abstract class SiteModelBase {
         sb.append("\n=== FLEX FAMILIES ===\n");
         for (FlexFamilyModelBase flexFamilyModel : families) {
             sb.append(flexFamilyModel.build(ics, username, password)).append("\n");
-            ;
         }
 
         sb.append("\n=== SITE ===\n");

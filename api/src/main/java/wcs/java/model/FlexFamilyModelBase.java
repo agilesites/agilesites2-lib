@@ -73,8 +73,8 @@ public class FlexFamilyModelBase {
         values.setValString("DescPGT", flexAssetFamilyInfo.getFlexParentDefInfo().getDescription());
         values.setValString("PluralPGT", flexAssetFamilyInfo.getFlexParentDefInfo().getPlural());
 
-        //FIXME read base storage dir from configuration file
-        values.setValString("defdirBase", "C:\\Projects\\agilesites2-demo\\sites\\shared\\Storage");
+        String defdirBase = ics.GetProperty("xcelerate.defaultbase","futuretense_xcel.ini", true);
+        values.setValString("defdirBase", defdirBase);
 
 
         ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/makeasset",values);

@@ -1,5 +1,5 @@
 @echo off
-set jsk=%CD%\webapps\cs
+set jsk=%CD%\webapps\cs116
 set v=11.1.1.6.0
 set h="%jsk%\WEB-INF\lib"
 if not exist %h%\systemtools-1.1.2.jar goto nofile
