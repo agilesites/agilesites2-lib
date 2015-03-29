@@ -27,11 +27,6 @@ public class FlexFamilyModelBase {
 
     public String build(ICS ics, String username, String password) {
 
-        FTValList ls = new FTValList();
-        ls.setValString("ftcmd", "login");
-        ls.setValString("username", username);
-        ls.setValString("password", password);
-        ics.CatalogManager(ls);
         StringBuilder sb = new StringBuilder();
         try {
             for (FlexAssetFamilyInfo family : families) {
@@ -54,6 +49,7 @@ public class FlexFamilyModelBase {
     public String createFlexFamily(ICS ics, FlexAssetFamilyInfo flexAssetFamilyInfo) throws AssetAccessException {
 
         FTValList values = new FTValList();
+        values.setValString("request_internal", "true");
         values.setValString("Attr", flexAssetFamilyInfo.getFlexAttributeInfo().getAssetTypeName());
         values.setValString("DescAttr", flexAssetFamilyInfo.getFlexAttributeInfo().getDescription());
         values.setValString("PluralAttr",flexAssetFamilyInfo.getFlexAttributeInfo().getPlural());
@@ -75,7 +71,6 @@ public class FlexFamilyModelBase {
 
         String defdirBase = ics.GetProperty("xcelerate.defaultbase","futuretense_xcel.ini", true);
         values.setValString("defdirBase", defdirBase);
-
 
         ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/makeasset",values);
         return " Created" ;
