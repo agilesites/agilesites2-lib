@@ -102,8 +102,9 @@ public class StartMenuModelBase extends ModelBase {
 				startMenuItem.setLegalRoles(roleList);
 
 				IArgumentList argumentList = startMenuItem.getArguments();
-
-				//argumentList.set("subtype", assetSubtype);
+                if (argumentList.get("subtype") == null) {
+                    argumentList.set("subtype", assetSubtype);
+                }
                 if (menuItem.arguments != null) {
                     for (Arg argument : menuItem.arguments) {
                         argumentList.set(argument.name,argument.value);
