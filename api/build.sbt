@@ -35,12 +35,12 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
          "com.oracle.sites" % "xcelerate" % ver % "provided",
          "com.oracle.sites" % "gator" % ver % "provided",
          "com.oracle.sites" % "assetapi" % ver % "provided", 
-         "com.oracle.sites" % "assetapi-impl" % ver % "provided",
          "com.oracle.sites" % "jsoup" % ver % "provided",
          "com.oracle.sites" % "xstream" % ver % "provided",
          "com.oracle.sites" % "gator" % ver % "provided",
          "com.oracle.sites" % "basic" % ver % "provided") ++
-         (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()))
+         (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()) ++
+         (if(!ver.startsWith("12.")) Seq("com.oracle.sites" % "assetapi-impl" % ver % "provided") else Seq()))
  
 val btSettings = bintrayPublishSettings ++ Seq(
 	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
