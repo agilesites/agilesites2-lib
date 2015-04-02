@@ -13,6 +13,7 @@ call mvn install:install-file -Dfile="%h%\jsoup-1.5.2.jar" -DgroupId=com.oracle.
 call mvn install:install-file -Dfile="%h%\xstream-1.4.2.jar" -DgroupId=com.oracle.sites -DartifactId=xstream -Dversion=%v% -Dpackaging=jar
 call mvn install:install-file -Dfile="%h%\basic.jar" -DgroupId=com.oracle.sites -DartifactId=basic -Dversion=%v% -Dpackaging=jar
 call mvn install:install-file -Dfile="%h%\gator.jar" -DgroupId=com.oracle.sites -DartifactId=gator -Dversion=%v% -Dpackaging=jar
+call mvn install:install-file -Dfile="%h%\framework.jar" -DgroupId=com.oracle.sites -DartifactId=framework -Dversion=%v% -Dpackaging=jar
 
 cd core
 call sbt "sitesTagWrapperGen %jsk% %v%"

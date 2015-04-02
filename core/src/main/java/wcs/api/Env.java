@@ -287,6 +287,11 @@ public interface Env extends Content {
 	 */
 	public abstract Asset getAsset();
 
+    /**
+     * Return the asset identified by the current c/cid
+     */
+    public abstract Asset getLocalizedAsset(String locale);
+
 	/**
 	 * Return current "c" (content type)
 	 * 

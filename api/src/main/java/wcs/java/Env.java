@@ -7,13 +7,17 @@ import static wcs.Api.toInt;
 import static wcs.Api.toLong;
 import static wcs.Api.toDouble;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.fatwire.assetapi.data.AssetDataManager;
+import com.fatwire.assetapi.data.AssetId;
+import com.fatwire.mda.*;
+import com.fatwire.system.Session;
+import com.fatwire.system.SessionFactory;
+import com.openmarket.xcelerate.asset.AssetIdImpl;
+import com.openmarket.xcelerate.asset.DimensionSetInstanceImpl;
+import com.openmarket.xcelerate.asset.FallbackDimensionFilterInstance;
+import com.openmarket.xcelerate.commands.DimensionSetTags;
 import wcs.Api;
 import wcs.api.Arg;
 import wcs.api.Asset;
@@ -24,6 +28,7 @@ import wcs.api.Log;
 import wcs.api.Range;
 import wcs.core.WCS;
 import wcs.core.tag.AssetTag;
+import wcs.core.tag.DimensionsetTag;
 import wcs.core.tag.RenderTag;
 import wcs.core.tag.SatelliteTag;
 import wcs.java.util.Util;
@@ -451,11 +456,39 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		return getAsset(getC(), getCid());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see wcs.java.IEnv#getC()
-	 */
+    @Override
+    public Asset getLocalizedAsset(String locale) {
+        String c = getC();
+        Long cid = getCid();
+        try {
+            AssetTag.load().type("Dimension").name("dim").field("name").value(locale).run(ics);
+            Dimension dim = (Dimension) ics.GetObj("dim");
+            // FIXME find a way to load the DimensionSet without using the name.
+            AssetTag.load().type("DimensionSet").name("dimSet").field("name").value("Global_DS").run(ics);
+            DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
+            DimensionFilterInstance dfi = dsi.getFilter();
+            dfi.setDimensonPreference(Util.list(dim));
+            // FIXME find a way to read the credentials from somewhere (.ini??)
+            Session session = SessionFactory.newSession("fwadmin", "xceladmin");
+            DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
+            Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
+            for (AssetId assetId : list) {
+                cid = assetId.getId();
+                c = assetId.getType();
+
+            }
+        } catch (Exception e) {
+            log.error(e, String.format("Could not find asset for locale %s", locale));
+            e.printStackTrace();
+        }
+        return getAsset(c, cid);
+    }
+
+    /*
+         * (non-Javadoc)
+         *
+         * @see wcs.java.IEnv#getC()
+         */
 	@Override
 	public String getC() {
 		return getString("c");
