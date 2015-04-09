@@ -479,7 +479,6 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
             }
         } catch (Exception e) {
             log.error(e, String.format("Could not find asset for locale %s", locale));
-            e.printStackTrace();
         }
         return getAsset(c, cid);
     }
