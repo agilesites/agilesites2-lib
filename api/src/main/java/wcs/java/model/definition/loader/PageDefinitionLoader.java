@@ -3,10 +3,9 @@ package wcs.java.model.definition.loader;
 import wcs.java.model.*;
 import wcs.java.model.annotation.*;
 import wcs.java.model.definition.WCSDefinition;
-import wcs.java.model.type.WCSAttributeType;
+import wcs.java.model.type.attribute.WCSAttributeType;
 import wcs.java.util.IdBeautifier;
 import wcs.java.util.StringUtils;
-import wcs.java.util.Util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

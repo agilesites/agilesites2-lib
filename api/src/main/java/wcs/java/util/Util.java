@@ -331,4 +331,24 @@ public class Util {
 			return name;
 		return site + "_" + name;
 	}
+
+
+    public static String normalizeBlobFilename(String filepath) {
+        filepath = filepath.replace("\\", "/");
+        String filename = filepath;
+        if (filepath.lastIndexOf("/") > 0) {
+            filename = filepath.substring(filepath.lastIndexOf("/") + 1,
+                    filepath.length());
+        }
+        int version = filename.lastIndexOf(",");
+        int extensionPos = filename.lastIndexOf(".", filename.length());
+        if (version > 0) {
+            String extension = "";
+            if (extensionPos > 0)
+                extension = filename.substring(extensionPos, filename.length());
+            return filename.substring(0, version) + extension;
+        }
+        return filename;
+    }
+
 }

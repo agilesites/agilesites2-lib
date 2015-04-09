@@ -1,12 +1,8 @@
 package wcs.java.model;
 
 import COM.FutureTense.Interfaces.ICS;
-import com.fatwire.assetapi.common.AssetAccessException;
-import com.fatwire.assetapi.common.AssetNotExistException;
 import com.fatwire.assetapi.data.AssetDataManager;
-import com.fatwire.assetapi.data.AssetId;
 import com.openmarket.basic.interfaces.AssetException;
-import com.openmarket.xcelerate.common.ArgumentList;
 import com.openmarket.xcelerate.common.RoleList;
 import com.openmarket.xcelerate.common.SiteList;
 import com.openmarket.xcelerate.interfaces.*;
@@ -17,12 +13,11 @@ import wcs.java.model.enums.StartMenuTypeEnum;
 import wcs.java.util.IdBeautifier;
 import wcs.java.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Base of attribute model classes
+ * Base of start menu classes
  * 
  * @author jelerak
  * 
@@ -69,7 +64,6 @@ public class StartMenuModelBase extends ModelBase {
 
 	@Override
 	public String build(String sitename, long baseid, AssetDataManager adm, ICS ics) {
-		System.out.println("building start menus");
 		ISiteList siteList  =new SiteList();
 		siteList.addSite(Long.parseLong(ics.GetSSVar("pubid")));
 		IRoleList roleList = new RoleList();
@@ -110,7 +104,6 @@ public class StartMenuModelBase extends ModelBase {
                         argumentList.set(argument.name,argument.value);
                     }
                 }
-                //startMenuItem.setArguments(argumentList);
 				IInputArgList inputArgList = new InputArgList();
 				inputArgList.add("subtype",false);
 				inputArgList.add("Group_%", false);

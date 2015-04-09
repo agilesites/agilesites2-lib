@@ -2,19 +2,18 @@ package wcs.java.model.definition.loader;
 
 import wcs.api.Log;
 import wcs.java.model.*;
+import wcs.java.model.annotation.AssetAttribute;
 import wcs.java.model.annotation.FlexFamily;
-import wcs.java.model.annotation.StartMenu;
-import wcs.java.model.annotation.StartMenuItem;
-import wcs.java.model.definition.WCSDefinition;
+import wcs.java.model.annotation.FlexParent;
+import wcs.java.model.annotation.FlexType;
 import wcs.java.model.definition.WCSFlexFamily;
-import wcs.java.model.definition.WCSFlexFamilyInfo;
-import wcs.java.model.type.WCSAttributeType;
-import wcs.java.util.IdBeautifier;
-import wcs.java.util.StringUtils;
+import wcs.java.model.type.WCSFlexAssetType;
+import wcs.java.model.type.WCSFlexFamilyInfo;
+import wcs.java.model.type.attribute.WCSAttributeType;
 import wcs.java.util.Util;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 
 import static wcs.Api.getLog;
 
@@ -39,6 +38,30 @@ public class FlexFamilyLoader {
                 info.flexParent(a.flexParent(), a.flexParent(), a.flexParent() + "s");
                 info.flexParentDef(a.flexParentDefinition(), a.flexParentDefinition(), a.flexParentDefinition() + "s");
                 modelbase.addFlexFamilyData(info);
+                for (Field f : clazz.getDeclaredFields()) {
+                    // Loop through field attributes
+                    for (Annotation ann : f.getAnnotations()) {
+                        if (ann.annotationType() == FlexParent.class) {
+                            FlexParent flexParentAnnotation = (FlexParent) ann;
+                            WCSFlexAssetType flexType = new WCSFlexAssetType(
+                                    f.getName(),
+                                    flexParentAnnotation.description(),
+                                    flexParentAnnotation.pluralForm(),
+                                    info.getFlexDefInfo().getAssetTypeName());
+                            modelbase.addFlexParent(flexType);
+                        }
+                        if (ann.annotationType() == FlexType.class) {
+                            FlexType flexTypeAnnotation = (FlexType) ann;
+                            WCSFlexAssetType flexType = new WCSFlexAssetType(
+                                    f.getName(),
+                                    flexTypeAnnotation.description(),
+                                    flexTypeAnnotation.pluralForm(),
+                                    flexTypeAnnotation.parentType(),
+                                    info.getFlexDefInfo().getAssetTypeName());
+                            modelbase.addFlexType(flexType);
+                        }
+                    }
+                }
             }
         }
     }

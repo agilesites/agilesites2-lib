@@ -10,8 +10,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface FlexType {
-    String parentType();
+public @interface FlexParent {
     String description();
     String pluralForm();
 }

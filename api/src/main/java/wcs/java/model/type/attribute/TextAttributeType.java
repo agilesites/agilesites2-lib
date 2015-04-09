@@ -1,4 +1,4 @@
-package wcs.java.model.type;
+package wcs.java.model.type.attribute;
 
 import wcs.java.model.enums.AttributeTypeEnum;
 

@@ -5,12 +5,9 @@ import wcs.java.model.*;
 import wcs.java.model.annotation.*;
 import wcs.java.model.annotation.ParentDefinition;
 import wcs.java.model.definition.WCSDefinition;
-import wcs.java.model.enums.Constants;
-import wcs.java.model.type.WCSAttributeType;
+import wcs.java.model.type.attribute.WCSAttributeType;
 import wcs.java.util.IdBeautifier;
-import wcs.java.util.NamingUtil;
 import wcs.java.util.StringUtils;
-import wcs.java.util.Util;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -42,6 +39,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                 WCSAttributeType type = null;
                 String attrDesc = null;
                 String assetTypeName = null;
+                String[] assetSubtypeNames = null;
                 AttributeEnum editorName = null;
                 for(Annotation a : f.getAnnotations()) {
                     if(a.annotationType() == AssetAttribute.class) {
@@ -57,6 +55,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                     if(a.annotationType() == AssetType.class) {
                         AssetType assetType = (AssetType) a;
                         assetTypeName = assetType.value();
+                        assetSubtypeNames = assetType.subtype();
                     }
                 }
                 // If type hasn't been specified, we don't know which type to create, continue to next field
@@ -67,7 +66,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                                 attrDesc,
                                 type.getAttributeName(),
                                 mul,
-                                editorName, assetTypeName);
+                                editorName, assetTypeName, assetSubtypeNames);
                 defList.add(dc);
             }
         }
@@ -75,7 +74,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
             // TODO Add another method for only supplying dc object, so it doesn't have to be specified 3 times.
             Attribute a = modelBase.attribute(dc.getType().toString(), dc, dc.getMul(), true, true);
             // Set AssetType is set
-            if(dc.getAssetType() != null) a.setAssetType(dc.getAssetType().toString());
+            if(dc.getAssetType() != null) a.setAssetType(dc.getAssetType() ,dc.getAssetSubtypes());
             // Set Editor if set
             if(dc.getEditor() != null) a.setEditor(dc.getEditor());
         }

@@ -7,7 +7,7 @@ import wcs.java.model.annotation.StartMenu;
 import wcs.java.model.annotation.StartMenuArgument;
 import wcs.java.model.annotation.StartMenuItem;
 import wcs.java.model.definition.WCSDefinition;
-import wcs.java.model.type.WCSAttributeType;
+import wcs.java.model.type.attribute.WCSAttributeType;
 import wcs.java.util.IdBeautifier;
 import wcs.java.util.StringUtils;
 import wcs.java.util.Util;

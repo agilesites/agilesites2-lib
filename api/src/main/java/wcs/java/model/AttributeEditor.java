@@ -42,7 +42,7 @@ public class AttributeEditor implements HasSetData {
 				+ ".xml", //
 				xml.getBytes());
 		ad.getAttributeData("urlxml").setData(blob);
-		System.out.println(blob);
+		//System.out.println(blob);
 	}
 
 	@Override

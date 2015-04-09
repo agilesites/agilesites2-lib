@@ -10,9 +10,11 @@ public enum AssetTypeNames {
     PAGE_ATTRIBUTE("PageAttribute"),
     PAGE_DEFINITION("PageDefinition"),
     PAGE("Page"),
+    DIMENSION("Dimension"),
+    DIMENSION_SET("DimensionSet"),
     ADV_COLS("AdvCols"),
     SEGMENTS("Segments"),
-    SCALAR_VARS("ScalarVals");
+    SCALAR_VALS("ScalarVals");
 
     private String desc;
 

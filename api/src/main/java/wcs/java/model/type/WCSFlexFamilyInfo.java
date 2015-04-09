@@ -1,4 +1,4 @@
-package wcs.java.model.definition;
+package wcs.java.model.type;
 
 import com.fatwire.assetapi.def.AssetTypeInfo;
 import com.fatwire.assetapi.def.FlexAssetFamilyInfo;

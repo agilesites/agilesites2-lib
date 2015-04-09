@@ -17,6 +17,7 @@ public class DefinitionContainer {
     private boolean required;
     private AttributeEnum editor;
     private String assetType;
+    private String assetSubtypes[];
 
     /**
      * Constructor for asset definition
@@ -28,6 +29,28 @@ public class DefinitionContainer {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    /**
+     * Constructor for attribute definition with editor
+     * @param id the attribute id
+     * @param name the attribute name
+     * @param description the attribute description
+     * @param type the attribute type
+     * @param mul single|multiple
+     * @param editor the attribute editor name
+     * @param assetType the asset type name
+     * @param assetSubtypes the asset subtype names
+     */
+    public DefinitionContainer(long id, String name, String description, AttributeTypeEnum type, Attribute.Mul mul, AttributeEnum editor, String assetType, String... assetSubtypes) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.type = type;
+        this.mul = mul;
+        this.editor = editor;
+        this.assetType = assetType;
+        this.assetSubtypes = assetSubtypes;
     }
 
     /**
@@ -163,5 +186,9 @@ public class DefinitionContainer {
 
     public void setAssetType(String assetType) {
         this.assetType = assetType;
+    }
+
+    public String[] getAssetSubtypes() {
+        return assetSubtypes;
     }
 }
