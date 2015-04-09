@@ -461,15 +461,15 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
         String c = getC();
         Long cid = getCid();
         try {
-            AssetTag.load().type("Dimension").name("dim").field("name").value(locale).run(ics);
+			AssetTag.load().type("Dimension").name("dim").field("name").value(locale).run(ics);
             Dimension dim = (Dimension) ics.GetObj("dim");
-            // FIXME find a way to load the DimensionSet without using the name.
-            AssetTag.load().type("DimensionSet").name("dimSet").field("name").value("Global_DS").run(ics);
+            // FIXME find a way to load the correct DimensionSet instead of getting just the first
+			Asset dimSet = findOne("DimensionSet");
+			AssetTag.load().type("DimensionSet").name("dimSet").objectid(""+dimSet.getCid()).run(ics);
             DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
             DimensionFilterInstance dfi = dsi.getFilter();
             dfi.setDimensonPreference(Util.list(dim));
-            // FIXME find a way to read the credentials from somewhere (.ini??)
-            Session session = SessionFactory.newSession("fwadmin", "xceladmin");
+            Session session = SessionFactory.getSession(ics());
             DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
             Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
             for (AssetId assetId : list) {
