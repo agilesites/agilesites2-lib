@@ -17,6 +17,7 @@ mvn install:install-file -Dfile="$h/sites-app$vv.jar" -DgroupId=com.oracle.sites
 mvn install:install-file -Dfile="$h/jsoup-1.5.2.jar" -DgroupId=com.oracle.sites -DartifactId=jsoup -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/xstream-1.4.2.jar" -DgroupId=com.oracle.sites -DartifactId=xstream -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/framework.jar" -DgroupId=com.oracle.sites -DartifactId=framework -Dversion=$v -Dpackaging=jar
+mvn install:install-file -Dfile="$h/assetframework.jar" -DgroupId=com.oracle.sites -DartifactId=assetframework -Dversion=$v -Dpackaging=jar
 
 cd core
 sbt "sitesTagWrapperGen $jsk $v"
