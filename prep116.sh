@@ -18,6 +18,7 @@ mvn install:install-file -Dfile="$h/xstream-1.4.2.jar" -DgroupId=com.oracle.site
 mvn install:install-file -Dfile="$h/basic.jar" -DgroupId=com.oracle.sites -DartifactId=basic -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/gator.jar" -DgroupId=com.oracle.sites -DartifactId=gator -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/framework.jar" -DgroupId=com.oracle.sites -DartifactId=framework -Dversion=$v -Dpackaging=jar
+mvn install:install-file -Dfile="$h/cs-cache-1.2.2.jar" -DgroupId=com.oracle.sites -DartifactId=cs-cache -Dversion=$v -Dpackaging=jar
 
 cd core
 sbt "sitesTagWrapperGen $jsk $v"
