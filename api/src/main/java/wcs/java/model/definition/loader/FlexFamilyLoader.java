@@ -47,7 +47,10 @@ public class FlexFamilyLoader {
                                     f.getName(),
                                     flexParentAnnotation.description(),
                                     flexParentAnnotation.pluralForm(),
-                                    info.getFlexDefInfo().getAssetTypeName());
+                                    info.getFlexDefInfo().getAssetTypeName(),
+                                    info.getFlexParentDefInfo().getAssetTypeName());
+                            flexType.setAttributeType(info.getFlexAttributeInfo().getAssetTypeName());
+                            flexType.setFilterType(info.getFlexFilterInfo().getAssetTypeName());
                             modelbase.addFlexParent(flexType);
                         }
                         if (ann.annotationType() == FlexType.class) {
@@ -58,6 +61,8 @@ public class FlexFamilyLoader {
                                     flexTypeAnnotation.pluralForm(),
                                     flexTypeAnnotation.parentType(),
                                     info.getFlexDefInfo().getAssetTypeName());
+                            flexType.setAttributeType(info.getFlexAttributeInfo().getAssetTypeName());
+                            flexType.setFilterType(info.getFlexFilterInfo().getAssetTypeName());
                             modelbase.addFlexType(flexType);
                         }
                     }

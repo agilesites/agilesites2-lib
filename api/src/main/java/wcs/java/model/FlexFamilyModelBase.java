@@ -2,11 +2,17 @@ package wcs.java.model;
 
 import COM.FutureTense.Interfaces.FTValList;
 import COM.FutureTense.Interfaces.ICS;
+import COM.FutureTense.Interfaces.Utilities;
 import com.fatwire.assetapi.common.AssetAccessException;
 import com.fatwire.assetapi.def.AssetTypeDef;
 import com.fatwire.assetapi.def.AssetTypeDefManager;
 import com.fatwire.assetapi.def.AssetTypeDefManagerImpl;
 import com.fatwire.assetapi.def.FlexAssetFamilyInfo;
+import com.openmarket.assetframework.assettypemanager.AssetTypeManager;
+import com.openmarket.basic.interfaces.AssetException;
+import com.openmarket.gator.fatypemanager.FlexAssetTypeManager;
+import com.openmarket.gator.fatypemanager.FlexGroupTypeManager;
+import com.openmarket.xcelerate.commands.AssetDispatcher;
 import wcs.java.model.type.WCSFlexAssetType;
 
 import java.util.LinkedList;
@@ -45,7 +51,7 @@ public class FlexFamilyModelBase {
         flexParents.add(data);
     }
 
-    public String build(ICS ics, String username, String password) {
+    public String build(ICS ics) {
 
         StringBuilder sb = new StringBuilder();
         try {
@@ -84,44 +90,107 @@ public class FlexFamilyModelBase {
             //e.printStackTrace();
         }
         if (def == null) {
-            FTValList values = new FTValList();
-            values.setValString("request_internal", "true");
-            values.setValString("op", "make");
-            values.setValString("DescFilt", flexType.getDescription());
-            values.setValString("Filt", flexType.getName());
-            values.setValString("PluralFilt",flexType.getPluralForm());
-            values.setValString("def", flexType.getContentDef());
-            values.setValString("member", "asset");
-            values.setValString("parent", flexType.getParent());
-            values.setValString("cs_environment", "standard");
-            values.setValString("cs_formmode", "WCM");
-            ics.CallElement("OpenMarket/Xcelerate/Admin/FlexFamily",values);
+            try {
+                FTValList values = new FTValList();
+                values.setValString("request_internal", "true");
+                values.setValString("assetname", flexType.getName());
+                values.setValString("AssetDescription", flexType.getDescription());
+                values.setValString("AssetPlural",flexType.getPluralForm());
+                values.setValString("AssetChild", "T");
+                values.setValString("assetlogic", "com.openmarket.assetframework.complexasset.ComplexAsset");
+                ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/addAssetType", values);
+
+                AssetTypeManager atm = new AssetTypeManager(ics);
+                atm.setAsset(flexType.getName(), "com.openmarket.gator.flexassets.FlexAssetManager", "Catalog");
+
+                values = new FTValList();
+                values.setValString("request_internal", "true");
+                values.setValString("elementtype", "FlexAssets");
+                values.setValString("AssetType", flexType.getName());
+                ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/addElements", values);
+
+                values = new FTValList();
+                values.setValString("request_internal", "true");
+                values.setValString("sqltype", "FlexAssets");
+                values.setValString("AssetType", flexType.getName());
+                ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/addSQL", values);
+
+
+                FlexAssetTypeManager fatm = new FlexAssetTypeManager(ics);
+                fatm.add(flexType.getName(), flexType.getParent(), flexType.getContentDef(), flexType.getAttributeType(), flexType.getFilterType());
+
+                String defdirBase = ics.GetProperty("xcelerate.defaultbase","futuretense_xcel.ini", true);
+                values = new FTValList();
+                values.setValString("TYPE", flexType.getName());
+                values.setValString("ACL", "Browser,SiteGod,xceleditor,xceladmin");
+                values.setValString("DIR", Utilities.fileName(defdirBase, flexType.getName()));
+                AssetDispatcher.Install(ics, values);
+
+            } catch (AssetException e) {
+                e.printStackTrace();
+                return (" Error: " + e.getMessage());
+            }
+            return " Created" ;
+        } else {
+            // TODO
+            return " Updated";
         }
-        return " Created" ;
     }
 
     private String addFlexParent(ICS ics, WCSFlexAssetType flexType) {
         AssetTypeDef def = null;
+        AssetTypeDefManager atdm = new AssetTypeDefManagerImpl(ics);
         try {
-            AssetTypeDefManager atdm = new AssetTypeDefManagerImpl(ics);
             def = atdm.findByName(flexType.getName(), null);
         } catch (AssetAccessException e) {
             //e.printStackTrace();
         }
         if (def == null) {
-            FTValList values = new FTValList();
-            values.setValString("request_internal", "true");
-            values.setValString("op", "make");
-            values.setValString("DescFilt", flexType.getDescription());
-            values.setValString("Filt", flexType.getName());
-            values.setValString("PluralFilt",flexType.getPluralForm());
-            values.setValString("member", "parent");
-            values.setValString("parent", flexType.getParent());
-            values.setValString("cs_environment", "standard");
-            values.setValString("cs_formmode", "WCM");
-            ics.CallElement("OpenMarket/Xcelerate/Admin/FlexFamily",values);
+            try {
+                FTValList values = new FTValList();
+                values.setValString("request_internal", "true");
+                values.setValString("assetname", flexType.getName());
+                values.setValString("AssetDescription", flexType.getDescription());
+                values.setValString("AssetPlural",flexType.getPluralForm());
+                values.setValString("AssetChild", "T");
+                values.setValString("assetlogic", "com.openmarket.assetframework.complexasset.ComplexAsset");
+                ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/addAssetType", values);
+
+                AssetTypeManager atm = new AssetTypeManager(ics);
+                atm.setAsset(flexType.getName(), "com.openmarket.gator.flexgroups.FlexGroupManager", "Catalog");
+
+                values = new FTValList();
+                values.setValString("request_internal", "true");
+                values.setValString("elementtype", "FlexGroups");
+                values.setValString("AssetType", flexType.getName());
+                ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/addElements", values);
+
+                values = new FTValList();
+                values.setValString("request_internal", "true");
+                values.setValString("sqltype", "FlexGroups");
+                values.setValString("AssetType", flexType.getName());
+                ics.CallElement("OpenMarket/Gator/FlexibleAssets/AssetMaker/addSQL", values);
+
+                FlexGroupTypeManager fgtm = new FlexGroupTypeManager(ics);
+                fgtm.add(flexType.getName(), flexType.getContentDef(), flexType.getAttributeType(), flexType.getFilterType());
+
+                String defdirBase = ics.GetProperty("xcelerate.defaultbase","futuretense_xcel.ini", true);
+                values = new FTValList();
+                values.setValString("TYPE", flexType.getName());
+                values.setValString("ACL", "Browser,SiteGod,xceleditor,xceladmin");
+                values.setValString("DIR", Utilities.fileName(defdirBase, flexType.getName()));
+                AssetDispatcher.Install(ics, values);
+
+
+            } catch (AssetException e) {
+                e.printStackTrace();
+                return (" Error: " + e.getMessage());
+            }
+            return " Created" ;
+        } else {
+            // TODO
+            return " Updated";
         }
-        return " Created" ;
     }
 
     public String createFlexFamily(ICS ics, FlexAssetFamilyInfo flexAssetFamilyInfo) throws AssetAccessException {

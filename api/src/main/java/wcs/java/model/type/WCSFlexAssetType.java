@@ -9,6 +9,24 @@ public class WCSFlexAssetType {
     String pluralForm;
     String parent;
     private String contentDef;
+    private String attributeType;
+    private String filterType;
+
+    public String getAttributeType() {
+        return attributeType;
+    }
+
+    public void setAttributeType(String attributeType) {
+        this.attributeType = attributeType;
+    }
+
+    public String getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(String filterType) {
+        this.filterType = filterType;
+    }
 
     public WCSFlexAssetType(String name, String description, String pluralForm, String parent) {
         this.name = name;
