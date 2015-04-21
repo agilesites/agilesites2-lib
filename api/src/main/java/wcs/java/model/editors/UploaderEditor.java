@@ -25,13 +25,17 @@ public class UploaderEditor extends AbstractAttributeEditor {
 
     public String getConfigElements() {
         StringBuilder stringBuilder =  new StringBuilder();
-        stringBuilder.append(" MAXVALUES=\"").append(maxValues)
-                .append("\" MAXFILESIZE=\"").append(maxFileSize)
-                .append("\" FILETYPES=\"").append(fileTypes)
-                .append("\" MINWIDTH=\"").append(minWidth)
-                .append("\" MAXWIDTH=\"").append(maxWidth)
-                .append("\" MINHEIGHT=\"").append(minHeight)
-                .append("\" MAXHEIGHT=\"").append(maxHeight).append("\"");
+        stringBuilder.append(" MAXFILESIZE=\"").append(maxFileSize).append("\"")
+                .append(" FILETYPES=\"").append(fileTypes).append("\"")
+                .append(" MINWIDTH=\"").append(minWidth).append("\"")
+                .append(" MAXWIDTH=\"").append(maxWidth).append("\"")
+                .append(" MINHEIGHT=\"").append(minHeight).append("\"")
+                .append(" MAXHEIGHT=\"").append(maxHeight).append("\"");
+
+        if (maxValues > 0) {
+            stringBuilder.append(" MAXVALUES=\"").append(maxValues).append("\"");
+        }
+
 
         return stringBuilder.toString();
     }
@@ -85,9 +89,14 @@ public class UploaderEditor extends AbstractAttributeEditor {
         public UploaderEditorBuilder fileTypes(String... fileTypes) {
             StringBuilder sb = new StringBuilder();
             for (String fileType : fileTypes) {
-                sb.append(fileType).append(",");
+                sb.append(fileType).append(";");
             }
-            sb.deleteCharAt(sb.length() -1);
+            if (sb.length() > 0) {
+                sb.deleteCharAt(sb.length() -1);
+            }
+            else {
+                sb.append("*.*");
+            }
             uploaderEditor.fileTypes = sb.toString();
             return this;
         }

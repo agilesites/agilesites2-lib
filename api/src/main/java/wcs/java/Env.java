@@ -465,19 +465,21 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
             Dimension dim = (Dimension) ics.GetObj("dim");
             // FIXME find a way to load the correct DimensionSet instead of getting just the first
 			Asset dimSet = findOne("DimensionSet");
-			AssetTag.load().type("DimensionSet").name("dimSet").objectid(""+dimSet.getCid()).run(ics);
-            DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
-            DimensionFilterInstance dfi = dsi.getFilter();
-            dfi.setDimensonPreference(Util.list(dim));
-            Session session = SessionFactory.getSession(ics());
-            DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
-            Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
-            for (AssetId assetId : list) {
-                cid = assetId.getId();
-                c = assetId.getType();
+			if (dimSet != null) {
+				AssetTag.load().type("DimensionSet").name("dimSet").objectid("" + dimSet.getCid()).run(ics);
+				DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
+				DimensionFilterInstance dfi = dsi.getFilter();
+				dfi.setDimensonPreference(Util.list(dim));
+				Session session = SessionFactory.getSession(ics());
+				DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
+				Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
+				for (AssetId assetId : list) {
+                    cid = assetId.getId();
+                    c = assetId.getType();
 
-            }
-        } catch (Exception e) {
+                }
+			}
+		} catch (Exception e) {
             log.error(e, String.format("Could not find asset for locale %s", locale));
         }
         return getAsset(c, cid);
