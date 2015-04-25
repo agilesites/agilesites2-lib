@@ -55,12 +55,13 @@ public class WCS {
 	}
 
 	/**
-	 * Dispatch requests
+	 * Dispatch requests old style - use dispatch with the poll interval set in the jsp
 	 * 
 	 * @param ics
 	 * @param clazz
 	 * @return
 	 */
+    @Deprecated
 	public static String dispatch(ICS ics, String clazz) {
 		log.trace("[WCS.dispatch] Dispatching...");
 		try {
@@ -77,7 +78,31 @@ public class WCS {
 		}
 	}
 
-	/**
+    /**
+     * Dispatch requests
+     *
+     * @param ics
+     * @param clazz
+     * @return
+     */
+    public static String dispatch(ICS ics, String clazz, int interval) {
+        log.trace("[WCS.dispatch] Dispatching...");
+        try {
+            Dispatcher dispatcher = Dispatcher.getDispatcher(ics);
+            if (dispatcher != null)
+                return dispatcher.dispatch(ics, clazz, interval);
+            else {
+                log.error("[WCS.dispatch] Not found jar.");
+                return "[WCS.dispatch] Not found jar";
+            }
+        } catch (Exception ex) {
+            log.warn(ex, "[WCS.dispatch]Cannot dispatch!");
+            return "[WCS.dispatch] Cannot dispatch: " + ex.getMessage();
+        }
+    }
+
+
+    /**
 	 * Deploy
 	 * 
 	 * @param ics

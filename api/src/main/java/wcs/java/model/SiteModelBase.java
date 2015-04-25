@@ -180,26 +180,6 @@ public abstract class SiteModelBase {
             sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"255\" />\n");
             sb.append("            <INPUTFORM TYPE=\"UPLOAD\" WIDTH=\"64\" LINKTEXT=\"Url\" REQUIRED=\"YES\"/>\n");
             sb.append("        </PROPERTY>\n");
-            /*
-            sb.append("        <PROPERTY NAME=\"FILEPATH\" DESCRIPTION=\"FILEPATH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"512\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"FILE PATH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"FILE PATH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"HASH\" DESCRIPTION=\"HASH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"32\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"HASHFILEPATH\" DESCRIPTION=\"HASHFILEPATH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"512\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH FILE PATH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH FILE PATH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            */
             sb.append("    </PROPERTIES>\n");
             sb.append("</ASSET>\n");
             jars.mkdirs();
