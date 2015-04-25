@@ -37,8 +37,8 @@ val btsettings = bintrayPublishSettings ++ Seq(
 
 val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
 
-val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
+//val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 
-val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
+//val api762 = project.in(file("api762")).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
 
-val api = project.in(file(".")).aggregate(api118,api116,api762).settings(sources in Compile := Seq())
+//val api = project.in(file(".")).aggregate(api118,api116,api762).settings(sources in Compile := Seq())

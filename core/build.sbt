@@ -36,12 +36,11 @@ val btsettings = bintrayPublishSettings ++ Seq(
 
 val core118 = project.in(file("core118")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
 
-val core116 = project.in(file("core116")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
+//val core116 = project.in(file("core116")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 
-val core762 = project.in(file("core762")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
+//val core762 = project.in(file("core762")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
 
-
-val core = project.in(file(".")).aggregate(core118, core116, core762).
-           settings(sources in Compile := Seq(),
-           		    libraryDependencies ++= Seq("log4j" % "log4j" % "1.2.16" % "provided",
-                                               "org.xeustechnologies" % "jcl-core" % "2.2.1"))
+//val core = project.in(file(".")).aggregate(core118, core116, core762).
+//           settings(sources in Compile := Seq(),
+//           		    libraryDependencies ++= Seq("log4j" % "log4j" % "1.2.16" % "provided",
+//                                               "org.xeustechnologies" % "jcl-core" % "2.2.1"))
