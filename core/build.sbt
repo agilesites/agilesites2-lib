@@ -16,8 +16,9 @@ def settingsByVersion(ver: String) = bintrayPublishSettings ++ Seq(
   unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
   unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources",
   libraryDependencies ++= Seq(
-  	   "com.novocode" % "junit-interface" % "0.9" % "test",
- 	     "org.xeustechnologies" % "jcl-core" % "2.2.1",
+       // "com.novocode" % "junit-interface" % "0.9" % "test",
+       // "org.xeustechnologies" % "jcl-core" % "2.2.1",
+       "commons-io" % "commons-io" % "1.4",
        "log4j" % "log4j" % "1.2.16" % "provided",
        "com.oracle.sites" % "cs-core" % ver % "provided",
        "com.oracle.sites" % "cs" % ver % "provided",
@@ -41,6 +42,6 @@ val core118 = project.in(file("core118")).enablePlugins(AgileSitesLibPlugin).set
 //val core762 = project.in(file("core762")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("7.5.0"): _*).settings(btsettings: _*)
 
 //val core = project.in(file(".")).aggregate(core118, core116, core762).
-//           settings(sources in Compile := Seq(),
-//           		    libraryDependencies ++= Seq("log4j" % "log4j" % "1.2.16" % "provided",
-//                                               "org.xeustechnologies" % "jcl-core" % "2.2.1"))
+//   settings(sources in Compile := Seq(),
+//   libraryDependencies ++= Seq("log4j" % "log4j" % "1.2.16" % "provided",
+//                               "org.xeustechnologies" % "jcl-core" % "2.2.1"))
