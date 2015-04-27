@@ -19,6 +19,8 @@ public class CSElement extends AssetSetup {
 	private Class<?> elementClass;
 	private String elementName;
 
+    private int poll = 1000;
+
 	/**
 	 * Create a CSElement invoking the given elementClass
 	 * 
@@ -39,6 +41,16 @@ public class CSElement extends AssetSetup {
 		this.elementName = elementName;
 	}
 
+    /**
+     * Set poll interval
+     * @param poll
+     * @return
+     */
+    public CSElement poll(int poll) {
+        this.poll = poll;
+        return this;
+    }
+
 	/**
 	 * Create a cselement with a chained asset setup
 	 * 
@@ -58,7 +70,7 @@ public class CSElement extends AssetSetup {
 	}
 
 	private String template(String clazz) {
-		return Util.getResource("/Streamer.jsp").replaceAll("%CLASS%", clazz);
+		return Util.getResource("/Streamer.jsp").replaceAll("%CLASS%", clazz).replaceAll("%POLL%", ""+poll);
 	}
 
 	void setData(MutableAssetData data) {

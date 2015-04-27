@@ -783,9 +783,9 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		list.add(arg("CID", cid.toString()));
 		list.add(arg("TTYPE", ttype));
 		list.add(arg("TID", tid));
-		for (Arg arg : args) {
-			list.add(arg);
-		}
+        for (Arg arg : args) {
+            list.add(arg);
+        }
 		return Api.call("RENDER:CALLTEMPLATE", list);
 	}
 
