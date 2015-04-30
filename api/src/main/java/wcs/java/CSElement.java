@@ -19,7 +19,9 @@ public class CSElement extends AssetSetup {
 	private Class<?> elementClass;
 	private String elementName;
 
-    private int poll = 1000;
+    // default poll interval for cselements is 0
+    // assumed they are called by cached elements
+    private int poll = 0;
 
 	/**
 	 * Create a CSElement invoking the given elementClass

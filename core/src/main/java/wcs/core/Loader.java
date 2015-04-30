@@ -38,7 +38,7 @@ public class Loader {
     private long jarTimeStamp;
 
     private ClassLoader parentClassLoader;
-    private ClassLoader currentClassLoader;
+    private ClassLoader currentClassLoader = null;
     private File currentSpoolDir;
 
     public String getCurrentSpoolDir() {
@@ -51,9 +51,9 @@ public class Loader {
      * @param dir where locate the jars
      * @param cl  parent classloader
      */
-    public Loader(File dir, File jarAssetDir, final ClassLoader cl) {
+    public Loader(File dir, File assetDir, final ClassLoader cl) {
         jarDir = dir;
-        jarAssetDir = jarAssetDir;
+        jarAssetDir = assetDir;
         libDir = new File(dir, "lib");
         try {
             tmpDir = createTempDirectory("agilesites");
@@ -66,7 +66,7 @@ public class Loader {
         cleanup();
 
         parentClassLoader = cl;
-        currentClassLoader = parentClassLoader;
+        currentClassLoader = null;
         currentSpoolDir = null;
         lastCheck = System.currentTimeMillis();
     }
@@ -101,7 +101,7 @@ public class Loader {
                 //Files.copy(ps, pd, StandardCopyOption.REPLACE_EXISTING);
             else
                 FileUtils.copyFile(src, dst, false);
-            //Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
+                //Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
             dst.setLastModified(System.currentTimeMillis());
             if (log.trace())
                 log.trace("copied %s", dst.getAbsolutePath());
@@ -167,9 +167,17 @@ public class Loader {
     public ClassLoader getClassLoader(int interval) {
 
         // get jars if somehing changed
-        File[] jars = getJarsIfSomeIsModifiedAfterInterval(interval);
-        if (jars == null)
-            return currentClassLoader;
+        File[] jars;
+        if(currentClassLoader==null)
+          jars = getJarsIfSomeIsModifiedAfterInterval(0);
+        else
+            jars = getJarsIfSomeIsModifiedAfterInterval(interval);
+
+        if(jars==null)
+            if(currentClassLoader==null)
+                return parentClassLoader;
+            else
+                return currentClassLoader;
 
         // update classloader
         synchronized (this) {

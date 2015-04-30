@@ -28,7 +28,9 @@ public class Template extends AssetSetup {
 	private String rootelement;
 	private String fileelement;
 	private String folderelement;
-    private int poll = -1;
+
+    // default poll interval for cached elements is 1000
+    private int poll = 1000;
 
 	private String clazz;
 	private String cscache;
@@ -154,14 +156,10 @@ public class Template extends AssetSetup {
 		// log.info(Util.dump(data));
 		// String rootelement = getSubtype() + "/" + getName();
 
-        // if poll is not set, defaults to 0 if cached otherwise to 1000 if uncached
+        // if cached, put poll interval to 0
         int mypoll = poll;
-        if(mypoll==-1) {
-            if(sscache.equals("false") && cscache.equals("false")) {
-                mypoll = 1000;
-            } else {
-                mypoll = 0;
-            }
+        if(!sscache.equals("false") || !cscache.equals("false")) {
+            mypoll = 0;
         }
 
 		final String body = template(clazz, mypoll);

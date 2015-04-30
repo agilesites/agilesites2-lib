@@ -27,9 +27,6 @@ public class Dispatcher {
      */
     static Dispatcher getDispatcher(ICS ics) {
 
-
-        //XXX qui bisogna metterci...
-
         if (dispatcher == null) {
             String jarPath = ics.GetProperty("agilesites.dir");
 
@@ -50,8 +47,8 @@ public class Dispatcher {
 
             File jarDir = new File(jarPath);
             File assetJarDir = new File(new File(storagePath), "Jar");
-            jarDir.mkdirs();
-            assetJarDir.mkdirs();
+            //jarDir.mkdirs();
+            //assetJarDir.mkdirs();
             log.debug("[Dispatcher.getDispatcher] dir=%s asset=%s defaultpoll=%d", jarDir, assetJarDir,
                     defaultPollInterval);
             dispatcher = new Dispatcher(jarDir, assetJarDir);

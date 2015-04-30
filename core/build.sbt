@@ -1,5 +1,7 @@
 import agilesites.build.AgileSitesLibPlugin
 
+import agilesites.config.AgileSitesConfigPlugin
+
 val v = scala.io.Source.fromFile( (file("..")/"version.txt").getAbsolutePath).getLines.next.trim
 
 def settingsByVersion(ver: String) = bintrayPublishSettings ++ Seq(
@@ -35,7 +37,7 @@ val btsettings = bintrayPublishSettings ++ Seq(
 	publishArtifact in packageDoc := false,
 	publishArtifact in Test := false)
 
-val core118 = project.in(file("core118")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
+val core118 = project.in(file("core118")).enablePlugins(AgileSitesLibPlugin,AgileSitesConfigPlugin).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
 
 //val core116 = project.in(file("core116")).enablePlugins(AgileSitesLibPlugin).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 

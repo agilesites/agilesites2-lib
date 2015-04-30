@@ -35,7 +35,7 @@ val btsettings = bintrayPublishSettings ++ Seq(
 	   publishArtifact in packageDoc := false,
 	   publishArtifact in Test := false)
 
-val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*)
+val api118 = project.in(file("api118")).settings(settingsByVersion("11.1.1.8.0"): _*).settings(btsettings: _*).enablePlugins(AgileSitesConfigPlugin)
 
 //val api116 = project.in(file("api116")).settings(settingsByVersion("11.1.1.6.0"): _*).settings(btsettings: _*)
 
