@@ -312,7 +312,8 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	/**
 	 * Return the specified asset. It does not log any dependencies - use this
 	 * when you just need to get an url.
-	 * 
+	 * @param attribute the attribute name
+     * @param type the asset type
 	 */
 	public wcs.api.Asset getAsset(String attribute, String type) {
 		return e.getAsset(type, getCid(attribute));
@@ -321,6 +322,9 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	/**
 	 * Return the specified asset at the nth position. It does not log any
 	 * dependencies - use this when you just need to get an url.
+     * @param attribute the attribute name
+     * @param type the asset type
+     * @param i the attribute position
 	 */
 	public wcs.api.Asset getAsset(String attribute, String type, int i) {
 		return e.getAsset(type, getCid(attribute, i));

@@ -42,6 +42,12 @@ public abstract class SiteModelBase {
         userRoles.put(user, Arrays.asList(_userRoles));
     }
 
+    BasicAssetModelBase[] basicAssets = null;
+
+    public void setBasicAssets(BasicAssetModelBase... basicAssetsModels) {
+        basicAssets = basicAssetsModels;
+    }
+
     AttributeModelBase[] attributes = null;
 
     public void setAttributes(AttributeModelBase... attributeModels) {
@@ -85,6 +91,11 @@ public abstract class SiteModelBase {
 
         StringBuilder sb = new StringBuilder();
 
+        sb.append("\n=== BASIC ASSETS ===\n");
+        for (BasicAssetModelBase basicAsset : basicAssets) {
+            sb.append(basicAsset.build(ics, atdm, name)).append("\n");
+        }
+
         sb.append("\n=== FLEX FAMILIES ===\n");
         for (FlexFamilyModelBase flexFamilyModel : families) {
             sb.append(flexFamilyModel.build(ics)).append("\n");
@@ -120,102 +131,6 @@ public abstract class SiteModelBase {
         for (String user : userRoles.keySet())
             site.setUserRoles(user, userRoles.get(user));
 
-        File base = new File(ics.GetProperty("xcelerate.defaultbase",
-                "futuretense_xcel.ini", true));
-
-        try {
-            File statics = new File(base, "Static");
-            StringBuilder sb = new StringBuilder();
-            sb.append("<?xml version=\"1.0\" ?>\n");
-            sb.append("<ASSET NAME=\"Static\" DESCRIPTION=\"Static\" DEFDIR=\"").append(statics.getAbsolutePath()).append("\">\n");
-            sb.append("    <PROPERTIES>\n");
-            sb.append("        <PROPERTY NAME=\"URL\" DESCRIPTION=\"URL\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"255\" />\n");
-            sb.append("            <INPUTFORM TYPE=\"UPLOAD\" WIDTH=\"64\" LINKTEXT=\"Url\" REQUIRED=\"YES\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"FILEPATH\" DESCRIPTION=\"FILEPATH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"512\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"FILE PATH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"FILE PATH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"HASH\" DESCRIPTION=\"HASH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"32\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"HASHFILEPATH\" DESCRIPTION=\"HASHFILEPATH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"512\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH FILE PATH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH FILE PATH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"MIMETYPE\" DESCRIPTION=\"MIMETYPE\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"255\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"MIMETYPE\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"MIMETYPE\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("    </PROPERTIES>\n");
-            sb.append("</ASSET>\n");
-            statics.mkdirs();
-
-            atdm.createAssetMakerAssetType("Static", "Static.xml",
-                    sb.toString(), false, false);
-            msg.append("AssetMaker: Static\n");
-        } catch (AssetAccessException e1) {
-            // System.out.println(e1.getMessage());
-            // e1.printStackTrace();
-            msg.append("AssetMaker: Static: Error: ").append(e1.getMessage()).append("\n");
-        }
-
-        try {
-            File jars = new File(base, "Jar");
-            StringBuilder sb = new StringBuilder();
-            sb.append("<?xml version=\"1.0\" ?>\n");
-            sb.append("<ASSET NAME=\"Jar\" DESCRIPTION=\"Jar\" DEFDIR=\"").append(jars.getAbsolutePath()).append("\">\n");
-            sb.append("    <PROPERTIES>\n");
-            sb.append("        <PROPERTY NAME=\"URL\" DESCRIPTION=\"URL\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"255\" />\n");
-            sb.append("            <INPUTFORM TYPE=\"UPLOAD\" WIDTH=\"64\" LINKTEXT=\"Url\" REQUIRED=\"YES\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            /*
-            sb.append("        <PROPERTY NAME=\"FILEPATH\" DESCRIPTION=\"FILEPATH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"512\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"FILE PATH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"FILE PATH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"HASH\" DESCRIPTION=\"HASH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"32\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            sb.append("        <PROPERTY NAME=\"HASHFILEPATH\" DESCRIPTION=\"HASHFILEPATH\">\n");
-            sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"512\"/>\n");
-            sb.append("            <INPUTFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH FILE PATH\" REQUIRED=\"YES\"/>\n");
-            sb.append("            <SEARCHFORM TYPE=\"TEXT\" DESCRIPTION=\"HASH FILE PATH\"/>\n");
-            sb.append("            <SEARCHRESULTS INCLUDE=\"TRUE\"/>\n");
-            sb.append("        </PROPERTY>\n");
-            */
-            sb.append("    </PROPERTIES>\n");
-            sb.append("</ASSET>\n");
-            jars.mkdirs();
-            atdm.createAssetMakerAssetType("Jar", "Jar.xml",
-                    sb.toString(), false, false);
-
-            //msg.append(sb.toString());
-            msg.append("AssetMaker: Jar\n");
-
-        } catch (AssetAccessException e1) {
-            // System.out.println(e1.getMessage());
-            // e1.printStackTrace();
-            msg.append("AssetMaker: Jar: Error: ").append(e1.getMessage()).append("\n");
-        }
-
-        // System.out.println("asset types:"+assetTypes);
         try {
             boolean exist = false;
             for (SiteInfo sif : sim.list())
