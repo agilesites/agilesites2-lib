@@ -11,6 +11,8 @@ public class CheckboxesEditor extends AbstractAttributeEditor {
     private static final String CHECKBOXES_END = "</CHECKBOXES>";
     private static final String CHECKBOXES_ITEM_START = "<ITEM>";
     private static final String CHECKBOXES_ITEM_END = "</ITEM>";
+    private static final String QUERYASSET_START = "<QUERYASSETNAME>";
+    private static final String QUERYASSET_END = "</QUERYASSETNAME>";
 
     protected List<String> itemList = new ArrayList<String>();
     protected String layout = LayoutEnum.VERTICAL.toString();
@@ -19,11 +21,17 @@ public class CheckboxesEditor extends AbstractAttributeEditor {
         super(name) ;
     }
 
+    protected String queryAssetName;
+
     public String toXml() {
         StringBuilder builder = new StringBuilder();
         builder.append("<CHECKBOXES LAYOUT= '").append(layout).append("'>");
-        for (String item: itemList){
-            builder.append(CHECKBOXES_ITEM_START).append(item).append(CHECKBOXES_ITEM_END);
+        if (queryAssetName != null && queryAssetName.length() > 0){
+            builder.append(QUERYASSET_START).append(queryAssetName).append(QUERYASSET_END);
+        } else {
+            for (String item: itemList){
+                builder.append(CHECKBOXES_ITEM_START).append(item).append(CHECKBOXES_ITEM_END);
+            }
         }
         builder.append(CHECKBOXES_END);
         return builder.toString();
@@ -48,6 +56,11 @@ public class CheckboxesEditor extends AbstractAttributeEditor {
 
         public CheckboxesEditorBuilder setLayout(LayoutEnum layout) {
             checkboxesEditor.layout = layout.toString();
+            return this;
+        }
+
+        public CheckboxesEditorBuilder setQueryAssetName(String queryAssetName) {
+            checkboxesEditor.queryAssetName = queryAssetName;
             return this;
         }
 
