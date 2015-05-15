@@ -9,20 +9,12 @@ public class RichTextEditor extends AbstractAttributeEditor  {
     private String widthValue = "400";
     private String heightValue = "600";
     private String allowedAssetTypesValue;
+    private String toolbarValue;
+    private String configValue;
+    private String configObjValue;
 
-    private RichTextEditor(RichTextEditorBuilder builder) {
-        super(builder.name);
-        if(null != builder.heightValue){
-            this.heightValue = builder.heightValue;
-        }
-        if(null != builder.widthValue){
-            this.widthValue = builder.widthValue;
-        }
-        if(null != builder.allowedAssetTypesValue){
-            this.allowedAssetTypesValue= builder.allowedAssetTypesValue;
-        }
-
-
+    private RichTextEditor(String name) {
+        super(name);
     }
 
     public String toXml() {
@@ -31,11 +23,20 @@ public class RichTextEditor extends AbstractAttributeEditor  {
 
     public String getConfigElements() {
         StringBuilder stringBuilder =  new StringBuilder();
-        stringBuilder.append(" WIDTH=\"").append(widthValue)
-                .append("\" HEIGHT=\"").append(heightValue);
+        stringBuilder.append(" WIDTH=\"").append(widthValue).append("\"")
+                .append(" HEIGHT=\"").append(heightValue).append("\"");
 
         if (allowedAssetTypesValue != null) {
-            stringBuilder.append("\" ALLOWEDASSETTYPES=\"").append(allowedAssetTypesValue).append("\" ");
+            stringBuilder.append(" ALLOWEDASSETTYPES=\"").append(allowedAssetTypesValue).append("\"");
+        }
+        if (toolbarValue != null) {
+            stringBuilder.append(" TOOLBAR=\"").append(toolbarValue).append("\"");
+        }
+        if (configValue != null) {
+            stringBuilder.append(" CONFIG=\"").append(configValue).append("\"");
+        }
+        if (configObjValue != null) {
+            stringBuilder.append(" CONFIGOBJ=\"").append(configObjValue).append("\"");
         }
 
         return stringBuilder.toString();
@@ -48,32 +49,59 @@ public class RichTextEditor extends AbstractAttributeEditor  {
 
     public static class RichTextEditorBuilder {
 
-        private String name;
-        private String widthValue;
-        private String heightValue;
-        private String allowedAssetTypesValue;
+        private RichTextEditor richTextEditor;
 
         private RichTextEditorBuilder(String name) {
-            this.name = name;
+            richTextEditor = new RichTextEditor(name);
         }
 
         public RichTextEditorBuilder widthValue(String widthValue) {
-            this.widthValue = widthValue;
+            richTextEditor.widthValue = widthValue;
             return this;
         }
 
         public RichTextEditorBuilder heightValue(String heightValue) {
-            this.heightValue = heightValue;
+            richTextEditor.heightValue = heightValue;
             return this;
         }
         public RichTextEditorBuilder allowedAssetTypesValue(String allowedAssetTypesValue) {
-            this.allowedAssetTypesValue= allowedAssetTypesValue;
+            richTextEditor.allowedAssetTypesValue= allowedAssetTypesValue;
+            return this;
+        }
+
+        public RichTextEditorBuilder toolbarValue(String toolbarValue) {
+            richTextEditor.toolbarValue = toolbarValue;
+            return this;
+        }
+
+        public RichTextEditorBuilder configValue(String configValue) {
+            richTextEditor.configValue = configValue;
+            return this;
+        }
+
+        public RichTextEditorBuilder configObjValue(String configObjValue) {
+            richTextEditor.configObjValue = configObjValue;
             return this;
         }
 
         public RichTextEditor build() {
-            return new RichTextEditor(this);
+            return richTextEditor;
         }
 
     }
+    public enum YesNoEnum {
+        YES("YES"),
+        NO("NO");
+
+        private String value;
+
+        private YesNoEnum(String value) {
+            this.value = value;
+        }
+
+        public String toString() {
+            return value;
+        }
+    }
+
 }
