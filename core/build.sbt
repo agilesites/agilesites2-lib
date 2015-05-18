@@ -53,6 +53,7 @@ def settingsByVersion(ver: String) = Seq(asPackageTask,
        else Seq())
   )
 
+/*
 val btSettings = bintrayPublishSettings ++ Seq(
   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
   bintray.Keys.repository in bintray.Keys.bintray := "maven",
@@ -60,8 +61,25 @@ val btSettings = bintrayPublishSettings ++ Seq(
   publishMavenStyle := true,
   publishArtifact in packageDoc := false,
   publishArtifact in Test := false)
+*/
+
+val publishSttings = Seq(
+  publishMavenStyle := true,
+  pomIncludeRepository := { _ => false },
+  publishTo := {
+    val nexus = "http://nexus.sciabarra.com/"
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "content/repositories/snapshots")
+    else
+      Some("releases"  at nexus + "content/repositories/releases")
+  },
+  publishArtifact in packageDoc := false,
+  publishArtifact in Test := false,
+  licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
+  credentials += Credentials(Path.userHome / ".ivy2" / "credentials")
+)
 
 val core = project.in(file(".")).
   enablePlugins(AgileSitesLibPlugin).
   settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
-  settings(btSettings: _*)
+  settings(publishSttings: _*)
