@@ -4,6 +4,9 @@ val asPackage = taskKey[Unit]("deploy the lib to destination")
 
 asPackage in Compile := { println("use one of the subprojects")}
 
+resolvers += "Nexus-sciabarra-releases" at "http://nexus.sciabarra.com/content/repositories/releases"
+resolvers += "Nexus-sciabarra-snapshots" at "http://nexus.sciabarra.com/content/repositories/snapshots"
+
 def settingsByVersion(ver: String) = Seq(asPackage := {
   val location = file("target.txt")
   if(!location.exists)
