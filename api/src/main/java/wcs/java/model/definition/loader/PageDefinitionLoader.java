@@ -36,6 +36,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
                 String attrDesc = null;
                 AttributeEnum editorName = null;
                 String assetTypeName = null;
+                String[] assetSubtypeNames = null;
                 for(Annotation a : f.getAnnotations()) {
                     if(a.annotationType() == PageAssetAttribute.class) {
                         PageAssetAttribute xAttr = (PageAssetAttribute) a;
@@ -50,6 +51,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
                     if(a.annotationType() == AssetType.class) {
                         AssetType assetType = (AssetType) a;
                         assetTypeName = assetType.value();
+                        assetSubtypeNames = assetType.subtype();
                     }
                 }
                 // If type hasn't been specified, we don't know which type to create, continue to next field
@@ -61,7 +63,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
                                 type.getAttributeName(),
                                 mul,
                                 editorName,
-                                assetTypeName);
+                                assetTypeName, assetSubtypeNames);
                 defList.add(dc);
             }
         }
@@ -69,7 +71,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
             // TODO Add another method for only supplying dc object, so it doesn't have to be specified 3 times.
             Attribute a = modelBase.attribute(dc.getType().toString(), dc, dc.getMul(), true, true);
             // Set AssetType is set
-            if(dc.getAssetType() != null) a.setAssetType(dc.getAssetType().toString());
+            if(dc.getAssetType() != null) a.setAssetType(dc.getAssetType() ,dc.getAssetSubtypes());
             // Add editor if set
             if(dc.getEditor() != null) a.setEditor(dc.getEditor());
         }

@@ -88,7 +88,7 @@ public class StartMenuModelBase extends ModelBase {
 				startMenuItem.setItemType(menuItem.getType());
 				startMenuItem.setAssetType(menuItem.getAssetType());
 				String assetSubtype = menuItem.getAssetSubtype();
-				if (!assetSubtype.startsWith(prefix))
+				if (!assetSubtype.startsWith(prefix) && assetSubtype.length() > 0)
 					assetSubtype = prefix + assetSubtype;
 
 				startMenuItem.setAssetSubtype(assetSubtype);
@@ -101,6 +101,9 @@ public class StartMenuModelBase extends ModelBase {
                 }
                 if (menuItem.arguments != null) {
                     for (Arg argument : menuItem.arguments) {
+                        IArgument arg = argumentList.get(argument.name);
+                        if (arg != null)
+                            argumentList.delete(argument.name);
                         argumentList.set(argument.name,argument.value);
                     }
                 }

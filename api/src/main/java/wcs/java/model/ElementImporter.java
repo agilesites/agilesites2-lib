@@ -27,10 +27,10 @@ public class ElementImporter {
 	}
 
 
-	public String setup(ICS ics, String username, String password) throws Exception {
+	public String setup(ICS ics, String username, String password, String sitename) throws Exception {
 
         StringBuilder sb = new StringBuilder();
-        Class<?>[] catalogClasses = Util.classesFromResource("Telmore", "catalog.txt");
+        Class<?>[] catalogClasses = Util.classesFromResource(sitename, "catalog.txt");
         ElementCatalog ec = new ElementCatalog(ics, username, password);
         for (Class<?> clazz : catalogClasses) {
             Method m = clazz.getDeclaredMethod("setup");

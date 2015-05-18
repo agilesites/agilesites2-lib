@@ -100,17 +100,19 @@ String site = c.getOnce("SITE");
 String tname = c.getOnce("TNAME");
 String ttype = c.getOnce("TTYPE");
 String tid = c.getOnce("TID");
+String endrow = c.getOnce("ENDROW");
 %><insite:slotlist 
   field='<%= field %>'
   assettype='<%= assettype %>'
   assetid='<%= assetid %>'
-><ics:listloop 
+><ics:listloop
   listname='<%= listname %>'
-><ics:listget 
-  listname='<%= listname %>' 
+  endrow='<%= endrow %>'
+><ics:listget
+  listname='<%= listname %>'
   fieldname='value'
-  output='<%= output %>' 
-/><insite:calltemplate 
+  output='<%= output %>'
+/><insite:calltemplate
   c='<%= childtype %>'
   cid='<%= ics.GetVar(output) %>' 
   site='<%= site %>'

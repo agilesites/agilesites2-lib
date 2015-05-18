@@ -427,14 +427,28 @@ public interface Asset extends Content {
 	 * @param field
 	 * @param template
 	 * @param type
-	 * @param i
 	 * @param args
 	 * @return
 	 */
 	public abstract String slotList(String field, String type, String template,
 			Arg... args) throws IllegalArgumentException;
 
-	/**
+
+    /**
+     * Render a list of slots pointed by the asset field using the the specified
+     * template.
+     *
+     * @param field
+     * @param maxrows max number of slots to render
+     * @param template
+     * @param type
+     * @param args
+     * @return
+     */
+     public abstract String slotList(String field, int maxrows, String type, String template,
+                    Arg... args) throws IllegalArgumentException;
+
+    /**
 	 * Render an empty slot.
 	 */
 	public abstract String slotEmpty(String attribute, String type,

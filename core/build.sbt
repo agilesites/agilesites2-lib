@@ -35,9 +35,11 @@ def settingsByVersion(ver: String) = Seq(asPackageTask,
        "javax.servlet" % "servlet-api" % "2.5" % "provided",
        "log4j" % "log4j" % "1.2.16" % "provided",
        "commons-io" % "commons-io" % "1.4",
+       "org.apache.lucene" % "lucene-core" % "2.9.2" % "provided",
        "com.oracle.sites" % "gator" % ver % "provided",
        "com.oracle.sites" % "cs-core" % ver % "provided",
        "com.oracle.sites" % "cs" % ver % "provided",
+       "com.oracle.sites" % "lucene-search" % ver % "provided",
        "com.oracle.sites" % "xcelerate" % ver % "provided",
        "com.oracle.sites" % "assetapi" % ver % "provided") ++
        (if(!ver.startsWith("12."))

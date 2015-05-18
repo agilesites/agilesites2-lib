@@ -312,7 +312,8 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	/**
 	 * Return the specified asset. It does not log any dependencies - use this
 	 * when you just need to get an url.
-	 * 
+	 * @param attribute the attribute name
+     * @param type the asset type
 	 */
 	public wcs.api.Asset getAsset(String attribute, String type) {
 		return e.getAsset(type, getCid(attribute));
@@ -321,6 +322,9 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	/**
 	 * Return the specified asset at the nth position. It does not log any
 	 * dependencies - use this when you just need to get an url.
+     * @param attribute the attribute name
+     * @param type the asset type
+     * @param i the attribute position
 	 */
 	public wcs.api.Asset getAsset(String attribute, String type, int i) {
 		return e.getAsset(type, getCid(attribute, i));
@@ -748,11 +752,13 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 			list.add(arg("CHILDTYPE", type));
 			if (n < 0) {
 				list.add(arg("LISTNAME", at(attribute)));
+                list.add(arg("ENDROW", String.valueOf(Math.abs(n))));
 				return Api.call("INSITE:CALLTEMPLATELOOP", list);
 			} else {
 				Long icid = (Long) ifn(getCid(attribute, n), 0l);
 				list.add(arg("CHILDID", icid.toString()));
 				list.add(arg("INDEX", Integer.toString(n)));
+                list.add(arg("ENDROW", Integer.toString(-1)));
 				return Api.call("INSITE:CALLTEMPLATE", list);
 			}
 		} catch (Exception ex) {
@@ -808,6 +814,27 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 			Arg... args) throws IllegalArgumentException {
 		return insiteCall(type, template, attribute, -1, null, args);
 	}
+
+    /**
+     * Render a list of slots pointed by the asset field using the the specified
+     * template.
+     *
+     * Slot type is configured in Config. You need a field of the same name of
+     * the field specifying the type as parameter "c"
+     *
+     * @param attribute
+     * @param maxrows maximum number of slots to display
+     * @param template
+     * @param type
+     * @param template
+     * @param args
+     * @return
+     */
+    @Override
+    public String slotList(String attribute, int maxrows, String type, String template,
+                           Arg... args) throws IllegalArgumentException {
+        return insiteCall(type, template, attribute, -1 * maxrows, null, args);
+    }
 
 	/**
 	 * Render an empty slot to drag additional content to a list.
