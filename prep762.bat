@@ -14,6 +14,7 @@ call mvn install:install-file -Dfile="%h%\basic.jar" -DgroupId=com.oracle.sites 
 call mvn install:install-file -Dfile="%h%\gator.jar" -DgroupId=com.oracle.sites -DartifactId=gator -Dversion=%v% -Dpackaging=jar
 call mvn install:install-file -Dfile="%h%\framework.jar" -DgroupId=com.oracle.sites -DartifactId=framework -Dversion=%v% -Dpackaging=jar
 call mvn install:install-file -Dfile="%h%\assetframework.jar" -DgroupId=com.oracle.sites -DartifactId=assetframework -Dversion=%v% -Dpackaging=jar
+call mvn install:install-file -Dfile="%h%\lucene-search.jar" -DgroupId=com.oracle.sites -DartifactId=lucene-search -Dversion=%v% -Dpackaging=jar
 
 cd core
 call sbt "sitesTagWrapperGen %jsk% %v%"
