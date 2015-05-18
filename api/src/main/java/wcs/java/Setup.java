@@ -215,7 +215,7 @@ abstract public class Setup implements wcs.core.Setup {
 			return what + " UPDATING: " + update(setup, data);
 
 		} catch (Exception e) {
-			log.error("insertOrUpdate failed", e);
+			log.error(e, "insertOrUpdate failed");
 			return what + " ERROR: " + e.getMessage();
 		}
 	}

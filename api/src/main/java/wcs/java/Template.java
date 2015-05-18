@@ -28,6 +28,7 @@ public class Template extends AssetSetup {
 	private String rootelement;
 	private String fileelement;
 	private String folderelement;
+    private int poll = -1;
 
 	private String clazz;
 	private String cscache;
@@ -112,6 +113,12 @@ public class Template extends AssetSetup {
 		return this;
 	}
 
+    public Template poll(int poll) {
+        this.poll = poll;
+        return this;
+    }
+
+
 	public Template cacheCriteria(String criteria) {
 		this.cacheCriteria.add(criteria);
 		return this;
@@ -136,8 +143,8 @@ public class Template extends AssetSetup {
 				"applicablesubtypes", "Thumbnail");
 	}
 
-	private String template(String clazz) {
-		return Util.getResource("/Streamer.jsp").replaceAll("%CLASS%", clazz);
+	private String template(String clazz, int poll) {
+		return Util.getResource("/Streamer.jsp").replaceAll("%CLASS%", clazz).replaceAll("%POLL%", ""+poll);
 	}
 
 	@Override
@@ -147,7 +154,17 @@ public class Template extends AssetSetup {
 		// log.info(Util.dump(data));
 		// String rootelement = getSubtype() + "/" + getName();
 
-		final String body = template(clazz);
+        // if poll is not set, defaults to 0 if cached otherwise to 1000 if uncached
+        int mypoll = poll;
+        if(mypoll==-1) {
+            if(sscache.equals("false") && cscache.equals("false")) {
+                mypoll = 1000;
+            } else {
+                mypoll = 0;
+            }
+        }
+
+		final String body = template(clazz, mypoll);
 
 		final AttributeData blob = attrBlob("url", folderelement, fileelement,
 				body);
