@@ -1,5 +1,6 @@
 package wcs.core;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -8,6 +9,16 @@ import wcs.api.Config;
 import wcs.api.Log;
 import wcs.api.Router;
 import COM.FutureTense.Interfaces.ICS;
+import com.fatwire.assetapi.common.AssetAccessException;
+import com.fatwire.assetapi.data.AssetDataManager;
+import com.fatwire.assetapi.def.AssetTypeDefManager;
+import com.fatwire.assetapi.site.Site;
+import com.fatwire.assetapi.site.SiteImpl;
+import com.fatwire.assetapi.site.SiteInfo;
+import com.fatwire.assetapi.site.SiteManager;
+import com.fatwire.system.Session;
+import com.fatwire.system.SessionFactory;
+
 
 /**
  * 
