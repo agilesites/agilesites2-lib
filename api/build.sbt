@@ -25,6 +25,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
+    autoScalaLibrary := false,
     libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
@@ -48,16 +49,15 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()) ++
          (if(!ver.startsWith("12.")) Seq("com.oracle.sites" % "assetapi-impl" % ver % "provided") else Seq()))
  
-/*
-val publishSetting = bintrayPublishSettings ++ Seq(
+val btSettings = bintrayPublishSettings ++ Seq(
 	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
 	   bintray.Keys.repository in bintray.Keys.bintray := "maven",
 	   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
 	   publishMavenStyle := true,
 	   publishArtifact in packageDoc := false,
 	   publishArtifact in Test := false)
-*/
-val publishSttings = Seq(
+
+val publishSettings = Seq(
   publishMavenStyle := true,
   pomIncludeRepository := { _ => false },
   publishTo := {
@@ -75,4 +75,4 @@ val publishSttings = Seq(
 
 val api = project.in(file(".")).
   settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
-  settings(publishSttings: _*)
+  settings(btSettings: _*)

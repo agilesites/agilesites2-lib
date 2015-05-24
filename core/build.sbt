@@ -22,6 +22,7 @@ def settingsByVersion(ver: String) = Seq(asPackageTask,
   version := ver + "_" + v,
   scalaVersion := "2.11.5",
   crossPaths := false,
+  autoScalaLibrary := false,
   javacOptions ++= Seq("-g", "-Xlint:unchecked", "-source", "1.6", "-target", "1.6"),
   scalacOptions ++= Seq("-target:jvm-1.6"),
   resolvers += Resolver.mavenLocal,
@@ -53,7 +54,6 @@ def settingsByVersion(ver: String) = Seq(asPackageTask,
        else Seq())
   )
 
-/*
 val btSettings = bintrayPublishSettings ++ Seq(
   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
   bintray.Keys.repository in bintray.Keys.bintray := "maven",
@@ -61,9 +61,8 @@ val btSettings = bintrayPublishSettings ++ Seq(
   publishMavenStyle := true,
   publishArtifact in packageDoc := false,
   publishArtifact in Test := false)
-*/
 
-val publishSttings = Seq(
+val publishSettings = Seq(
   publishMavenStyle := true,
   pomIncludeRepository := { _ => false },
   publishTo := {
@@ -82,4 +81,4 @@ val publishSttings = Seq(
 val core = project.in(file(".")).
   enablePlugins(AgileSitesLibPlugin).
   settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
-  settings(publishSttings: _*)
+  settings(btSettings: _*)
