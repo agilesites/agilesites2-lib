@@ -25,6 +25,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
     crossPaths := false,
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
+    autoScalaLibrary := false,
     libraryDependencies ++= Seq(
          "com.sciabarra" % "agilesites2-core" % version.value % "provided",
          "junit" % "junit" % "4.11",
