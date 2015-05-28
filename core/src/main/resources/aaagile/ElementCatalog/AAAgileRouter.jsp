@@ -4,7 +4,11 @@
 %><%@ page import="wcs.core.*,wcs.api.*"
 %><cs:ftcs><%! final static Log log = wcs.api.Log.getLog("jsp.wcs.api.Router");
 %><%
-  Call c = WCS.route(ics, 
+    while (request.getHeaderNames().hasMoreElements()) {
+        String headerName = (String)request.getHeaderNames().nextElement();
+        ics.SetVar("Header:" + headerName, request.getHeader(headerName));
+    }
+   Call c = WCS.route(ics,
    ics.GetVar("site"), 
    ics.GetVar("url"),
    request.getQueryString());
