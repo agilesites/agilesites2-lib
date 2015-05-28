@@ -57,7 +57,7 @@ val publishSetting = bintrayPublishSettings ++ Seq(
 	   publishArtifact in packageDoc := false,
 	   publishArtifact in Test := false)
 */
-val publishSttings = Seq(
+val publishSettings = Seq(
   publishMavenStyle := true,
   pomIncludeRepository := { _ => false },
   publishTo := {
@@ -75,4 +75,4 @@ val publishSttings = Seq(
 
 val api = project.in(file(".")).
   settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
-  settings(publishSttings: _*)
+  settings(publishSettings: _*)
