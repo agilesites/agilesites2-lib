@@ -19,6 +19,38 @@ public class Dispatcher {
 
     private static int defaultPollInterval = 100;
 
+    synchronized static Dispatcher getDispatcherSyhcronized(ICS ics) {
+        // if someone changed the dispatcher in the meanwhile
+        if (dispatcher != null)
+            return dispatcher;
+
+        String jarPath = ics.GetProperty("agilesites.dir");
+        if (jarPath == null) {
+            log.debug("[Dispatcher.getDispatcher] creating static dispatcher");
+
+            dispatcher =
+                    new Dispatcher();
+            return dispatcher;
+        }
+
+        String storagePath = ics.GetProperty("xcelerate.defaultbase",
+                "futuretense_xcel.ini", true);
+
+        try {
+            defaultPollInterval = Integer.parseInt(ics.GetProperty("agilesites.poll"));
+        } catch (Exception e) {
+        }
+
+        File jarDir = new File(jarPath);
+        File assetJarDir = new File(new File(storagePath), "Jar");
+        //jarDir.mkdirs();
+        //assetJarDir.mkdirs();
+        log.debug("[Dispatcher.getDispatcher] dir=%s asset=%s defaultpoll=%d", jarDir, assetJarDir,
+                defaultPollInterval);
+        dispatcher = new Dispatcher(jarDir, assetJarDir);
+        return dispatcher;
+    }
+
     /**
      * Load the dispatcher singleton using parameters from the futuretense.ini
      *
@@ -26,34 +58,10 @@ public class Dispatcher {
      * @return
      */
     static Dispatcher getDispatcher(ICS ics) {
-
-        if (dispatcher == null) {
-            String jarPath = ics.GetProperty("agilesites.dir");
-
-
-            if (jarPath == null) {
-                log.debug("[Dispatcher.getDispatcher] creating static dispatcher");
-                dispatcher = new Dispatcher();
-                return dispatcher;
-            }
-
-            String storagePath = ics.GetProperty("xcelerate.defaultbase",
-                    "futuretense_xcel.ini", true);
-
-            try {
-                defaultPollInterval = Integer.parseInt(ics.GetProperty("agilesites.poll"));
-            } catch (Exception e) {
-            }
-
-            File jarDir = new File(jarPath);
-            File assetJarDir = new File(new File(storagePath), "Jar");
-            //jarDir.mkdirs();
-            //assetJarDir.mkdirs();
-            log.debug("[Dispatcher.getDispatcher] dir=%s asset=%s defaultpoll=%d", jarDir, assetJarDir,
-                    defaultPollInterval);
-            dispatcher = new Dispatcher(jarDir, assetJarDir);
-        }
-        return dispatcher;
+        if (dispatcher == null)
+           return getDispatcherSyhcronized(ics);
+        else
+            return dispatcher;
     }
 
     /**

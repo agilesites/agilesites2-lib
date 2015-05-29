@@ -57,7 +57,7 @@ public class WCS {
 			try {
 				properties.load(Config.class
 						.getResourceAsStream("/agilesites.properties"));
-				System.out.println(properties.toString());
+				//System.out.println(properties.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

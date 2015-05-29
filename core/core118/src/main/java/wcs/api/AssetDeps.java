@@ -13,11 +13,4 @@ public enum AssetDeps {
 		return value;
 	}
 
-	
-	public static void main(String[] args) {
-		System.out.println(NONE.toString());	
-		System.out.println(EXISTS.toString());
-		System.out.println(EXACT.toString());
-	}
-	
 }

@@ -340,7 +340,7 @@ public class Loader {
             if (curTimeStamp > jarTimeStamp) {
                 if (log.debug()) {
                     log.debug("jar changed, timestamp=%d", curTimeStamp);
-                    System.out.println("Loader: detected change");
+                    //System.out.println("Loader: detected change");
                 }
                 jarTimeStamp = curTimeStamp;
                 return jars.toArray(protoFileArray);
