@@ -57,7 +57,7 @@ public class WCS {
 			try {
 				properties.load(Config.class
 						.getResourceAsStream("/agilesites.properties"));
-				//System.out.println(properties.toString());
+				System.out.println(properties.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -97,6 +97,7 @@ public class WCS {
      * @return
      */
     public static String dispatch(ICS ics, String clazz, int interval) {
+        log.trace("[WCS.dispatch] Dispatching...");
         try {
             Dispatcher dispatcher = Dispatcher.getDispatcher(ics);
             if (dispatcher != null)
@@ -151,8 +152,8 @@ public class WCS {
 	 */
 	public static Call route(ICS ics, String site, String path, String query)
 			throws Exception {
-		if (log.trace())
-			log.trace("[WCS.route] site=%s path=%s query=%s", site, path, query);
+		if (log.debug())
+			log.debug("[WCS.route] site=%s path=%s query=%s", site, path, query);
 		Dispatcher dispatcher = Dispatcher.getDispatcher(ics);
 		if (dispatcher != null) {
 			return dispatcher.route(ics, site, path, query);
@@ -205,7 +206,6 @@ public class WCS {
 	 */
 	public static wcs.api.Env getEnv(ICS ics, String className) {
 		try {
-
 			wcs.api.Env env = (wcs.api.Env) Dispatcher.getDispatcher(ics)
 					.loadClass(className).newInstance();
 			env.init(ics);

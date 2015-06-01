@@ -101,7 +101,7 @@ public class Loader {
                 //Files.copy(ps, pd, StandardCopyOption.REPLACE_EXISTING);
             else
                 FileUtils.copyFile(src, dst, false);
-            //Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
+                //Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
             dst.setLastModified(System.currentTimeMillis());
             if (log.trace())
                 log.trace("copied %s", dst.getAbsolutePath());
@@ -168,25 +168,19 @@ public class Loader {
 
         // get jars if somehing changed
         File[] jars;
-        if (currentClassLoader == null)
-            jars = getJars();
+        if(currentClassLoader==null)
+          jars = getJarsIfSomeIsModifiedAfterInterval(0);
         else
             jars = getJarsIfSomeIsModifiedAfterInterval(interval);
 
-        if (jars == null)
-            if (currentClassLoader == null)
+        if(jars==null)
+            if(currentClassLoader==null)
                 return parentClassLoader;
             else
                 return currentClassLoader;
 
         // update classloader
-        ClassLoader mycl = currentClassLoader;
         synchronized (this) {
-            // check if someone else updated the classloader
-            if(mycl!=currentClassLoader) {
-                // never mind
-                return currentClassLoader;
-            }
             try {
                 // copy jars to a new spooldir
                 File newSpoolDir = copyJarsToTempDir(jars);
@@ -217,6 +211,7 @@ public class Loader {
                 }
 
                 // create a class loader according the current choice
+
                 //log.error("using JCL classloader without parent");
                 currentClassLoader = new JarClassLoader(toUrlArray(list));
                 currentSpoolDir = newSpoolDir;
@@ -225,8 +220,8 @@ public class Loader {
             } catch (Exception ex) {
                 log.error(ex, "[Loader.getClassLoader]");
             }
+            return currentClassLoader;
         }
-        return currentClassLoader;
     }
 
     /**
@@ -277,32 +272,6 @@ public class Loader {
 
     File[] protoFileArray = new File[0];
 
-
-    /**
-     * Serch for all the jars
-     *
-     * @return
-     */
-    public File[] getJars() {
-        ArrayList<File> jars = new ArrayList<File>();
-
-        // look in the classical jarDir
-        if (jarDir != null && jarDir.isDirectory())
-            Collections.addAll(jars, jarDir.listFiles(onlyJars));
-
-        // look in the jar asset dir for 2 levels
-        if (jarAssetDir != null && jarAssetDir.isDirectory()) {
-            Collections.addAll(jars, jarAssetDir.listFiles(onlyJars));
-            for (File dir1 : jarAssetDir.listFiles(onlyDirs)) {
-                Collections.addAll(jars, dir1.listFiles(onlyJars));
-                for (File dir2 : dir1.listFiles(onlyDirs)) {
-                    Collections.addAll(jars, dir2.listFiles(onlyJars));
-                }
-            }
-        }
-      return jars.toArray(protoFileArray);
-    }
-
     /**
      * Return the jars to use only for the classloader if some of them has been
      * modified Check only once in a given interval.
@@ -334,18 +303,30 @@ public class Loader {
             if (now < lastCheck + reloadInterval)
                 return null;
 
-            if (log.debug())
-                log.debug("checking  jars after %d", now - lastCheck);
-
             // set last check time
             lastCheck = now;
 
             // get the more recent lastmodified timestamp
             long curTimeStamp = 0;
 
-            File[] jars = getJars();
+            ArrayList<File> jars = new ArrayList<File>();
 
-            if (jars.length == 0) {
+            // look in the classical jarDir
+            if (jarDir != null && jarDir.isDirectory())
+                Collections.addAll(jars, jarDir.listFiles(onlyJars));
+
+            // look in the jar asset dir for 2 levels
+            if (jarAssetDir != null && jarAssetDir.isDirectory()) {
+                Collections.addAll(jars, jarAssetDir.listFiles(onlyJars));
+                for (File dir1 : jarAssetDir.listFiles(onlyDirs)) {
+                    Collections.addAll(jars, dir1.listFiles(onlyJars));
+                    for (File dir2 : dir1.listFiles(onlyDirs)) {
+                        Collections.addAll(jars, dir2.listFiles(onlyJars));
+                    }
+                }
+            }
+
+            if (jars.size() == 0) {
                 log.warn("no jars in the jar folder");
                 return null;
             }
@@ -359,17 +340,16 @@ public class Loader {
             if (curTimeStamp > jarTimeStamp) {
                 if (log.debug()) {
                     log.debug("jar changed, timestamp=%d", curTimeStamp);
-                    //System.out.println("Loader: detected change");
+                    System.out.println("Loader: detected change");
                 }
                 jarTimeStamp = curTimeStamp;
-                return jars;
+                return jars.toArray(protoFileArray);
             } else {
-                if (log.debug())
-                    log.debug("no changes detected");
+                if (log.trace())
+                    log.trace("no changes detected");
             }
             return null;
         }
-
     }
 
     /**
@@ -384,12 +364,13 @@ public class Loader {
             if (log.trace())
                 log.trace("loading %s", classname);
             return //cl.loadClass(classname);
-                    Class.forName(classname, true, cl);
+                   Class.forName(classname, true, cl);
         } catch (ClassNotFoundException ex) {
             log.error(ex, "[Loader.loadClass]");
             return null;
         }
     }
+
 
     private static File createTempDirectory(String prefix) throws IOException {
 

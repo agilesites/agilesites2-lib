@@ -19,51 +19,39 @@ public class Dispatcher {
 
     private static int defaultPollInterval = 100;
 
-    private static Dispatcher createDispatcher(ICS ics) {
-
-        String jarPath = ics.GetProperty("agilesites.dir");
-        if (jarPath == null) {
-            System.out.println("*** creating static dispatcher *** ");
-            log.debug("[Dispatcher.getDispatcher] creating static dispatcher");
-            return new Dispatcher();
-        }
-
-        String storagePath = ics.GetProperty(
-                "xcelerate.defaultbase",
-                "futuretense_xcel.ini", true);
-
-        try {
-            defaultPollInterval = Integer.parseInt(ics.GetProperty("agilesites.poll"));
-        } catch (Exception e) {
-            defaultPollInterval =  100;
-        }
-
-        File jarDir = new File(jarPath);
-        File assetJarDir = new File(new File(storagePath), "Jar");
-
-        //jarDir.mkdirs();
-        //assetJarDir.mkdirs();
-        log.debug("[Dispatcher.getDispatcher] dir=%s asset=%s defaultpoll=%d", jarDir, assetJarDir,
-                defaultPollInterval);
-        System.out.println("*** creating dispatcher "+jarDir+":"+assetJarDir+" *** ");
-
-        return new Dispatcher(jarDir, assetJarDir);
-    }
-
     /**
      * Load the dispatcher singleton using parameters from the futuretense.ini
-     * <p/>
-     * Thread safe singleton implementation
      *
      * @param ics
      * @return
      */
     static Dispatcher getDispatcher(ICS ics) {
+
         if (dispatcher == null) {
-            synchronized (Dispatcher.class) {
-                if (dispatcher == null)
-                    dispatcher = createDispatcher(ics);
+            String jarPath = ics.GetProperty("agilesites.dir");
+
+
+            if (jarPath == null) {
+                log.debug("[Dispatcher.getDispatcher] creating static dispatcher");
+                dispatcher = new Dispatcher();
+                return dispatcher;
             }
+
+            String storagePath = ics.GetProperty("xcelerate.defaultbase",
+                    "futuretense_xcel.ini", true);
+
+            try {
+                defaultPollInterval = Integer.parseInt(ics.GetProperty("agilesites.poll"));
+            } catch (Exception e) {
+            }
+
+            File jarDir = new File(jarPath);
+            File assetJarDir = new File(new File(storagePath), "Jar");
+            //jarDir.mkdirs();
+            //assetJarDir.mkdirs();
+            log.debug("[Dispatcher.getDispatcher] dir=%s asset=%s defaultpoll=%d", jarDir, assetJarDir,
+                    defaultPollInterval);
+            dispatcher = new Dispatcher(jarDir, assetJarDir);
         }
         return dispatcher;
     }
@@ -73,7 +61,7 @@ public class Dispatcher {
      *
      * @param jar
      */
-    private Dispatcher(File jarDir, File assetJarDir) {
+    public Dispatcher(File jarDir, File assetJarDir) {
         log.debug("[Dispatcher.<init>] jarDir=%s assetJarDir=%s", jarDir, assetJarDir);
         loader = new Loader(jarDir, assetJarDir,
                 Thread.currentThread().getContextClassLoader()
@@ -86,7 +74,7 @@ public class Dispatcher {
      *
      * @param jar
      */
-    private Dispatcher() {
+    public Dispatcher() {
         log.debug("[Dispatcher.<init>] static loader");
         loader = new Loader();
         log.debug("[Dispatcher.<init>] got loader");
@@ -212,9 +200,7 @@ public class Dispatcher {
                 // cast to Setup and execute
                 Class<?> clazz = loadClass(className);
                 Object obj = null;
-                if (clazz != null) {
-                    obj = clazz.newInstance();
-                }
+                if (clazz != null) obj = clazz.newInstance();
                 if (obj != null && obj instanceof wcs.core.Setup) {
                     log.debug("[Dispatcher.deploy] obj is a wcs.core.Setup");
                     Setup setup = (wcs.core.Setup) obj;
