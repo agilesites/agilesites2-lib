@@ -80,5 +80,5 @@ val publishSettings = Seq(
 
 val core = project.in(file(".")).
   enablePlugins(AgileSitesLibPlugin).
-  settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
+  settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.8.0"  ): _*).
   settings(btSettings: _*)

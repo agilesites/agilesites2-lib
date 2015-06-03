@@ -5,6 +5,7 @@ val asPackage = taskKey[Unit]("deploy the lib to destination")
 asPackage in Compile := { println("use one of the subprojects")}
 
 resolvers += "Nexus-sciabarra-releases" at "http://nexus.sciabarra.com/content/repositories/releases"
+
 resolvers += "Nexus-sciabarra-snapshots" at "http://nexus.sciabarra.com/content/repositories/snapshots"
 
 def settingsByVersion(ver: String) = Seq(asPackage := {
@@ -74,5 +75,5 @@ val publishSettings = Seq(
 )
 
 val api = project.in(file(".")).
-  settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.6.0"  ): _*).
+  settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.8.0"  ): _*).
   settings(btSettings: _*)
