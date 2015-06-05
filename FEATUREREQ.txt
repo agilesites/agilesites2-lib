@@ -1,1 +1,7 @@
 # add here all the feature requests
+
+- Propagate Exceptions thrown in the Element.exec() method to allow for customized per-application management
+- manage multiple version of the jar by loading only the latest version
+- check at deploy time if the model contains multiple attributes or templates with the same name (or force uniqueness by using prefixes)
+
+
