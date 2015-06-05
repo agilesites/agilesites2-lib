@@ -457,32 +457,40 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	}
 
     @Override
-    public Asset getLocalizedAsset(String locale) {
-        String c = getC();
-        Long cid = getCid();
+    public Asset getLocalizedAsset(String locale, Id id) {
+        return getLocalizedAsset(locale, id.c, id.cid);
+    }
+
+    @Override
+    public Asset getLocalizedAsset(String locale, String c, Long cid) {
         try {
-			AssetTag.load().type("Dimension").name("dim").field("name").value(locale).run(ics);
+            AssetTag.load().type("Dimension").name("dim").field("name").value(locale).run(ics);
             Dimension dim = (Dimension) ics.GetObj("dim");
             // FIXME find a way to load the correct DimensionSet instead of getting just the first
-			Asset dimSet = findOne("DimensionSet");
-			if (dimSet != null) {
-				AssetTag.load().type("DimensionSet").name("dimSet").objectid("" + dimSet.getCid()).run(ics);
-				DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
-				DimensionFilterInstance dfi = dsi.getFilter();
-				dfi.setDimensonPreference(Util.list(dim));
-				Session session = SessionFactory.getSession(ics());
-				DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
-				Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
-				for (AssetId assetId : list) {
+            Asset dimSet = findOne("DimensionSet");
+            if (dimSet != null) {
+                AssetTag.load().type("DimensionSet").name("dimSet").objectid("" + dimSet.getCid()).run(ics);
+                DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
+                DimensionFilterInstance dfi = dsi.getFilter();
+                dfi.setDimensonPreference(Util.list(dim));
+                Session session = SessionFactory.getSession(ics());
+                DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
+                Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
+                for (AssetId assetId : list) {
                     cid = assetId.getId();
                     c = assetId.getType();
 
                 }
-			}
-		} catch (Exception e) {
+            }
+        } catch (Exception e) {
             log.error(e, String.format("Could not find asset for locale %s", locale));
         }
         return getAsset(c, cid);
+    }
+
+    @Override
+    public Asset getLocalizedAsset(String locale) {
+        return getLocalizedAsset(locale, getC(), getCid());
     }
 
     /*
@@ -575,9 +583,16 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		// System.out.println("getUrl:" + id);
 
 		if (insite || preview) {
-			return RenderTag.getpageurl().pagename(site).c(id.c)
-					.cid(id.cid.toString()).assembler("query")
-					.eval(ics, "outstr");
+            StringBuilder sb = new StringBuilder();
+			sb.append(RenderTag.getpageurl().pagename(site).c(id.c)
+                    .cid(id.cid.toString()).assembler("query")
+                    .eval(ics, "outstr"));
+            if (args.length > 0) {
+                for (Arg arg : args) {
+                    sb.append("&").append(arg.name).append("=").append(arg.value);
+                }
+            }
+            return sb.toString();
 		}
 
 		String nsite = WCS.normalizeSiteName(site);
@@ -616,48 +631,61 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	 */
 	@Override
 	public List<Id> find(String type, Arg... args) {
-		// load all the pages with a given name
-		AssetTag.List list = AssetTag.list();
-		String ls = tmp();
-		list.type(type).list(ls);
-		list.pubid(getSiteId());
-		list.excludevoided("true");
-		int n = 1;
-		for (Arg arg : args) {
-			switch (n) {
-			case 1:
-				list.field1(arg.name);
-				list.value1(arg.value);
-				break;
-			case 2:
-				list.field2(arg.name);
-				list.value2(arg.value);
-				break;
-			case 3:
-				list.field3(arg.name);
-				list.value3(arg.value);
-				break;
-			case 4:
-				list.field4(arg.name);
-				list.value4(arg.value);
-				break;
-			case 5:
-				list.field5(arg.name);
-				list.value5(arg.value);
-				break;
-			default:
-				log.warn("too many arguments for find, argument >5 ignored");
-			}
-			n++;
-		}
-
-		list.run(ics);
-		List<Id> result = new ArrayList<Id>();
-		for (Integer pos : getRange(ls)) {
-			result.add(new Id(type, getLong(ls, pos, "id")));
-		}
-		return result;
+        return find(type, null, args);
 	}
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see wcs.java.IEnv#find(java.lang.String, wcs.core.Arg)
+     */
+    @Override
+    public List<Id> find(String type, String orderField, Arg... args) {
+        // load all the pages with a given name
+        AssetTag.List list = AssetTag.list();
+        String ls = tmp();
+        list.type(type).list(ls);
+        list.pubid(getSiteId());
+        if (orderField != null) {
+            list.order(orderField);
+        }
+        list.excludevoided("true");
+        int n = 1;
+        for (Arg arg : args) {
+            switch (n) {
+                case 1:
+                    list.field1(arg.name);
+                    list.value1(arg.value);
+                    break;
+                case 2:
+                    list.field2(arg.name);
+                    list.value2(arg.value);
+                    break;
+                case 3:
+                    list.field3(arg.name);
+                    list.value3(arg.value);
+                    break;
+                case 4:
+                    list.field4(arg.name);
+                    list.value4(arg.value);
+                    break;
+                case 5:
+                    list.field5(arg.name);
+                    list.value5(arg.value);
+                    break;
+                default:
+                    log.warn("too many arguments for find, argument >5 ignored");
+            }
+            n++;
+        }
+
+        list.run(ics);
+        List<Id> result = new ArrayList<Id>();
+        for (Integer pos : getRange(ls)) {
+            result.add(new Id(type, getLong(ls, pos, "id")));
+        }
+        return result;
+    }
 
 	/**
 	 * Find one assets

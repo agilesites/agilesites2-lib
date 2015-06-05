@@ -2,10 +2,13 @@
 %><%@ taglib prefix="render" uri="futuretense_cs/render.tld"
 %><%@ taglib prefix="ics" uri="futuretense_cs/ics.tld"
 %><%@ page import="wcs.core.*,wcs.api.*"
-%><cs:ftcs><%! final static Log log = wcs.api.Log.getLog("jsp.wcs.api.Router");
+%>
+<%@ page import="java.util.Enumeration" %>
+<cs:ftcs><%! final static Log log = wcs.api.Log.getLog("jsp.wcs.api.Router");
 %><%
-    while (request.getHeaderNames().hasMoreElements()) {
-        String headerName = (String)request.getHeaderNames().nextElement();
+    Enumeration headers = request.getHeaderNames();
+    while (headers.hasMoreElements()) {
+        String headerName = (String)headers.nextElement();
         ics.SetVar("Header:" + headerName, request.getHeader(headerName));
     }
    Call c = WCS.route(ics,

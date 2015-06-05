@@ -16,10 +16,12 @@ com.fatwire.system.Session,
 com.fatwire.system.SessionFactory,
 java.util.*,
 java.io.*,
-wcs.api.Log" %><%!
+wcs.api.Log" %>
+<%@ page import="com.fatwire.assetapi.common.SiteAccessException" %>
+<%@ page import="com.fatwire.assetapi.common.AssetAccessException" %><%!
     final static Log log = Log.getLog("wcs.core.AAAgileSetup");
 
-    private void enableJar(String siteName, SiteManager sim) {
+    private void enableJar(String siteName, SiteManager sim) throws SiteAccessException {
         Site site = sim.read(Arrays.asList(siteName)).get(0);
         List<String> types = site.getAssetTypes();
         log.debug("site types="+types);
@@ -40,7 +42,7 @@ wcs.api.Log" %><%!
         }
     }
 
-    private void disableJar(String siteName, SiteManager sim) {
+    private void disableJar(String siteName, SiteManager sim) throws SiteAccessException {
         Site site = sim.read(Arrays.asList(siteName)).get(0);
         List<String> types = site.getAssetTypes();
         List<String> newtypes = new LinkedList<String>();
@@ -59,7 +61,7 @@ wcs.api.Log" %><%!
         }
     }
 
-    void createJarTypeIfDoesNotExist (Session ses) {
+    void createJarTypeIfDoesNotExist (ICS ics, Session ses) throws AssetAccessException {
         AssetTypeDefManager atdm = (AssetTypeDefManager) ses
                 .getManager(AssetTypeDefManager.class.getName());
 
@@ -102,7 +104,7 @@ wcs.api.Log" %><%!
         SiteManager sim = (SiteManager) ses.getManager(SiteManager.class
                 .getName());
 
-        createJarTypeIfDoesNotExist(ses);
+        createJarTypeIfDoesNotExist(ics, ses);
 
         /// enable the Jar type in the requires sites
         StringBuffer found = new StringBuffer();
