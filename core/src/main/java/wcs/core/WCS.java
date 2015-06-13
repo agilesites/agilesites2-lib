@@ -146,8 +146,10 @@ public class WCS {
 	 * Dispatch requests
 	 * 
 	 * @param ics
-	 * @param clazz
-	 * @return
+	 * @param site
+     * @param path
+     * @param query
+	 * @return Call
 	 * @throws Exception
 	 */
 	public static Call route(ICS ics, String site, String path, String query)
@@ -167,7 +169,7 @@ public class WCS {
 	/**
 	 * Return a router for the site. It uses the current site variable
 	 * 
-	 * @param site
+	 * @param ics
 	 * @return
 	 */
 	public static Router getRouter(ICS ics) {

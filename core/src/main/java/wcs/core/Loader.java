@@ -363,8 +363,7 @@ public class Loader {
         try {
             if (log.trace())
                 log.trace("loading %s", classname);
-            return cl.loadClass(classname);
-            // Class.forName(classname, true, cl);
+            return Class.forName(classname, true, cl);
         } catch (ClassNotFoundException ex) {
             log.error(ex, "[Loader.loadClass]");
             return null;

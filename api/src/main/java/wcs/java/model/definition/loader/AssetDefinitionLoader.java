@@ -88,7 +88,9 @@ public class AssetDefinitionLoader extends DefinitionLoader {
     public void saveParentDefinitions(DefinitionModelBase modelBase) {
         initialize();
         for(Map.Entry<Class<? extends WCSDefinition>, Set<DefinitionContainer>> dc : defMap.entrySet()) {
+            Parent parentLink = null;
             for(Annotation a : dc.getKey().getAnnotations()) {
+                if(a.annotationType() == Parent.class) parentLink = (Parent) a;
                 if(a.annotationType() == ParentDefinition.class) {
                     ParentDefinition parentDefinition = (ParentDefinition) a;
                     String description = (parentDefinition.value() != null ? parentDefinition.value() : dc.getKey().getSimpleName());
@@ -97,6 +99,9 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                             new DefinitionContainer(IdBeautifier.generateUniqueDefId(dc.getKey().getSimpleName()),
                                     dc.getKey().getSimpleName(),
                                     description));
+                    if(parentLink != null) {
+                        pDef.addParent(IdBeautifier.generateUniqueDefId(parentLink.value().getSimpleName()), parentLink.required(), parentLink.multiple());
+                    }
                     for(Field f : dc.getKey().getDeclaredFields()) {
                         boolean isRequired = false;
                         String attrDesc = null;
@@ -144,14 +149,16 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                 }
                 for(Field f : dc.getKey().getDeclaredFields()) {
                     boolean isRequired = false;
+                    String attrDesc = null;
                     AssetAttribute assetAttribute = null;
                     for (Annotation fieldAnnotation : f.getAnnotations()) {
                         if(fieldAnnotation.annotationType() == Required.class) isRequired = true;
                         if(fieldAnnotation.annotationType() == AssetAttribute.class) {
                             assetAttribute = (AssetAttribute) fieldAnnotation;
+                            attrDesc = (assetAttribute.value() != null ? assetAttribute.value() : f.getName());
                         }
                     }
-                    if(assetAttribute != null) {
+                    if(attrDesc != null) {
                         cDef.addAttribute(IdBeautifier.generateUniqueAttrId(StringUtils.capitalize(f.getName())), isRequired);
                     }
                 }

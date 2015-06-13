@@ -292,6 +292,16 @@ public interface Env extends Content {
      */
     public abstract Asset getLocalizedAsset(String locale);
 
+    /**
+     * Return the asset identified by the current c/cid
+     */
+    public abstract Asset getLocalizedAsset(String locale, Id id);
+
+    /**
+     * Return the asset identified by the current c/cid
+     */
+    public abstract Asset getLocalizedAsset(String locale, String c, Long cid);
+
 	/**
 	 * Return current "c" (content type)
 	 * 
@@ -346,6 +356,11 @@ public interface Env extends Content {
 	 * Find assets
 	 */
 	public abstract List<Id> find(String type, Arg... args);
+
+    /**
+     * Find assets
+     */
+    public abstract List<Id> find(String type, String orderField, Arg... args);
 
 	/**
 	 * Find one assets
