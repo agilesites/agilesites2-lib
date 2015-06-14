@@ -1,6 +1,6 @@
 package wcs.core;
 
-import static wcs.Api.*;
+import static wcs.core.Api.*;
 import wcs.api.Id;
 
 import java.io.OutputStream;

@@ -2,11 +2,6 @@ package wcs.core;
 
 import java.io.File;
 import java.util.StringTokenizer;
-
-import wcs.api.Call;
-import wcs.api.Element;
-import wcs.api.Log;
-import wcs.api.Router;
 import COM.FutureTense.Interfaces.ICS;
 
 public class Dispatcher {
@@ -59,11 +54,11 @@ public class Dispatcher {
     /**
      * New dispatcher looking for a given jar
      *
-     * @param jar
+     * @param assetJarDir
      */
     public Dispatcher(File jarDir, File assetJarDir) {
         log.debug("[Dispatcher.<init>] jarDir=%s assetJarDir=%s", jarDir, assetJarDir);
-        loader = new Loader(jarDir, assetJarDir,
+        loader = new wcs.core.Loader(jarDir, assetJarDir,
                 Thread.currentThread().getContextClassLoader()
                 /*getClass().getClassLoader()*/);
         log.debug("[Dispatcher.<init>] got loader");
@@ -72,11 +67,10 @@ public class Dispatcher {
     /**
      * New dispatcher looking for a given jar
      *
-     * @param jar
      */
     public Dispatcher() {
         log.debug("[Dispatcher.<init>] static loader");
-        loader = new Loader();
+        loader = new wcs.core.Loader();
         log.debug("[Dispatcher.<init>] got loader");
     }
 
@@ -130,8 +124,7 @@ public class Dispatcher {
     /**
      * Load a class from the classloader
      *
-     * @param ics
-     * @param name
+     * @param className
      * @return
      */
     public Class<?> loadClass(String className) {
@@ -147,7 +140,7 @@ public class Dispatcher {
      */
     public Class<?> loadSiteClass(ICS ics, String name) {
         String site = ics.GetVar("site");
-        String className = WCS.normalizeSiteName(site) + "." + name;
+        String className = wcs.core.WCS.normalizeSiteName(site) + "." + name;
         return loadClass(className);
     }
 
@@ -195,15 +188,15 @@ public class Dispatcher {
         while (st.hasMoreTokens()) {
             // next setup to run...
             String site = st.nextToken().trim();
-            String className = WCS.normalizeSiteName(site) + ".Setup";
+            String className = wcs.core.WCS.normalizeSiteName(site) + ".Setup";
             try {
                 // cast to Setup and execute
                 Class<?> clazz = loadClass(className);
                 Object obj = null;
                 if (clazz != null) obj = clazz.newInstance();
-                if (obj != null && obj instanceof wcs.core.Setup) {
+                if (obj != null && obj instanceof Setup) {
                     log.debug("[Dispatcher.deploy] obj is a wcs.core.Setup");
-                    Setup setup = (wcs.core.Setup) obj;
+                    Setup setup = (Setup) obj;
                     msg.append(setup.exec(ics, site, user, pass));
                 } else {
                     log.debug("[Dispatcher.deploy] obj is NOT a wcs.core.Setup");

@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static wcs.Api.arg;
-import static wcs.Api.call;
+import static wcs.core.Api.arg;
+import static wcs.core.Api.call;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -1,9 +1,7 @@
 package wcs.api;
 
-import static wcs.Api.toDate;
-import static wcs.Api.toInt;
-import static wcs.Api.toLong;
-
+import static wcs.Api.*;
+import wcs.core.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -1,5 +1,4 @@
 package wcs.java;
-import wcs.api.Log;
 import java.util.List;
 import wcs.java.util.Util;
 import com.fatwire.assetapi.data.AssetId;

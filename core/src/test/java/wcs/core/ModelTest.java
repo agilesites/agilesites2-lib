@@ -1,6 +1,6 @@
 package wcs.core;
 
-import static wcs.Api.*;
+import static wcs.core.Api.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;

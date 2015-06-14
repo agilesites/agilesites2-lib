@@ -7,7 +7,6 @@ package wcs.core;
 
 import org.apache.commons.io.FileUtils;
 import org.xeustechnologies.jcl.JarClassLoader;
-import wcs.api.Log;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -28,7 +27,7 @@ import java.util.List;
  */
 public class Loader {
 
-    final static Log log = Log.getLog(Loader.class);
+    final static Log log = Log.getLog(wcs.core.Loader.class);
 
     private File jarDir; // classical jar spool dir
     private File jarAssetDir; // jar storage dir
@@ -113,7 +112,7 @@ public class Loader {
     }
 
     private File copyJarsToTempDir(File[] jars) throws IOException {
-        File spoolDir = new File(tmpDir, wcs.Api.tmp());
+        File spoolDir = new File(tmpDir, Api.tmp());
         if (!spoolDir.exists())
             spoolDir.mkdirs();
 

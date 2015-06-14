@@ -3,7 +3,7 @@ package wcs.java;
 import static wcs.Api.*;
 import wcs.Api;
 import wcs.api.Arg;
-import wcs.api.Log;
+
 import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;

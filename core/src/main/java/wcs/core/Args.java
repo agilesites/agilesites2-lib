@@ -1,4 +1,4 @@
-package wcs.api;
+package wcs.core;
 
 import java.util.LinkedList;
 import java.util.List;

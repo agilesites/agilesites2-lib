@@ -113,7 +113,7 @@ public class Loader {
     }
 
     private File copyJarsToTempDir(File[] jars) throws IOException {
-        File spoolDir = new File(tmpDir, wcs.Api.tmp());
+        File spoolDir = new File(tmpDir, wcs.core.Api.tmp());
         if (!spoolDir.exists())
             spoolDir.mkdirs();
 

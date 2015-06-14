@@ -1,6 +1,6 @@
 package wcs.java.model.definition.loader;
 
-import wcs.api.Log;
+import wcs.core.Log;
 import wcs.java.model.*;
 import wcs.java.model.annotation.*;
 import wcs.java.model.annotation.ParentDefinition;
@@ -12,6 +12,7 @@ import wcs.java.util.StringUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
+
 
 import static wcs.Api.getLog;
 

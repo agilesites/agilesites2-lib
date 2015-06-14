@@ -1,6 +1,6 @@
 package wcs.java.util;
 import static wcs.Api.*;
-import wcs.api.Log;
+
 import wcs.api.Env;
 import org.junit.runner.Description;
 import org.junit.runner.JUnitCore;

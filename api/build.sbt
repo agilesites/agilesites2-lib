@@ -50,15 +50,7 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
          (if(ver.startsWith("11.")) Seq("com.oracle.sites" % "wem-sso-api" % ver % "provided") else Seq()) ++
          (if(!ver.startsWith("12.")) Seq("com.oracle.sites" % "assetapi-impl" % ver % "provided") else Seq()))
  
-/*
-val publishSetting = bintrayPublishSettings ++ Seq(
-	   bintray.Keys.bintrayOrganization in bintray.Keys.bintray := Some("sciabarra"),
-	   bintray.Keys.repository in bintray.Keys.bintray := "maven",
-	   licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0.html")),
-	   publishMavenStyle := true,
-	   publishArtifact in packageDoc := false,
-	   publishArtifact in Test := false)
-*/
+
 val publishSettings = Seq(
   publishMavenStyle := true,
   pomIncludeRepository := { _ => false },
@@ -77,4 +69,4 @@ val publishSettings = Seq(
 
 val api = project.in(file(".")).
   settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.8.0"  ): _*).
-  settings(btSettings: _*)
+  settings(publishSettings: _*)

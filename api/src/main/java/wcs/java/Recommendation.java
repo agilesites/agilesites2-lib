@@ -3,7 +3,6 @@ package wcs.java;
 import static wcs.Api.*;
 import wcs.api.Arg;
 import wcs.api.Id;
-import wcs.api.Log;
 import wcs.core.tag.CommercecontextTag;
 import java.util.ArrayList;
 import java.util.List;

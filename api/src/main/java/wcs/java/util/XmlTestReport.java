@@ -19,7 +19,7 @@ package wcs.java.util;
  */
 
 import static wcs.Api.*;
-import wcs.api.Log;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;

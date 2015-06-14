@@ -22,7 +22,6 @@ import wcs.Api;
 import wcs.api.Arg;
 import wcs.api.Call;
 import wcs.api.Content;
-import wcs.api.Log;
 import wcs.api.URL;
 
 /**

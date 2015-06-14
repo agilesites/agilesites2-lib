@@ -1,6 +1,7 @@
 package wcs.api;
 
 import java.util.List;
+import wcs.core.*;
 
 import COM.FutureTense.Interfaces.ICS;
 
@@ -54,7 +55,6 @@ public interface Env extends Content {
 	 * 
 	 * @param list
 	 * @param row
-	 * @param field
 	 * @return
 	 */
 	public abstract String getString(String list, int row);

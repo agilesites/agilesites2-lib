@@ -1,15 +1,13 @@
 package wcs.java.model.definition.loader;
 
-import wcs.api.Log;
+import wcs.core.Log;
 import wcs.java.model.*;
-import wcs.java.model.annotation.AssetAttribute;
 import wcs.java.model.annotation.FlexFamily;
 import wcs.java.model.annotation.FlexParent;
 import wcs.java.model.annotation.FlexType;
 import wcs.java.model.definition.WCSFlexFamily;
 import wcs.java.model.type.WCSFlexAssetType;
 import wcs.java.model.type.WCSFlexFamilyInfo;
-import wcs.java.model.type.attribute.WCSAttributeType;
 import wcs.java.util.Util;
 
 import java.lang.annotation.Annotation;

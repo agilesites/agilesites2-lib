@@ -7,7 +7,6 @@ import com.fatwire.system.Session;
 import com.fatwire.system.SessionFactory;
 import com.openmarket.xcelerate.asset.AssetIdImpl;
 import wcs.Api;
-import wcs.api.Log;
 import wcs.core.tag.AssetTag;
 import wcs.java.Env;
 import wcs.java.util.Util;

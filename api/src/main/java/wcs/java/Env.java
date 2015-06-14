@@ -9,22 +9,18 @@ import static wcs.Api.toDouble;
 
 import java.util.*;
 
-import com.fatwire.assetapi.data.AssetDataManager;
 import com.fatwire.assetapi.data.AssetId;
 import com.fatwire.mda.*;
 import com.fatwire.system.Session;
 import com.fatwire.system.SessionFactory;
 import com.openmarket.xcelerate.asset.AssetIdImpl;
 import com.openmarket.xcelerate.asset.DimensionSetInstanceImpl;
-import com.openmarket.xcelerate.asset.FallbackDimensionFilterInstance;
-import com.openmarket.xcelerate.commands.DimensionSetTags;
 import wcs.Api;
 import wcs.api.Arg;
 import wcs.api.Asset;
 import wcs.api.AssetDeps;
 import wcs.api.Content;
 import wcs.api.Id;
-import wcs.api.Log;
 import wcs.api.Range;
 import wcs.core.WCS;
 import wcs.core.tag.AssetTag;

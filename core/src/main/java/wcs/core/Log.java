@@ -1,4 +1,4 @@
-package wcs.api;
+package wcs.core;
 
 import org.apache.log4j.Logger;
 
@@ -176,7 +176,7 @@ public class Log {
 	/**
 	 * Get a logger by name
 	 * 
-	 * @param clazz
+	 * @param className
 	 * @return
 	 */
 	public static Log getLog(String className) {

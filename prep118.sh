@@ -6,6 +6,7 @@ export h="$jsk/WEB-INF/lib"
 if ! test -e  $h/systemtools-11.1.1.8.0.jar 
 then echo "No Sites $v found" ; exit
 fi
+if test -z "$SKIP_MAVEN_INSTALL"; then
 mvn install:install-file -Dfile="$h/cs-core.jar" -DgroupId=com.oracle.sites -DartifactId=cs-core -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/cs.jar" -DgroupId=com.oracle.sites -DartifactId=cs -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/wem-sso-api-11.1.1.8.0.jar" -DgroupId=com.oracle.sites -DartifactId=wem-sso-api -Dversion=$v -Dpackaging=jar
@@ -22,6 +23,7 @@ mvn install:install-file -Dfile="$h/framework.jar" -DgroupId=com.oracle.sites -D
 mvn install:install-file -Dfile="$h/assetframework.jar" -DgroupId=com.oracle.sites -DartifactId=assetframework -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/lucene-search.jar" -DgroupId=com.oracle.sites -DartifactId=lucene-search -Dversion=$v -Dpackaging=jar
 mvn install:install-file -Dfile="$h/cs-cache-11.1.1.8.0.jar" -DgroupId=com.oracle.sites -DartifactId=cs-cache -Dversion=$v -Dpackaging=jar
+fi
 cd core
 sbt "sitesTagWrapperGen $jsk $v"
 cd ..

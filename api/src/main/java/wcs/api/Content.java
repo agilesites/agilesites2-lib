@@ -30,7 +30,7 @@ public interface Content {
 	 * Return the first attribute of the the named attribute as a string, or
 	 * null if not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public String getString(String attribute);
@@ -38,7 +38,7 @@ public interface Content {
 	/**
 	 * Return the nth named attribute as a string, or null if not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public String getString(String attribute, int n);
@@ -47,7 +47,7 @@ public interface Content {
 	 * Return the first attribute of the the attribute list as an int, or null
 	 * if not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public Integer getInt(String attribute);
@@ -56,7 +56,7 @@ public interface Content {
 	 * Return the nth attribute of the the attribute list as an int, or null if
 	 * not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public Integer getInt(String attribute, int n);
@@ -81,7 +81,7 @@ public interface Content {
 	 * Return the first attribute of the the attribute list as an int, or null
 	 * if not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public Date getDate(String attribute);
@@ -90,7 +90,7 @@ public interface Content {
 	 * Return the nth attribute of the the attribute list as an int, or null if
 	 * not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public Date getDate(String attribute, int n);
@@ -114,7 +114,6 @@ public interface Content {
 	/**
 	 * Return a string dump of this content
 	 * 
-	 * @param asset
 	 * @return
 	 */
 	public String dump();
@@ -122,7 +121,7 @@ public interface Content {
 	/**
 	 * Return a string dump of an attriute
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public String dump(String attribute);

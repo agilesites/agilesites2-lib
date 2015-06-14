@@ -3,11 +3,6 @@ package wcs.core;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
-
-import wcs.api.Call;
-import wcs.api.Config;
-import wcs.api.Log;
-import wcs.api.Router;
 import COM.FutureTense.Interfaces.ICS;
 import com.fatwire.assetapi.common.AssetAccessException;
 import com.fatwire.assetapi.data.AssetDataManager;
@@ -18,7 +13,7 @@ import com.fatwire.assetapi.site.SiteInfo;
 import com.fatwire.assetapi.site.SiteManager;
 import com.fatwire.system.Session;
 import com.fatwire.system.SessionFactory;
-
+import wcs.core.Dispatcher;
 
 /**
  * 
@@ -44,26 +39,6 @@ public class WCS {
 	}
 
 	private static Properties properties = null;
-
-	/**
-	 * Return a property configured in setup
-	 * 
-	 * @param name
-	 * @return
-	 */
-	public static String getProperty(String name) {
-		if (properties == null) {
-			properties = new Properties();
-			try {
-				properties.load(Config.class
-						.getResourceAsStream("/agilesites.properties"));
-				System.out.println(properties.toString());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		return properties.getProperty(name);
-	}
 
 	/**
 	 * Dispatch requests old style - use dispatch with the poll interval set in the jsp
@@ -187,7 +162,7 @@ public class WCS {
 	/**
 	 * Load the config for the current site
 	 * 
-	 * @param site
+	 * @param ics
 	 * @return
 	 */
 	public static Config getConfig(ICS ics) {
@@ -203,9 +178,11 @@ public class WCS {
 	/**
 	 * Load an env class initializing it with an ICS
 	 * 
-	 * @param site
+	 * @param ics
 	 * @return
-	 */
+
+	// not sure if it is still needed
+
 	public static wcs.api.Env getEnv(ICS ics, String className) {
 		try {
 			wcs.api.Env env = (wcs.api.Env) Dispatcher.getDispatcher(ics)
@@ -216,7 +193,7 @@ public class WCS {
 			log.error(ex, "[WCS.getEnv]");
 			return null;
 		}
-	}
+	}*/
 
 	private static long tmpVarCounter = System.currentTimeMillis();
 

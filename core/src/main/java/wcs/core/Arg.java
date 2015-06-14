@@ -1,4 +1,4 @@
-package wcs.api;
+package wcs.core;
 
 /**
  * Simple Arg holder class

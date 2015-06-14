@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import wcs.Api;
-import wcs.api.Log;
 import wcs.core.tag.AssetTag;
 import wcs.java.util.Util;
 import COM.FutureTense.Interfaces.ICS;

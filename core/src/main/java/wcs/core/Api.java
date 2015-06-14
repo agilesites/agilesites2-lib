@@ -1,13 +1,9 @@
-package wcs;
+package wcs.core;
 
-import wcs.api.Arg;
-import wcs.api.Args;
-import wcs.api.Call;
-import wcs.api.Content;
-import wcs.api.Env;
-import wcs.api.Id;
-import wcs.api.Log;
-import wcs.api.Model;
+import wcs.core.Arg;
+import wcs.core.Args;
+import wcs.core.Call;
+import wcs.core.Id;
 import wcs.core.Sequencer;
 import java.io.CharArrayWriter;
 import java.io.PrintWriter;
@@ -29,14 +25,8 @@ public class Api {
 	private static long tmpVarCounter = System.currentTimeMillis();
 
 	/**
-	 * Access to the env in a JSP
-	 */
-	public static Env env(ICS ics) {
-		return wcs.core.WCS.getEnv(ics, "wcs.java.Env");
-	}
-	/**
 	 * Generate an unique temporary var name.
-	 * 
+	 *
 	 * @return
 	 */
 	public synchronized static String tmp() {
@@ -59,32 +49,18 @@ public class Api {
 	 * Create list of args
 	 * 
 	 * @param name
-	 * @param value
+	 * @param values
 	 * @return
 	 */
 	public static Args args(String name, String... values) {
 		return new Args(name, values);
 	}
 
-	/**
-	 * Create a Model
-	 */
-	public static Model model(Arg... args) {
-		return new Model(args);
-	}
-
-	/**
-	 * Create a Model
-	 */
-	public static Model model(Model m, Arg... args) {
-		return new Model(m, args);
-	}
 
 	/**
 	 * Create an array of Arg from a list of strings in the form key=value
 	 * 
-	 * @param name
-	 * @param value
+	 * @param args
 	 * @return
 	 */
 	public static Arg[] argv(String... args) {
@@ -102,8 +78,8 @@ public class Api {
 	/**
 	 * Create an id
 	 * 
-	 * @param name
-	 * @param value
+	 * @param c
+	 * @param cid
 	 * @return
 	 */
 	public static Id id(String c, Long cid) {
@@ -282,42 +258,9 @@ public class Api {
 	}
 
 	/**
-	 * Print on standard output some contents
-	 */
-	public static void out(String message, Content... contents) {
-		System.out.println(message);
-		for (Content c : contents) {
-			System.out.println(c.dump());
-		}
-	}
-
-	/**
-	 * Print on standard output some contents
-	 */
-	public static void out(Content... contents) {
-		for (Content c : contents) {
-			System.out.println(c.dump());
-		}
-	}
-
-	/**
-	 * Print on standard output a content attributes
-	 */
-	public static void out(String message, Content content, String name) {
-		System.out.println(message + ": " + content.dump(name));
-	}
-
-	/**
-	 * Print on standard output a content attributes
-	 */
-	public static void out(Content content, String name) {
-		System.out.println(content.dump(name));
-	}
-	
-	/**
 	 * Get a logger by name
 	 * 
-	 * @param clazz
+	 * @param className
 	 * @return
 	 */
 	public static Log getLog(String className) {

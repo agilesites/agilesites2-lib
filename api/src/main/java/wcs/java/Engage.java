@@ -9,7 +9,6 @@ import COM.FutureTense.Interfaces.ICS;
 import wcs.Api;
 import wcs.api.Arg;
 import wcs.api.Id;
-import wcs.api.Log;
 import wcs.core.tag.CommercecontextTag;
 import wcs.core.tag.VdmTag;
 

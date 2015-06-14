@@ -16,7 +16,7 @@ com.fatwire.system.Session,
 com.fatwire.system.SessionFactory,
 java.util.*,
 java.io.*,
-wcs.api.Log" %>
+wcs.core.Log" %>
 <%@ page import="com.fatwire.assetapi.common.SiteAccessException" %>
 <%@ page import="com.fatwire.assetapi.common.AssetAccessException" %><%!
     final static Log log = Log.getLog("wcs.core.AAAgileSetup");

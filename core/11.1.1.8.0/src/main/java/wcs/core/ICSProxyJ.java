@@ -1,7 +1,7 @@
 package wcs.core;
 
-import static wcs.Api.*;
-import wcs.api.Id;
+import static wcs.core.Api.*;
+import wcs.core.Id;
 
 import java.io.OutputStream;
 import java.security.Principal;

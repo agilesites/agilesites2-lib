@@ -32,9 +32,9 @@ object AgileSitesLibPlugin extends AutoPlugin  {
     val cl = tld2class(s)
     """package wcs.core.tag;
 
-import static wcs.Api.*;
-import wcs.api.Arg;
-import wcs.api.Log;
+import static wcs.core.Api.*;
+import wcs.core.Arg;
+import wcs.core.Log;
 import COM.FutureTense.Interfaces.*;
 
 public class %s  {

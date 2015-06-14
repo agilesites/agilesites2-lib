@@ -4,7 +4,7 @@
 %><%@ page import="wcs.core.*,wcs.api.*"
 %>
 <%@ page import="java.util.Enumeration" %>
-<cs:ftcs><%! final static Log log = wcs.api.Log.getLog("jsp.wcs.api.Router");
+<cs:ftcs><%! final static Log log = wcs.core.Log.getLog("jsp.wcs.core.Router");
 %><%
     Enumeration headers = request.getHeaderNames();
     while (headers.hasMoreElements()) {

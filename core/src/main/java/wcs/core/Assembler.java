@@ -1,7 +1,5 @@
 package wcs.core;
 
-import wcs.Api;
-import wcs.api.Log;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,6 +18,7 @@ import com.fatwire.cs.core.uri.Definition;
 import com.fatwire.cs.core.uri.Definition.ContainerType;
 import com.fatwire.cs.core.uri.QueryAssembler;
 import com.fatwire.cs.core.uri.Simple;
+import wcs.core.*;
 
 public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
@@ -124,7 +123,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	private Definition assetDef(URI uri, String site, String path, String d) {
 		Simple def = new Simple(false, //
 				Definition.SatelliteContext.SATELLITE_SERVER, //
-				Definition.ContainerType.SERVLET, //
+				ContainerType.SERVLET, //
 				uri.getScheme(), //
 				uri.getAuthority(),//
 				Definition.AppType.CONTENT_SERVER,//
@@ -180,7 +179,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	    // hashedBlob: "^.*_[a-h0-9]{32}\\..*$"
 		Simple def = new Simple(false, //
 				Definition.SatelliteContext.SATELLITE_SERVER, //
-				Definition.ContainerType.SERVLET, //
+				ContainerType.SERVLET, //
 				uri.getScheme(), //
 				uri.getAuthority(), //
 				Definition.AppType.BLOB_SERVER, //
@@ -212,8 +211,8 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
 	/**
 	 * Disassemble blob - null if it is not possible
-	 * 
-	 * @param subpath without the site prefix
+	 *
+	 * @param path without the site prefix
 	 * @return
 	 */
 	private Definition disassembleBlob(URI uri, String path) {
@@ -231,7 +230,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
 	/**
 	 * Disassemble static - null if it is not possible
-	 * 
+	 *
 	 * @param path including the site prefix
 	 *
 	 * @return

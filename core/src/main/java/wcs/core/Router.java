@@ -1,4 +1,4 @@
-package wcs.api;
+package wcs.core;
 
 import COM.FutureTense.Interfaces.ICS;
 
@@ -21,29 +21,11 @@ public interface Router {
 	 * Route requests
 	 * 
 	 * @param ics
-	 * @param site
 	 * @param path
 	 * @param query
 	 * @return
 	 */
 	public Call route(ICS ics, String path, String query);
 
-	/**
-	 * Route an asset
-	 * 
-	 * @param env
-	 * @param url
-	 * @return
-	 */
-	public Call route(Env env, URL url);
-
-	/**
-	 * Generate the link to an asset
-	 * 
-	 * @param env
-	 * @param id
-	 * @return
-	 */
-	public String link(Env env, Id id, Arg... args);
 
 }

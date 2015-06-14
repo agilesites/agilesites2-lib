@@ -1,7 +1,6 @@
 package wcs.java.model;
 
 import COM.FutureTense.Interfaces.ICS;
-import wcs.api.Log;
 import wcs.java.ElementCatalog;
 import wcs.java.ElementCatalogEntry;
 import wcs.java.Env;

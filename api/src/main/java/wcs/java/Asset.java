@@ -7,7 +7,6 @@ import static wcs.Api.tmp;
 import static wcs.Api.toDate;
 import static wcs.Api.toInt;
 import static wcs.Api.toLong;
-import static wcs.Api.toDouble;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +16,6 @@ import wcs.Api;
 import wcs.api.Arg;
 import wcs.api.AssetDeps;
 import wcs.api.Call;
-import wcs.api.Log;
 import wcs.core.WCS;
 import wcs.core.tag.AssetTag;
 import wcs.core.tag.AssetsetTag;

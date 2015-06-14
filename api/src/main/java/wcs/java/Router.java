@@ -4,7 +4,6 @@ import wcs.api.Arg;
 import wcs.api.Call;
 import wcs.api.Env;
 import wcs.api.Id;
-import wcs.api.Log;
 import wcs.api.URL;
 import wcs.java.util.Util;
 import COM.FutureTense.Interfaces.ICS;
