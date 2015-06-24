@@ -5,214 +5,320 @@
 %><%@ taglib prefix="asset" uri="futuretense_cs/asset.tld"
 %><%@ taglib prefix="publication" uri="futuretense_cs/publication.tld"
 %><%@ taglib prefix="ics" uri="futuretense_cs/ics.tld"
-%><%@ page import="COM.FutureTense.Interfaces.ICS,
-COM.FutureTense.Interfaces.FTValList, 
-java.util.StringTokenizer,
-com.fatwire.assetapi.def.AssetTypeDefManager,
-com.fatwire.assetapi.site.Site,
-com.fatwire.assetapi.site.SiteInfo,
-com.fatwire.assetapi.site.SiteManager,
-com.fatwire.system.Session,
-com.fatwire.system.SessionFactory,
-java.util.*,
-java.io.*,
-wcs.core.Log" %>
-<%@ page import="com.fatwire.assetapi.common.SiteAccessException" %>
-<%@ page import="com.fatwire.assetapi.common.AssetAccessException" %><%!
-    final static Log log = Log.getLog("wcs.core.AAAgileSetup");
+%><%@ page import="COM.FutureTense.Interfaces.*,
+ com.fatwire.assetapi.common.*,
+ com.fatwire.assetapi.data.*,
+ com.fatwire.assetapi.def.*,
+ com.fatwire.assetapi.site.*,
+ com.fatwire.system.*,
+ wcs.core.*,
+ wcs.core.tag.*,
+ java.io.*,
+ java.util.*"
+%><%! 
+public static class MyInstaller {
 
-    private void enableJar(String siteName, SiteManager sim) throws SiteAccessException {
+    final static Log log = Log.getLog(Installer.class);
+
+    ICS ics;
+    String username;
+    String password;
+    String site;
+    Session ses;
+    SiteManager sim;
+
+  
+    public MyInstaller(ICS ics) {
+        this.ics = ics;
+
+        username = ics.GetVar("username");
+        password = ics.GetVar("password");
+
+        site = ics.GetVar("site");
+
+        ses = SessionFactory.newSession(username, password);
+        sim = (SiteManager) ses.getManager(SiteManager.class
+                .getName());
+    }
+
+    private String xmlByType(String typeName) {
+        log.trace("xmlByType %s", typeName);
+        File base = new File(ics.GetProperty("xcelerate.defaultbase",
+                "futuretense_xcel.ini", true));
+        StringBuilder sb = new StringBuilder();
+        String defDir = new File(base, typeName).getAbsolutePath();
+
+        if (typeName.equals(("Jar"))) {
+            sb.append("<?xml version='1.0' ?>\n");
+            sb.append("<ASSET NAME='Jar' DESCRIPTION='Jar' DEFDIR='").append(defDir).append("'>\n");
+            sb.append(" <PROPERTIES>\n");
+            sb.append("  <PROPERTY NAME='URL' DESCRIPTION='URL'>\n");
+            sb.append("    <STORAGE TYPE='VARCHAR' LENGTH='255' />\n");
+            sb.append("    <INPUTFORM TYPE='UPLOAD' WIDTH='64' LINKTEXT='Url' REQUIRED='YES'/>\n");
+            sb.append("  </PROPERTY>\n");
+            sb.append(" </PROPERTIES>\n");
+            sb.append("</ASSET>\n");
+        }
+        if (typeName.equals("Static")) {
+            sb.append("<?xml version='1.0' ?>\n");
+            sb.append("<ASSET NAME='Static' DESCRIPTION='Static' DEFDIR='").append(defDir).append("'>\n");
+            sb.append(" <PROPERTIES>\n");
+            sb.append("  <PROPERTY NAME='URL' DESCRIPTION='URL'>\n");
+            sb.append("   <STORAGE TYPE='VARCHAR' LENGTH='255' />\n");
+            sb.append("   <INPUTFORM TYPE='UPLOAD' WIDTH='64' LINKTEXT='Url' REQUIRED='YES'/>\n");
+            sb.append(" </PROPERTY>\n");
+            sb.append(" <PROPERTY NAME='FILEPATH' DESCRIPTION='FILEPATH'>\n");
+            sb.append("   <STORAGE TYPE='VARCHAR' LENGTH='512'/>\n");
+            sb.append("   <INPUTFORM TYPE='TEXT' DESCRIPTION='FILE PATH' REQUIRED='YES'/>\n");
+            sb.append("   <SEARCHFORM TYPE='TEXT' DESCRIPTION='FILE PATH'/>\n");
+            sb.append("   <SEARCHRESULTS INCLUDE='TRUE'/>\n");
+            sb.append(" </PROPERTY>\n");
+            sb.append(" <PROPERTY NAME='HASH' DESCRIPTION='HASH'>\n");
+            sb.append("  <STORAGE TYPE='VARCHAR' LENGTH='32'/>\n");
+            sb.append("  <INPUTFORM TYPE='TEXT' DESCRIPTION='HASH' REQUIRED='YES'/>\n");
+            sb.append("  <SEARCHFORM TYPE='TEXT' DESCRIPTION='HASH'/>\n");
+            sb.append("  <SEARCHRESULTS INCLUDE='TRUE'/>\n");
+            sb.append(" </PROPERTY>\n");
+            sb.append(" <PROPERTY NAME='HASHFILEPATH' DESCRIPTION='HASHFILEPATH'>\n");
+            sb.append("  <STORAGE TYPE='VARCHAR' LENGTH='512'/>\n");
+            sb.append("  <INPUTFORM TYPE='TEXT' DESCRIPTION='HASH FILE PATH' REQUIRED='YES'/>\n");
+            sb.append("  <SEARCHFORM TYPE='TEXT' DESCRIPTION='HASH FILE PATH'/>\n");
+            sb.append("  <SEARCHRESULTS INCLUDE='TRUE'/>\n");
+            sb.append(" </PROPERTY>\n");
+            sb.append(" <PROPERTY NAME='MIMETYPE' DESCRIPTION='MIMETYPE'>\n");
+            sb.append("   <STORAGE TYPE='VARCHAR' LENGTH='255'/>\n");
+            sb.append("   <INPUTFORM TYPE='TEXT' DESCRIPTION='MIMETYPE' REQUIRED='YES'/>\n");
+            sb.append("   <SEARCHFORM TYPE='TEXT' DESCRIPTION='MIMETYPE'/>\n");
+            sb.append("   <SEARCHRESULTS INCLUDE='TRUE'/>\n");
+            sb.append("  </PROPERTY>\n");
+            sb.append(" </PROPERTIES>\n");
+            sb.append("</ASSET>\n");
+        }
+        String body = sb.toString().replace('\'', '"');
+        //System.out.println(body);
+        return body;
+    }
+
+
+    private void enableType(String siteName, String typeName) throws SiteAccessException {
+
+        log.trace("enableType in %s for %s", siteName, typeName);
         Site site = sim.read(Arrays.asList(siteName)).get(0);
         List<String> types = site.getAssetTypes();
-        log.debug("site types="+types);
-        boolean hasJar = false;
+        log.debug("site types=" + types);
+        boolean hasType = false;
         for (String type : types)
-            if (type.equals("Jar")) {
-                hasJar = true;
+            if (type.equals(typeName)) {
+                hasType = true;
                 break;
             }
-        log.debug(siteName+" hasJar="+hasJar);
-        if (!hasJar) {
+
+        log.debug(siteName + " hasType=" + hasType);
+        if (!hasType) {
             List<String> newtypes = new LinkedList<String>();
             newtypes.addAll(types);
-            newtypes.add("Jar");
+            newtypes.add(typeName);
             site.setAssetTypes(newtypes);
-            log.debug("7. "+siteName+" newtypes="+newtypes);
+            log.debug("adding " + siteName + " newtypes=" + newtypes);
             sim.update(Arrays.asList(site));
         }
     }
 
-    private void disableJar(String siteName, SiteManager sim) throws SiteAccessException {
-        Site site = sim.read(Arrays.asList(siteName)).get(0);
-        List<String> types = site.getAssetTypes();
-        List<String> newtypes = new LinkedList<String>();
-        log.debug("site types="+types);
-        boolean hasJar = false;
-        for (String type : types)
-            if (type.equals("Jar")) {
-                hasJar = true;
-                break;
-            } else {
-                newtypes.add(type);
-            }
-        log.debug(siteName+" hasJar="+hasJar);
-        if (hasJar) {
-            sim.update(Arrays.asList(site));
-        }
-    }
-
-    void createJarTypeIfDoesNotExist (ICS ics, Session ses) throws AssetAccessException {
+    private boolean createTypeIfDoesNotExist(String typeName) throws AssetAccessException {
         AssetTypeDefManager atdm = (AssetTypeDefManager) ses
                 .getManager(AssetTypeDefManager.class.getName());
 
         // create the Jar Asset type if it does not exits
         Iterator<String> it = atdm.getAssetTypes().iterator();
-        while (it.hasNext()) {
-            if (it.next().equalsIgnoreCase("Jar")) {
-                log.debug("Jar exist");
-                return;
-            }
-        }
-        log.debug("Jar does not exist, creating.");
+        while (it.hasNext()) 
+            if (it.next().equalsIgnoreCase(typeName)) 
+                return false;
 
-        File base = new File(ics.GetProperty("xcelerate.defaultbase",
-                "futuretense_xcel.ini", true));
-        File baseJar = new File(base, "Jar");
+        atdm.createAssetMakerAssetType(
+                typeName, 
+                typeName + ".xml",
+                xmlByType(typeName), false, false);
+
+        return true;
+    }
+
+    private boolean createSiteIfDoesNotExist(String sitename, long siteid) throws SiteAccessException {
+        for (SiteInfo inf : sim.list())
+            if (inf.getName().equals(sitename)) 
+                return false;
+        try {
+
+            Site site = new SiteImpl();
+            site.setId(siteid);
+            site.setName(sitename);
+            site.setDescription(sitename);
+            site.setAssetTypes(Arrays.asList("Jar", "Static"));            
+            site.setUserRoles("fwadmin", Arrays.asList("GeneralAdmin", "SitesUser", "AdvancedUser"));
+            sim.create(Arrays.asList(site));
+
+           // sim.create(Collections.<Site>singletonList(new MiniSite(sitename, siteid)));
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    
+    }
+
+    public String init(String siteName, long siteId) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append("<?xml version=\"1.0\" ?>\n");
-        sb.append("<ASSET NAME=\"Jar\" DESCRIPTION=\"Jar\" DEFDIR=\"").append(baseJar.getAbsolutePath()).append("\">\n");
-        sb.append("    <PROPERTIES>\n");
-        sb.append("        <PROPERTY NAME=\"URL\" DESCRIPTION=\"URL\">\n");
-        sb.append("            <STORAGE TYPE=\"VARCHAR\" LENGTH=\"255\" />\n");
-        sb.append("            <INPUTFORM TYPE=\"UPLOAD\" WIDTH=\"64\" LINKTEXT=\"Url\" REQUIRED=\"YES\"/>\n");
-        sb.append("        </PROPERTY>\n");
-        sb.append("    </PROPERTIES>\n");
-        sb.append("</ASSET>\n");
-        atdm.createAssetMakerAssetType("Jar", "Jar.xml",
-                sb.toString(), false, false);
+        if(createTypeIfDoesNotExist("Jar"))
+            sb.append("Created Jar\n");
+        
+        if(createTypeIfDoesNotExist("Static")) 
+            sb.append("Created Static.\n");
+
+        if(createSiteIfDoesNotExist(siteName, siteId))
+            sb.append("Created ").append(siteName+"("+siteId+")");
+
+        return sb.toString();
     }
 
     /**
-     * Ensure there is a Jar asset before uploading it
-     * <p/>
-     * Return sites where the jar must be uploaded  or null if no sites found
+     * Upload a jar
+     *
+     * @return
      */
-    public String ensureJarAsset(ICS ics, String sites, String username, String password) throws Exception {
 
-        // load the required managers
-        Session ses = SessionFactory.newSession(username, password);
-        SiteManager sim = (SiteManager) ses.getManager(SiteManager.class
-                .getName());
+    public String uploadJar() {
+        UserTag.login()
+                .username(username)
+                .password(password)
+                .run(ics);
 
-        createJarTypeIfDoesNotExist(ics, ses);
+        byte[] file = ics.GetBin("file");
+        String filename = ics.GetVar("jar_file");
+        String result;
 
-        /// enable the Jar type in the requires sites
-        StringBuffer found = new StringBuffer();
-        StringTokenizer st = new StringTokenizer(sites, ",");
-        while (st.hasMoreTokens()) {
-            String siteName = st.nextToken();
-            log.debug("checking=" + siteName);
-            boolean exist = false;
-            for (SiteInfo sif : sim.list()) {
-                if (sif.getName().equals(siteName)) {
-                    found.append(siteName).append(",");
-                    enableJar(siteName, sim);
-                    exist = true;
-                }
-            }
-        }
-
-        // return the list of the found sites with Jar type or the AdminSite
-        if (found.length() > 0) {
-            found.setLength(found.length() - 1);
-            disableJar("AdminSite", sim);
-            return found.toString();
+        AssetTag.load()
+                .name("obj")
+                .type("Jar")
+                .field("name")
+                .value(filename)
+                .editable("true")
+                .run(ics);
+        if (ics.GetObj("obj") == null) {
+            result = "created,";
+            AssetTag.create()
+                    .name("obj")
+                    .type("Jar")
+                    .run(ics);
+            AssetTag.set()
+                    .name("obj")
+                    .field("name")
+                    .value("filename")
+                    .run(ics);
         } else {
-            return "AdminSite";
+            result = "updated,";
+            AssetTag.scatter()
+                    .name("obj")
+                    .prefix("data")
+                    .fieldlist("url")
+                    .run(ics);
         }
+        PublicationTag.load()
+                .name("Pub")
+                .field("name")
+                .value(site)
+                .run(ics);
+
+        PublicationTag.get()
+                .name("Pub")
+                .field("name")
+                .output("siteid")
+                .run(ics);
+
+        AssetTag.addsite()
+                .name("obj")
+                .pubid(ics.GetVar("siteid"))
+                .run(ics);
+
+        FTValList list = new FTValList();
+        list.setValBLOB("jar", file);
+        ics.SetVar("data:url", list.getVal("jar"));
+
+        IcsTag.setvar()
+                .name("data:url_file")
+                .value(filename)
+                .run(ics);
+
+        IcsTag.setvar()
+                .name("data:url_folder")
+                .value("agilesites")
+                .run(ics);
+
+        IcsTag.setvar()
+                .name("data:status")
+                .value("ED")
+                .run(ics);
+
+        AssetTag.gather()
+                .name("obj")
+                .prefix("data")
+                .fieldlist("url")
+                .run(ics);
+
+        AssetTag.save()
+                .name("obj")
+                .run(ics);
+
+        AssetTag.get()
+                .name("obj")
+                .field("id")
+                .output("id")
+                .run(ics);
+
+        result += ics.GetVar("id") + "," + filename + "," + file.length;
+        //log.debug("Jar "+ics.GetObj("obj"));
+            /*java.util.Enumeration en = ics.GetVars();
+            while(en.hasMoreElements())  {
+              String k = en.nextElement().toString();
+              log.debug(k+"="+ics.GetVar(k));
+            }*/
+        //log.debug("Jar "+ics.GetBin("jar:url").length);
+        return result;
     }
+}
 %><cs:ftcs><%
 
-    String result ="";
-    String tmp = ics.GetVar("op");
-    if(tmp==null) tmp = "deploy";
+String op = ics.GetVar("op");
+String result ="Unknown command: "+op;
 
-    log.debug("ops="+tmp);
-
-    StringTokenizer ops = new StringTokenizer(tmp, ",");
-    while(ops.hasMoreTokens()) {
-        try {
-            String op = ops.nextToken();
-            if(op.equals("upload")) {
-                String sites = ensureJarAsset(ics,
-                                              ics.GetVar("sites"),
-                                              ics.GetVar("username"),
-                                              ics.GetVar("password"));
-                log.debug("post ensureJar sites="+sites);
-                byte[] jar = ics.GetBin("jar");
-                String filename = ics.GetVar("jar_file");
-%><user:login
-        username='<%=ics.GetVar("username") %>'
-        password='<%=ics.GetVar("password") %>'
-        /><asset:load name="obj" type="Jar" field="name" value='<%= filename %>' editable="true"
-        /><% if(ics.GetObj("obj")==null) {
-    result = "created,";
-%><asset:create name="obj" type="Jar"
-        /><asset:set name="obj" field="name" value='<%= filename %>'
-        /><% } else {
-    result = "updated,";
-%><asset:scatter name="obj" prefix="data" fieldlist="url"
-        /><% }
-%><% StringTokenizer st = new StringTokenizer(sites, ",");
-    while(st.hasMoreTokens()) {
-%><publication:load name="Pub" field="name" value='<%= st.nextToken() %>'
-        /><publication:get name="Pub" field="id" output="siteid"
-        /><asset:addsite name="obj" pubid='<%=ics.GetVar("siteid")%>'
-        /><% }
-    FTValList list = new FTValList();
-    list.setValBLOB("jar", jar);
-    ics.SetVar("data:url", list.getVal("jar"));
-%><ics:setvar name="data:url_file" value='<%= filename %>'
-        /><ics:setvar name="data:url_folder" value="agilesites"
-        /><ics:setvar name="data:status" value="ED"
-        /><asset:gather name="obj" prefix="data" fieldlist="url"
-        /><asset:save name="obj"
-        /><asset:get name="obj" field="id" output="id"/><%
-    result +=  ics.GetVar("id") + "," +filename + "," + jar.length;
-    //log.debug("Jar "+ics.GetObj("obj"));
-    /*java.util.Enumeration en = ics.GetVars();
-    while(en.hasMoreElements())  {
-      String k = en.nextElement().toString();
-      log.debug(k+"="+ics.GetVar(k));
-    }*/
-    //log.debug("Jar "+ics.GetBin("jar:url").length);
-} else if(op.equals("deploy")) {
+try {
+  if (op == null) {
+    throw new Exception("You are using an obsolete version of the deployer - plase upgrade plugin to version 11g or later");
+  } else if(op.equals("init")) {
+     String site = ics.GetVar("site");
+     long siteid = Long.parseLong(ics.GetVar("siteid"));
+     result = new MyInstaller(ics).init(site,siteid);
+  } else if(op.equals("status")) {
+     result = ics.GetSSVar("_authkey_");    
+  }  else if(op.equals("upload")) {
+    result = new MyInstaller(ics).uploadJar();
+  } else if(op.equals("deploy")) {
     result = wcs.core.WCS.deploy(ics,
-            ics.GetVar("sites"),
-            ics.GetVar("username"),
-            ics.GetVar("password"));
-} else if(op.equals("hello")) {
-    result = "Nice to meet you, please take a cookie.";
-} else if(op.equals("key")) {
-    result = ics.GetSSVar("_authkey_");
-} else if(op.equals("form")) {
-%><form method="POST"
-        action="/cs/Satellite"
-        enctype="multipart/form-data">
-    <input type="file" name="jar">
-    <input type="hidden" name="_authkey_"
-           value="<%=ics.GetSSVar("_authkey_")%>">
-    <input type="hidden" name="pagename"
-           value="AAAgileSetup">
-    <input type="submit">
+        ics.GetVar("site"),
+        ics.GetVar("username"),
+        ics.GetVar("password"));
+  } else if(op.equals("form")) { %>
+<form method="POST"
+      action="/cs/Satellite"
+      enctype="multipart/form-data">
+  <input type="file" name="jar">
+  <input type="hidden" name="_authkey_"
+         value="<%=ics.GetSSVar("_authkey_")%>">
+  <input type="hidden" name="pagename"
+         value="AAAgileSetup">
+  <input type="submit">
 </form>
-    <% } else {
-        result = "unknown op";
-       }
-    } catch(NullPointerException ex) {
-        result = "ERROR: no op specified";
-    } catch(Exception ex) {
-        result = "ERROR: "+ex.getMessage();
-        ex.printStackTrace();
-    }
- }%><%= result %></cs:ftcs>
+<%} 
+} catch(Exception ex) {
+    result = "ERROR: "+ex.getMessage();
+    ex.printStackTrace();
+} 
+%><%= result %></cs:ftcs>
