@@ -362,7 +362,14 @@ public interface Env extends Content {
      */
     public abstract List<Id> find(String type, String orderField, Arg... args);
 
-	/**
+    /*
+     * (non-Javadoc)
+     *
+     * @see wcs.java.IEnv#find(java.lang.String, wcs.core.Arg)
+     */
+    List<Id> findLocalized(String type, String orderField, String locale, Arg... args);
+
+    /**
 	 * Find one assets
 	 */
 	public abstract Asset findOne(String type, Arg... args);

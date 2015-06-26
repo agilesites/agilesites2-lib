@@ -58,7 +58,8 @@ if (name.equalsIgnoreCase("INSITE:CALLTEMPLATE")) {
 	String site = c.getOnce("SITE"); 
 	String index = c.getOnce("INDEX");
 	String empty = Api.nn(c.getOnce("EMPTYTEXT"));
-if(childid!=null && childid.equals("0")) {
+    String endrow = c.getOnce("ENDROW");
+    if(childid!=null && childid.equals("0")) {
   %><insite:calltemplate  
     site='<%=site%>'
 	assettype='<%=atype%>'

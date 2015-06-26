@@ -222,6 +222,17 @@ public class Picker {
 		return removeOrSingle(where, false);
 	}
 
+    /**
+     * Remove nodes specified
+     *
+     * @param where
+     * @return
+     */
+    public Picker remove(String where, int index) {
+        top.select(where).remove(index);
+        return this;
+    }
+
 	/**
 	 * Remove specified attributes
 	 * 
@@ -395,6 +406,15 @@ public class Picker {
 		top.select(where).addClass(what);
 		return this;
 	}
+
+    /**
+     * Remove a class
+     *
+     */
+    public Picker removeClass(String where, String what) {
+        top.select(where).removeClass(what);
+        return this;
+    }
 
 	/**
 	 * Convenience method to dump the html of the current node - embedded calls

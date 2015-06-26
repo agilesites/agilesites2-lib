@@ -319,7 +319,12 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return e.getAsset(type, getCid(attribute));
 	}
 
-	/**
+    @Override
+    public wcs.api.Asset getLocalizedAsset(String attribute, String type, String locale) {
+        return e.getLocalizedAsset(locale, type, getCid(attribute));
+    }
+
+    /**
 	 * Return the specified asset at the nth position. It does not log any
 	 * dependencies - use this when you just need to get an url.
      * @param attribute the attribute name
@@ -330,7 +335,12 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return e.getAsset(type, getCid(attribute, i));
 	}
 
-	/**
+    @Override
+    public wcs.api.Asset getLocalizedAsset(String attribute, String type, int i, String locale) {
+        return e.getLocalizedAsset(locale, type, getCid(attribute, i));
+    }
+
+    /**
 	 * Return the related asset pointed by the attribute of the given type if
 	 * not found
 	 * 
@@ -344,7 +354,14 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return e.getAsset(type, cid);
 	}
 
-	/**
+    @Override
+    public wcs.api.Asset getLocalizedAsset(String attribute, int i, String type, AssetDeps deps, String locale) {
+        Long cid = getCid(attribute);
+        e.addDependency(type, cid, deps);
+        return e.getLocalizedAsset(locale, type, cid);
+    }
+
+    /**
 	 * Return the related asset pointed by the nth attribute of the given type
 	 * if not found
 	 * 
@@ -891,7 +908,15 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return insiteCall(type, template, attribute, 1, emptyText, args);
 	}
 
-	/**
+    @Override
+    public wcs.api.Asset getLocale() {
+        ICS ics = e.ics();
+        String glocale = tmp();
+        AssetTag.getlocale().type(getC()).objectid(getC()).prefix(glocale).run(ics);
+        return e.getAsset(glocale + ":TYPE", Long.parseLong(glocale+":OBJECTID"));
+    }
+
+    /**
 	 * Return the URL to render this asset
 	 */
 	@Override

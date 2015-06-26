@@ -185,6 +185,15 @@ public interface Asset extends Content {
 	 */
 	public abstract Asset getAsset(String attribute, String type);
 
+    /**
+     * Return the related asset pointed by the attribute of the given type.
+     *
+     * It does not log any dependencies - use only if you use to generate urls
+     * or retrieve other assets.
+     *
+     */
+    public abstract Asset getLocalizedAsset(String attribute, String type, String locale);
+
 	/**
 	 * Return the related asset pointed by the nth attribute of the given type.
 	 * 
@@ -193,17 +202,43 @@ public interface Asset extends Content {
 	 */
 	public abstract Asset getAsset(String attribute, String type, int i);
 
+    /**
+     * Return the related asset pointed by the nth attribute of the given type.
+     *
+     * It does not log any dependencies - use only if you use to generate urls
+     * or retrieve other assets.
+     */
+    public abstract Asset getLocalizedAsset(String attribute, String type, int i, String locale);
+
 	/**
 	 * Return the related asset pointed by the nth attribute of the given type.
 	 * 
 	 * Since you are accessing another asset it is mandatory to specify the
 	 * dependency type you are going to use.
 	 * 
-	 * @param asset
+	 * @param attribute attribute name
+     * @param i attribute index
+     * @param type attribute type
+     * @param logdep
 	 * @return
 	 */
 	public abstract Asset getAsset(String attribute, int i, String type,
 			AssetDeps logdep);
+
+    /**
+     * Return the related asset pointed by the nth attribute of the given type.
+     *
+     * Since you are accessing another asset it is mandatory to specify the
+     * dependency type you are going to use.
+     *
+     * @param attribute attribute name
+     * @param i attribute index
+     * @param type attribute type
+     * @param logdep
+     * @return
+     */
+    public abstract Asset getLocalizedAsset(String attribute, int i, String type,
+                                   AssetDeps logdep, String locale);
 
 	/**
 	 * String get blob url of the first attribute, with optional args
@@ -484,5 +519,8 @@ public interface Asset extends Content {
 	 */
 	public abstract String slot(String attribute, String type, String template,
 			String emptyText, Arg... args) throws IllegalArgumentException;
+
+
+    public abstract Asset getLocale();
 
 }
