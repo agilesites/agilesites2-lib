@@ -5,6 +5,7 @@ import wcs.java.ElementCatalog;
 import wcs.java.ElementCatalogEntry;
 import wcs.java.Env;
 import wcs.java.util.Util;
+import wcs.core.Log;
 
 import java.lang.reflect.Method;
 

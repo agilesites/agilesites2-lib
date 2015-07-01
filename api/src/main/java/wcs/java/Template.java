@@ -51,10 +51,6 @@ public class Template extends AssetSetup {
 	 * 
 	 * Description defaults to the name, cache defaults to false/false
 	 * 
-	 * @param subtype
-	 * @param name
-	 * @param description
-	 * @param element
 	 */
 	public Template(String subtype, String name, char ttype, String forSubtype,
 			Class<?> elementClass) {

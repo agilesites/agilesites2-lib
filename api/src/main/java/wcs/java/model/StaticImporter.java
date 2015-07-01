@@ -15,6 +15,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import wcs.core.Log;
 
 /**
  * Imports static assets for a site

@@ -142,7 +142,7 @@ import java.util.StringTokenizer;
 
 public class URL {
 
-	private final static Log log = Log.getLog(URL.class);
+	private final static wcs.core.Log log = wcs.core.Log.getLog(URL.class);
 
 	//
 	// Public statics

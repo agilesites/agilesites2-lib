@@ -2,7 +2,8 @@ package wcs.java;
 
 import static wcs.Api.*;
 import wcs.Api;
-import wcs.api.Arg;
+import wcs.core.Arg;
+import wcs.core.Log;
 
 import java.lang.reflect.Method;
 import java.util.LinkedList;

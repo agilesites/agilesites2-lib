@@ -41,7 +41,7 @@ import org.junit.runner.notification.RunListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
+import wcs.core.Log;
 
 /**
  * Prints XML output of the test to a specified Writer.

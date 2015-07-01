@@ -7,7 +7,7 @@ import com.openmarket.xcelerate.common.RoleList;
 import com.openmarket.xcelerate.common.SiteList;
 import com.openmarket.xcelerate.interfaces.*;
 import com.openmarket.xcelerate.startmenu.InputArgList;
-import wcs.api.Arg;
+import wcs.core.Arg;
 import wcs.java.model.enums.AssetTypeNames;
 import wcs.java.model.enums.StartMenuTypeEnum;
 import wcs.java.util.IdBeautifier;

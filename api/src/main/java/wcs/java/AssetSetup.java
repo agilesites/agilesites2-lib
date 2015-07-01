@@ -1,7 +1,6 @@
 package wcs.java;
 
 import java.util.List;
-
 import wcs.java.util.Util;
 
 import com.fatwire.assetapi.data.MutableAssetData;

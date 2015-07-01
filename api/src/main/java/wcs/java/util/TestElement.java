@@ -19,10 +19,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import wcs.Api;
-import wcs.api.Arg;
-import wcs.api.Call;
+import wcs.core.Arg;
+import wcs.core.Call;
 import wcs.api.Content;
 import wcs.api.URL;
+import wcs.core.Log;
 
 /**
  * Collection of test helpers for testing elements.
@@ -71,6 +72,7 @@ public class TestElement extends TestCase {
 	 * @return
 	 */
 	public TestEnv env(String path, Arg... args) {
+
 		if (path == null)
 			path = "";
 		TestEnv te = env(args);
@@ -78,7 +80,7 @@ public class TestElement extends TestCase {
 		for (Arg arg : args)
 			list.add(arg);
 		try {
-			Call call = wcs.core.WCS.getRouter(te.ics()).route(te,
+			Call call = ((wcs.api.Router) wcs.core.WCS.getRouter(te.ics())).route(te,
 					URL.parse(new URI(path)));
 			for (String k : call.keysLeft())
 				list.add(arg(k, call.getOnce(k)));
@@ -242,7 +244,7 @@ public class TestElement extends TestCase {
 	 * of the selected node.
 	 * 
 	 * @param cssq
-	 * @param html
+	 * @param attr
 	 */
 	public void assertAttr(String cssq, String attr, String value) {
 		Elements elem = doc.select(cssq);
@@ -264,7 +266,7 @@ public class TestElement extends TestCase {
 	 * of the selected node.
 	 * 
 	 * @param cssq
-	 * @param html
+	 * @param attr
 	 */
 	public void assertAttrContains(String cssq, String attr, String value) {
 		Elements elem = doc.select(cssq);
@@ -290,7 +292,7 @@ public class TestElement extends TestCase {
 	/**
 	 * Dump generated outer html to a print writer (System.out for example)
 	 * 
-	 * @param log
+	 * @param out
 	 */
 	protected void dump(PrintStream out) {
 		out.println(dumpStream(doc.outerHtml()));
@@ -310,8 +312,7 @@ public class TestElement extends TestCase {
 
 	/**
 	 * Dump generated outer html
-	 * 
-	 * @param log
+	 *
 	 */
 	protected void dump(PrintStream out, Content c) {
 		if (c == null)
@@ -336,7 +337,7 @@ public class TestElement extends TestCase {
 	/**
 	 * Dump a content attribute to a System.out
 	 * 
-	 * @param log
+	 * @param out
 	 */
 	protected void dump(PrintStream out, Content c, String name) {
 		if (c.exists(name)) {

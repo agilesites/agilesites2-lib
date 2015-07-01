@@ -9,6 +9,7 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 import java.io.ByteArrayOutputStream;
 import java.util.StringTokenizer;
+import wcs.core.Log;
 
 public abstract class TestRunnerElement extends wcs.java.Element {
 

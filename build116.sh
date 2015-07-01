@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 cd core
 sbt -Dver=11.1.1.6.0 "publish-local" 
 cd ..

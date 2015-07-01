@@ -22,7 +22,7 @@ import wcs.core.*;
 
 public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
-	final static Log log = Log.getLog(Assembler.class);
+	final static wcs.core.Log log = wcs.core.Log.getLog(Assembler.class);
 	private QueryAssembler qa = new QueryAssembler();
 	private Map<String, String> sitePrefix = new HashMap<String, String>();
 	private Map<String, String> siteName = new HashMap<String, String>();

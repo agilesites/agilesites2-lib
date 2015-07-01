@@ -1,25 +1,16 @@
-val v = scala.io.Source.fromFile( (file("..")/"version.txt").getAbsolutePath).getLines.next.trim
+val v = settingKey[String]("v")
 
-val asPackage = taskKey[Unit]("deploy the lib to destination")
+v := scala.io.Source.fromFile( baseDirectory.value.getParentFile / "version.txt").getLines.next.trim
 
-asPackage in Compile := { println("use one of the subprojects")}
+resolvers ++= Seq(
+     "Nexus-sciabarra-releases" at "http://nexus.sciabarra.com/content/repositories/releases"
+    ,"Nexus-sciabarra-snapshots" at "http://nexus.sciabarra.com/content/repositories/snapshots"
+  )
 
-resolvers += "Nexus-sciabarra-releases" at "http://nexus.sciabarra.com/content/repositories/releases"
-
-resolvers += "Nexus-sciabarra-snapshots" at "http://nexus.sciabarra.com/content/repositories/snapshots"
-
-def settingsByVersion(ver: String) = Seq(asPackage := {
-  val location = file("target.txt")
-  if(!location.exists)
-    throw new java.io.FileNotFoundException("Not found 'target.txt' - Please create one to specify destination.")
-  val dst = file(scala.io.Source.fromFile(location).getLines.next.trim)
-  val src = (Keys.`package` in Compile).value
-  IO.copyFile(src, dst)
-  println(s"+++ ${dst}")
-},
+def settingsByVersion(ver: String) = Seq(
     name := "agilesites2-api",
     organization := "com.sciabarra",
-    version := ver + "_" + v,
+    version := ver + "_" + v.value,
     javacOptions ++= Seq("-g", "-Xlint:unchecked", "-source", "1.6", "-target", "1.6"),
     scalacOptions ++= Seq("-target:jvm-1.6"),
     scalaVersion := "2.11.5",
@@ -27,8 +18,9 @@ def settingsByVersion(ver: String) = Seq(asPackage := {
     javacOptions in Compile += "-g",
     resolvers += Resolver.mavenLocal,
     autoScalaLibrary := false,
+    ivyConfigurations += config("core"),
     libraryDependencies ++= Seq(
-         "com.sciabarra" % "agilesites2-core" % version.value % "provided",
+         "com.sciabarra" % "agilesites2-core" % version.value ,
          "junit" % "junit" % "4.11",
          "org.mockito" % "mockito-core" % "1.9.5" % "test",
          "org.powermock" % "powermock-api-mockito" % "1.6.1" % "test",

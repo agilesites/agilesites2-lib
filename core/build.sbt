@@ -1,25 +1,11 @@
-val v = scala.io.Source.fromFile((file("..") / "version.txt").getAbsolutePath).getLines.next.trim
+val v = settingKey[String]("v")
 
-val asPackage = taskKey[Unit]("deploy the lib to destination")
+v := scala.io.Source.fromFile( baseDirectory.value.getParentFile / "version.txt").getLines.next.trim
 
-val asPackageTask = asPackage := {
-  val location = file("target.txt")
-  if (!location.exists)
-    throw new java.io.FileNotFoundException("Not found 'target.txt' - Please create one to specify destination.")
-  val dst = file(scala.io.Source.fromFile(location).getLines.next.trim)
-  val src = (Keys.`package` in Compile).value
-  IO.copyFile(src, dst)
-  println(s"+++ ${dst}")
-  println(
-    """ ***************************************************
-      | **** You need to restart to use the new jar!!! ****
-      | ***************************************************""".stripMargin)
-}
-
-def settingsByVersion(ver: String) = Seq(asPackageTask,
+def settingsByVersion(ver: String) = Seq(
   name := "agilesites2-core",
   organization := "com.sciabarra",
-  version := ver + "_" + v,
+  version := ver + "_" + v.value,
   scalaVersion := "2.11.5",
   crossPaths := false,
   autoScalaLibrary := false,
@@ -31,18 +17,16 @@ def settingsByVersion(ver: String) = Seq(asPackageTask,
   unmanagedResourceDirectories in Compile ++= Seq(
     baseDirectory.value / ver / "src" / "main" / "resources"),
   libraryDependencies ++= Seq(
-       //"com.novocode" % "junit-interface" % "0.9" % "test",
-        //"org.xeustechnologies" % "jcl-core" % "2.2.1",
-       "javax.servlet" % "servlet-api" % "2.5" % "provided",
-       "log4j" % "log4j" % "1.2.16" % "provided",
-       "commons-io" % "commons-io" % "1.4" % "provided",
-       "org.apache.lucene" % "lucene-core" % "2.9.2" % "provided",
-       "com.oracle.sites" % "gator" % ver % "provided",
-       "com.oracle.sites" % "cs-core" % ver % "provided",
-       "com.oracle.sites" % "cs" % ver % "provided",
-       "com.oracle.sites" % "lucene-search" % ver % "provided",
-       "com.oracle.sites" % "xcelerate" % ver % "provided",
-       "com.oracle.sites" % "assetapi" % ver % "provided") ++
+        "javax.servlet" % "servlet-api" % "2.5" % "provided"
+       ,"log4j" % "log4j" % "1.2.16" % "provided"
+       ,"commons-io" % "commons-io" % "1.4" % "provided"
+       ,"org.apache.lucene" % "lucene-core" % "2.9.2" % "provided"
+       ,"com.oracle.sites" % "gator" % ver % "provided"
+       ,"com.oracle.sites" % "cs-core" % ver % "provided"
+       ,"com.oracle.sites" % "cs" % ver % "provided"
+       ,"com.oracle.sites" % "lucene-search" % ver % "provided"
+       ,"com.oracle.sites" % "xcelerate" % ver % "provided"
+       ,"com.oracle.sites" % "assetapi" % ver % "provided") ++
        (if(!ver.startsWith("12."))
         Seq("com.oracle.sites" % "assetapi-impl" % ver % "provided")
        else Seq()) ++
@@ -72,5 +56,6 @@ val publishSettings = Seq(
 
 val core = project.in(file(".")).
   enablePlugins(AgileSitesLibPlugin).
-  settings(settingsByVersion(  Option(System.getProperty("ver")) getOrElse "11.1.1.8.0"  ): _*).
+  settings(settingsByVersion(
+    Option(System.getProperty("ver")) getOrElse "11.1.1.8.0"  ): _*).
   settings(publishSettings: _*)

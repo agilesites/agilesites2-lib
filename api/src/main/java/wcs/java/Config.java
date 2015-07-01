@@ -9,7 +9,7 @@ import COM.FutureTense.Interfaces.ICS;
  * @author msciab
  * 
  */
-abstract public class Config implements wcs.api.Config {
+abstract public class Config implements wcs.core.Config {
 
 	private String blobId = null;
 	private String blobUrl = null;
@@ -45,15 +45,6 @@ abstract public class Config implements wcs.api.Config {
 		if (blobTable == null)
 			blobTable = BlobserviceTag.gettablename().eval(ics, "VARNAME");
 		return blobTable;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see wcs.java.IConfig#getProperty(java.lang.String)
-	 */
-	@Override
-	public String getProperty(String name) {
-		return wcs.core.WCS.getProperty(name);
 	}
 
 	// // ABSTRACT PART ////

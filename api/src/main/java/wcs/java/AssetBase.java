@@ -1,6 +1,6 @@
 package wcs.java;
 
-import wcs.api.Id;
+import wcs.core.Id;
 import java.util.Date;
 
 /**

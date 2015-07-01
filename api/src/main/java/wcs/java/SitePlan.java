@@ -2,7 +2,8 @@ package wcs.java;
 
 import static wcs.Api.*;
 import wcs.api.Env;
-import wcs.api.Id;
+import wcs.core.Id;
+import wcs.core.Log;
 import wcs.core.tag.AssetTag;
 import wcs.core.tag.SiteplanTag;
 import COM.FutureTense.Interfaces.ICS;

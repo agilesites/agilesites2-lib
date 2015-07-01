@@ -19,22 +19,20 @@
 public static class MyInstaller {
 
     final static Log log = Log.getLog(Installer.class);
-
+    
     ICS ics;
-    String username;
-    String password;
-    String site;
     Session ses;
     SiteManager sim;
+    String username;
+    String password;
 
-  
-    public MyInstaller(ICS ics) {
+    public MyInstaller(ICS ics, String username, String password) {
         this.ics = ics;
+        this.username =  username;
+        this.password = password;
 
-        username = ics.GetVar("username");
-        password = ics.GetVar("password");
-
-        site = ics.GetVar("site");
+        //System.out.println(username);
+        //System.out.println(password);
 
         ses = SessionFactory.newSession(username, password);
         sim = (SiteManager) ses.getManager(SiteManager.class
@@ -99,31 +97,7 @@ public static class MyInstaller {
         return body;
     }
 
-
-    private void enableType(String siteName, String typeName) throws SiteAccessException {
-
-        log.trace("enableType in %s for %s", siteName, typeName);
-        Site site = sim.read(Arrays.asList(siteName)).get(0);
-        List<String> types = site.getAssetTypes();
-        log.debug("site types=" + types);
-        boolean hasType = false;
-        for (String type : types)
-            if (type.equals(typeName)) {
-                hasType = true;
-                break;
-            }
-
-        log.debug(siteName + " hasType=" + hasType);
-        if (!hasType) {
-            List<String> newtypes = new LinkedList<String>();
-            newtypes.addAll(types);
-            newtypes.add(typeName);
-            site.setAssetTypes(newtypes);
-            log.debug("adding " + siteName + " newtypes=" + newtypes);
-            sim.update(Arrays.asList(site));
-        }
-    }
-
+    // create a type if it does not exist
     private boolean createTypeIfDoesNotExist(String typeName) throws AssetAccessException {
         AssetTypeDefManager atdm = (AssetTypeDefManager) ses
                 .getManager(AssetTypeDefManager.class.getName());
@@ -142,6 +116,7 @@ public static class MyInstaller {
         return true;
     }
 
+    // create a site if it does not exist
     private boolean createSiteIfDoesNotExist(String sitename, long siteid) throws SiteAccessException {
         for (SiteInfo inf : sim.list())
             if (inf.getName().equals(sitename)) 
@@ -152,8 +127,7 @@ public static class MyInstaller {
             site.setId(siteid);
             site.setName(sitename);
             site.setDescription(sitename);
-            site.setAssetTypes(Arrays.asList("Jar", "Static"));            
-            site.setUserRoles("fwadmin", Arrays.asList("GeneralAdmin", "SitesUser", "AdvancedUser"));
+            site.setUserRoles(username, Arrays.asList("GeneralAdmin", "SitesUser", "AdvancedUser"));
             sim.create(Arrays.asList(site));
 
            // sim.create(Collections.<Site>singletonList(new MiniSite(sitename, siteid)));
@@ -162,9 +136,36 @@ public static class MyInstaller {
             return false;
         }
         return true;
-    
     }
 
+    /**
+     * Enable a type for the existing site
+     */
+    private boolean enableType(String siteName, String typeName) throws SiteAccessException {
+        log.trace("enableType in %s for %s", siteName, typeName);
+        Site site = sim.read(Arrays.asList(siteName)).get(0);
+        List<String> types = site.getAssetTypes();
+        boolean hasType = false;
+        for (String type : types)
+            if (type.equals(typeName)) {
+                hasType = true;
+                break;
+            }
+        if(hasType)
+            return false;
+
+        List<String> newtypes = new LinkedList<String>();
+        newtypes.addAll(types);
+        newtypes.add(typeName);
+        site.setAssetTypes(newtypes);
+        log.debug("adding " + siteName + " newtypes=" + newtypes);
+        sim.update(Arrays.asList(site));
+        return true;
+    }
+
+    /**
+     * init a site creating a Jar, a Static and a Site with a given id
+     */
     public String init(String siteName, long siteId) throws Exception {
         StringBuilder sb = new StringBuilder();
         if(createTypeIfDoesNotExist("Jar"))
@@ -176,6 +177,12 @@ public static class MyInstaller {
         if(createSiteIfDoesNotExist(siteName, siteId))
             sb.append("Created ").append(siteName+"("+siteId+")");
 
+        if(enableType(siteName, "Jar"))
+            sb.append("Enabled Jar for").append(siteName+"("+siteId+")");
+
+        if(enableType(siteName, "Static"))
+            sb.append("Enabled Static for").append(siteName+"("+siteId+")");
+
         return sb.toString();
     }
 
@@ -184,14 +191,13 @@ public static class MyInstaller {
      *
      * @return
      */
-
-    public String uploadJar() {
-        UserTag.login()
+    public String uploadJar(String siteid) {
+         UserTag.login()
                 .username(username)
                 .password(password)
                 .run(ics);
 
-        byte[] file = ics.GetBin("file");
+        byte[] file = ics.GetBin("jar");
         String filename = ics.GetVar("jar_file");
         String result;
 
@@ -202,8 +208,9 @@ public static class MyInstaller {
                 .value(filename)
                 .editable("true")
                 .run(ics);
+
         if (ics.GetObj("obj") == null) {
-            result = "created,";
+            result = "created: ";
             AssetTag.create()
                     .name("obj")
                     .type("Jar")
@@ -211,27 +218,16 @@ public static class MyInstaller {
             AssetTag.set()
                     .name("obj")
                     .field("name")
-                    .value("filename")
+                    .value(filename)
                     .run(ics);
         } else {
-            result = "updated,";
+            result = "updated: ";
             AssetTag.scatter()
                     .name("obj")
                     .prefix("data")
                     .fieldlist("url")
                     .run(ics);
         }
-        PublicationTag.load()
-                .name("Pub")
-                .field("name")
-                .value(site)
-                .run(ics);
-
-        PublicationTag.get()
-                .name("Pub")
-                .field("name")
-                .output("siteid")
-                .run(ics);
 
         AssetTag.addsite()
                 .name("obj")
@@ -273,50 +269,42 @@ public static class MyInstaller {
                 .output("id")
                 .run(ics);
 
-        result += ics.GetVar("id") + "," + filename + "," + file.length;
-        //log.debug("Jar "+ics.GetObj("obj"));
-            /*java.util.Enumeration en = ics.GetVars();
-            while(en.hasMoreElements())  {
-              String k = en.nextElement().toString();
-              log.debug(k+"="+ics.GetVar(k));
-            }*/
-        //log.debug("Jar "+ics.GetBin("jar:url").length);
+        result += filename+" #"+file.length + "("+ ics.GetVar("id") + ")";
         return result;
     }
+
+    private void dumpVars() {
+        java.util.Enumeration en = ics.GetVars();
+        while(en.hasMoreElements())  {
+          String k = en.nextElement().toString();
+          log.debug(k+"="+ics.GetVar(k));
+        }
+    }
 }
-%><cs:ftcs><%
-
-String op = ics.GetVar("op");
-String result ="Unknown command: "+op;
-
-try {
+%><cs:ftcs><% 
+ String op = ics.GetVar("op");
+ String result ="Unknown command: "+op;
+ try {
+  String username = ics.GetVar("username");
+  String password = ics.GetVar("password");
   if (op == null) {
     throw new Exception("You are using an obsolete version of the deployer - plase upgrade plugin to version 11g or later");
   } else if(op.equals("init")) {
      String site = ics.GetVar("site");
      long siteid = Long.parseLong(ics.GetVar("siteid"));
-     result = new MyInstaller(ics).init(site,siteid);
+     result = new MyInstaller(ics, username, password).init(site,siteid);
   } else if(op.equals("status")) {
      result = ics.GetSSVar("_authkey_");    
   }  else if(op.equals("upload")) {
-    result = new MyInstaller(ics).uploadJar();
+    result = new MyInstaller(ics, username, password).uploadJar(ics.GetVar("siteid"));
   } else if(op.equals("deploy")) {
     result = wcs.core.WCS.deploy(ics,
         ics.GetVar("site"),
         ics.GetVar("username"),
         ics.GetVar("password"));
-  } else if(op.equals("form")) { %>
-<form method="POST"
-      action="/cs/Satellite"
-      enctype="multipart/form-data">
-  <input type="file" name="jar">
-  <input type="hidden" name="_authkey_"
-         value="<%=ics.GetSSVar("_authkey_")%>">
-  <input type="hidden" name="pagename"
-         value="AAAgileSetup">
-  <input type="submit">
-</form>
-<%} 
+  } else {
+   throw new Exception("unknow command "+op);
+  } 
 } catch(Exception ex) {
     result = "ERROR: "+ex.getMessage();
     ex.printStackTrace();

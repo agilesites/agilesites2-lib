@@ -128,7 +128,7 @@ public interface Asset extends Content {
 	 * Return the first attribute of the attribute list as an id (long), or null
 	 * if not found
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public abstract Long getCid(String attribute);
@@ -171,7 +171,7 @@ public interface Asset extends Content {
 	 * Specify the dependency type you are going to use when accessing this
 	 * asset.
 	 * 
-	 * @param asset
+	 * @param attribute
 	 * @return
 	 */
 	public abstract Asset getAsset(String attribute, String type,
@@ -200,8 +200,6 @@ public interface Asset extends Content {
 	 * Since you are accessing another asset it is mandatory to specify the
 	 * dependency type you are going to use.
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Asset getAsset(String attribute, int i, String type,
 			AssetDeps logdep);
@@ -229,8 +227,6 @@ public interface Asset extends Content {
 	 * Return the nth attribute of the named attribute as an id (long), or null
 	 * if not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Long getCid(String attribute, int n);
 
@@ -238,16 +234,12 @@ public interface Asset extends Content {
 	 * Return the first attribute of the the named attribute as a string, or
 	 * null if not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract String getString(String attribute);
 
 	/**
 	 * Return the nth named attribute as a string, or null if not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract String getString(String attribute, int n);
 
@@ -255,17 +247,13 @@ public interface Asset extends Content {
 	 * Return the first attribute of the the attribute list as an int, or null
 	 * if not found
 	 * 
-	 * @param asset
-	 * @return
-	 */
+ì	 */
 	public abstract Integer getInt(String attribute);
 
 	/**
 	 * Return the nth attribute of the the attribute list as an int, or null if
 	 * not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Integer getInt(String attribute, int n);
 
@@ -273,8 +261,6 @@ public interface Asset extends Content {
 	 * Return the first attribute of the the attribute list as a long, or null
 	 * if not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Long getLong(String attribute);
 
@@ -282,8 +268,6 @@ public interface Asset extends Content {
 	 * Return the nth attribute of the the attribute list as an int, or null if
 	 * not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Long getLong(String attribute, int n);
 
@@ -292,8 +276,6 @@ public interface Asset extends Content {
 	 * Return the first attribute of the the attribute list as a double, or null
 	 * if not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Double getDouble(String attribute);
 
@@ -301,8 +283,6 @@ public interface Asset extends Content {
 	 * Return the nth attribute of the the attribute list as a double, or null if
 	 * not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Double getDouble(String attribute, int n);
 	
@@ -310,8 +290,6 @@ public interface Asset extends Content {
 	 * Return the first attribute of the the attribute list as an int, or null
 	 * if not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Date getDate(String attribute);
 
@@ -319,8 +297,6 @@ public interface Asset extends Content {
 	 * Return the nth attribute of the the attribute list as an int, or null if
 	 * not found
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract Date getDate(String attribute, int n);
 
@@ -386,8 +362,6 @@ public interface Asset extends Content {
 	 * Edit (or return if not insite) the nth named attribute as a string, or
 	 * null if not found and pass additional parameters using the CK editor
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract String editText(String attribute, int n, String params);
 
@@ -395,9 +369,6 @@ public interface Asset extends Content {
 	 * Edit (or return if not insite) the first named attribute as a string, or
 	 * null if not found and pass additional parameters
 	 * 
-	 * @param asset
-	 * @param args
-	 * @return
 	 */
 	public abstract String editString(String attribute, String params,
 			Arg... args);
@@ -406,8 +377,6 @@ public interface Asset extends Content {
 	 * Edit (or return if not insite) the first named attribute as a string, or
 	 * null if not found using the CK editor
 	 * 
-	 * @param asset
-	 * @return
 	 */
 	public abstract String editText(String attribute, String params);
 
@@ -476,12 +445,6 @@ public interface Asset extends Content {
 	 * specified template.
 	 * 
 	 * 
-	 * @param attribute
-	 * @param template
-	 *            type
-	 * @param template
-	 * @param args
-	 * @return
 	 */
 	public abstract String slot(String attribute, String type, String template,
 			String emptyText, Arg... args) throws IllegalArgumentException;

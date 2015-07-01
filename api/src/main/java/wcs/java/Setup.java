@@ -9,6 +9,7 @@ import java.util.List;
 
 import wcs.Api;
 import wcs.core.tag.AssetTag;
+import wcs.core.Log;
 import wcs.java.util.Util;
 import COM.FutureTense.Interfaces.ICS;
 

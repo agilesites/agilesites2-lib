@@ -18,6 +18,7 @@ import com.fatwire.assetapi.data.BlobObject;
 import com.fatwire.assetapi.data.BlobObjectImpl;
 import com.fatwire.assetapi.def.AttributeTypeEnum;
 import com.openmarket.xcelerate.asset.AttributeDefImpl;
+import wcs.core.Log;
 
 /**
  * Utility and support functions specific for AgileSites

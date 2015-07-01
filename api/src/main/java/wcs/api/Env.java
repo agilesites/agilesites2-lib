@@ -158,7 +158,6 @@ public interface Env extends Content {
 	 * Get the field value at given position as a date, or null
 	 * 
 	 * @param ls
-	 * @param field
 	 * @param pos
 	 * @return
 	 */
@@ -178,7 +177,6 @@ public interface Env extends Content {
 	 * Get field "value" at given position as a long, or null
 	 * 
 	 * @param ls
-	 * @param field
 	 * @param pos
 	 * @return
 	 */
@@ -199,7 +197,6 @@ public interface Env extends Content {
 	 * Get field "value" at given position as a double, or null
 	 * 
 	 * @param ls
-	 * @param field
 	 * @param pos
 	 * @return
 	 */
@@ -219,7 +216,6 @@ public interface Env extends Content {
 	 * Get the field "value" at given position as an int, or null
 	 * 
 	 * @param ls
-	 * @param field
 	 * @param pos
 	 * @return
 	 */
@@ -322,12 +318,12 @@ public interface Env extends Content {
 	/**
 	 * Return the current config
 	 */
-	public abstract Config getConfig();
+	public abstract wcs.api.Config getConfig();
 
 	/**
 	 * Return the current router
 	 */
-	public abstract Router getRouter();
+	public abstract wcs.api.Router getRouter();
 
 	/**
 	 * The current site name

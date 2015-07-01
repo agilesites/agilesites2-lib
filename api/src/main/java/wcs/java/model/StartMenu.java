@@ -2,7 +2,7 @@ package wcs.java.model;
 
 import com.fatwire.assetapi.data.AssetData;
 import com.fatwire.assetapi.data.AssetDataManager;
-import wcs.api.Arg;
+import wcs.core.Arg;
 
 public class StartMenu implements HasSetData {
 	long id;

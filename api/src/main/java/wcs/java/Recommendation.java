@@ -1,8 +1,9 @@
 package wcs.java;
 
 import static wcs.Api.*;
-import wcs.api.Arg;
-import wcs.api.Id;
+import wcs.core.Arg;
+import wcs.core.Id;
+import wcs.core.Log;
 import wcs.core.tag.CommercecontextTag;
 import java.util.ArrayList;
 import java.util.List;

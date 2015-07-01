@@ -1,9 +1,10 @@
 package wcs.java;
 
-import wcs.api.Arg;
-import wcs.api.Call;
+import wcs.core.Arg;
+import wcs.core.Call;
 import wcs.api.Env;
-import wcs.api.Id;
+import wcs.core.Id;
+import wcs.core.Log;
 import wcs.api.URL;
 import wcs.java.util.Util;
 import COM.FutureTense.Interfaces.ICS;

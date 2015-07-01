@@ -1,6 +1,8 @@
 package wcs.java;
+
 import static wcs.Api.*;
 import wcs.api.Content;
+import wcs.core.Log;
 
 import java.io.InputStream;
 import java.util.Iterator;

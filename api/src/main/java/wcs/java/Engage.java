@@ -7,10 +7,11 @@ import java.util.List;
 
 import COM.FutureTense.Interfaces.ICS;
 import wcs.Api;
-import wcs.api.Arg;
-import wcs.api.Id;
+import wcs.core.Arg;
+import wcs.core.Id;
 import wcs.core.tag.CommercecontextTag;
 import wcs.core.tag.VdmTag;
+import wcs.core.Log;
 
 /**
  * Wrapper class for the Engage api

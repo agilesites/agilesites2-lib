@@ -7,6 +7,7 @@ import com.fatwire.assetapi.data.MutableAssetData;
 import com.fatwire.assetapi.site.SiteInfo;
 import com.fatwire.assetapi.site.SiteManager;
 import com.fatwire.assetapi.common.SiteAccessException;
+import wcs.core.Log;
 
 /**
  * Represent a site - currently only the name of the site is stored

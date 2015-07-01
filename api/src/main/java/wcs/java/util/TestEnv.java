@@ -1,6 +1,6 @@
 package wcs.java.util;
 
-import wcs.api.Arg;
+import wcs.core.Arg;
 import wcs.api.Content;
 import wcs.api.Model;
 import wcs.java.Env;
