@@ -19,7 +19,7 @@ call mvn install:install-file -Dfile="%h%\assetframework.jar" -DgroupId=com.orac
 call mvn install:install-file -Dfile="%h%\lucene-search.jar" -DgroupId=com.oracle.sites -DartifactId=lucene-search -Dversion=%v% -Dpackaging=jar
 
 cd core
-call sbt "sitesTagWrapperGen %jsk% %v%"
+call sbt "-Dsites.webapp=%jsk"% "-Dsites.version=%v%" sitesTagWrapperGen
 cd ..
 goto end
 :nofile

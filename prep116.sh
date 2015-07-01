@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 set -x
 v=11.1.1.6.0
 export jsk=${1:-$PWD/webapps/cs116}
@@ -24,5 +25,5 @@ mvn install:install-file -Dfile="$h/assetframework.jar" -DgroupId=com.oracle.sit
 mvn install:install-file -Dfile="$h/lucene-search.jar" -DgroupId=com.oracle.sites -DartifactId=lucene-search -Dversion=$v -Dpackaging=jar
 fi
 cd core
-sbt "sitesTagWrapperGen $jsk $v"
+sbt -Dsites.webapp="$jsk" -Dsites.version="$v" "sitesTagWrapperGen"
 cd ..

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -x
 v=11.1.1.8.0
 export jsk=${1:-$PWD/webapps/cs118}
@@ -25,5 +25,7 @@ mvn install:install-file -Dfile="$h/lucene-search.jar" -DgroupId=com.oracle.site
 mvn install:install-file -Dfile="$h/cs-cache-11.1.1.8.0.jar" -DgroupId=com.oracle.sites -DartifactId=cs-cache -Dversion=$v -Dpackaging=jar
 fi
 cd core
-sbt "sitesTagWrapperGen $jsk $v"
+mkdir -p $v/src/main/java/agilesites/mappings
+xjc -d $v/src/main/java/agilesites/mappings -p agilesites.mappings -xmlschema $jsk/schema/rest-api.xsd
+#sbt -Dsites.webapp="$jsk" -Dsites.version="$v" "sitesTagWrapperGen"
 cd ..

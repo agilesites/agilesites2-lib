@@ -155,18 +155,22 @@ public static %s %s() {
     }
   }
 
-  lazy val sitesTagWrapperGen = inputKey[Unit]("Generate Tag Wrappers")
+
+  lazy val sitesTagWrapperGen = taskKey[Unit]("Generate Tag Wrappers")
 
   lazy val sitesTagWrapperGenTask = sitesTagWrapperGen := {
-    val args: Seq[String] = Def.spaceDelimited("<arg>").parsed
-    if (args.size < 2)
-      println("usage: siteTagWrapperGen <sites-webapp-folder> <target-folder-project>")
+
+    val dir = Option(System.getProperty("sites.webapp"))
+    val ver = Option(System.getProperty("sites.version"))
+
+    if (dir.isEmpty || ver.isEmpty)
+      println("usage: -Dsites.version=<sites-webapp-folder> -Dsites.webapps=<target-folder-project> sitesTagWrapperGen")
     else {
-      val tldDir = file(args.head) / "WEB-INF" / "futuretense_cs"
+      val tldDir = file(dir.get) / "WEB-INF" / "futuretense_cs"
       if (!tldDir.isDirectory)
         println("no tld founds in " + tldDir)
       else {
-        val dstDir = file(args(1)) / "src" / "main" / "java" / "wcs" / "core" / "tag"
+        val dstDir = file(ver.get) / "src" / "main" / "java" / "wcs" / "core" / "tag"
         for {
           tld <- tldDir.listFiles
           if tld.getName.endsWith(".tld")
