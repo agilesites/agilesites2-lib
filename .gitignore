@@ -2,6 +2,7 @@ webapps/
 target/
 project/target/
 core/*/src/main/java/wcs/core/tag/
+core/*/src/main/java/agilesites/mappings/
 webapps/
 .cache
 .classpath

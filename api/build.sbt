@@ -2,6 +2,8 @@ val v = settingKey[String]("v")
 
 v := scala.io.Source.fromFile( baseDirectory.value.getParentFile / "version.txt").getLines.next.trim
 
+isSnapshot := v.value.endsWith("-SNAPSHOT")
+
 resolvers ++= Seq(
      "Nexus-sciabarra-releases" at "http://nexus.sciabarra.com/content/repositories/releases"
     ,"Nexus-sciabarra-snapshots" at "http://nexus.sciabarra.com/content/repositories/snapshots"

@@ -2,6 +2,8 @@ val v = settingKey[String]("v")
 
 v := scala.io.Source.fromFile( baseDirectory.value.getParentFile / "version.txt").getLines.next.trim
 
+isSnapshot := v.value.endsWith("-SNAPSHOT")
+
 def settingsByVersion(ver: String) = Seq(
   name := "agilesites2-core",
   organization := "com.sciabarra",
