@@ -14,10 +14,7 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Load a pool of jars using a classloader. It caches the classloader and check
@@ -150,7 +147,19 @@ public class Loader {
         }
     }
 
+    public static void orderByTimestap(List<File> files) {
+         /* sort the list putting the file modified more recently first in the list */
+        Collections.sort(files, new Comparator<File>() {
+            @Override
+            public int compare(File file, File otherFile) {
+                return new Long(otherFile.lastModified()).compareTo(file.lastModified());
+            }
+        });
+    }
+
+    // return the list of the urls , ordered by timestap
     private URL[] toUrlArray(List<File> files) throws MalformedURLException {
+        orderByTimestap(files);
         URL[] res = new URL[files.size()];
         int i = 0;
         for (File file : files)
