@@ -14,10 +14,7 @@ import wcs.java.util.Util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static wcs.Api.getLog;
 
@@ -94,5 +91,23 @@ public abstract class DefinitionLoader {
             log.error("Could not access WCSAttributeType", e);
         }
         return attrType;
+    }
+
+    protected Collection<Field> getInheritedFields( Class<?> type ) {
+        HashMap<String, Field> fields = new LinkedHashMap<String, Field>();
+        traverseNodes( type, fields );
+        return fields.values();
+    }
+
+    // implemented as recursive to preserve attribute order
+    protected void traverseNodes( Class<?> type , HashMap<String, Field> fields ) {
+        if (type.getSuperclass() != null) {
+            traverseNodes(type.getSuperclass(), fields);
+        }
+        for (Field field : type.getDeclaredFields()) {
+            if (fields.get(field.getName()) == null) {
+                fields.put(field.getName(), field);
+            }
+        }
     }
 }

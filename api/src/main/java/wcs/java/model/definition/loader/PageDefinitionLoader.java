@@ -29,7 +29,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
         initialize();
         HashSet<DefinitionContainer> defList = new LinkedHashSet<DefinitionContainer>();
         for(Class<? extends WCSDefinition> clazz : classList) {
-            for(Field f : clazz.getDeclaredFields()) {
+            for(Field f : getInheritedFields(clazz)) {
                 // Loop through field attributes
                 Attribute.Mul mul = Attribute.Mul.SINGLE;
                 WCSAttributeType type = null;
@@ -97,7 +97,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
                 }
             }
             if(cDef != null) {
-                for(Field f : dc.getKey().getDeclaredFields()) {
+                for(Field f : getInheritedFields(dc.getKey())) {
                     boolean isRequired = false;
                     PageAssetAttribute assetAttribute = null;
                     for (Annotation fieldAnnotation : f.getAnnotations()) {
@@ -168,6 +168,5 @@ public class PageDefinitionLoader extends DefinitionLoader {
             defList.add(dc);
         }
     }
-
 
 }

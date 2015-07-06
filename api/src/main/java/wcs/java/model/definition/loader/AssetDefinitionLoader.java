@@ -33,7 +33,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
         initialize();
         HashSet<DefinitionContainer> defList = new LinkedHashSet<DefinitionContainer>();
         for(Class<? extends WCSDefinition> clazz : classList) {
-            for(Field f : clazz.getDeclaredFields()) {
+            for(Field f : getInheritedFields(clazz)) {
                 // Loop through field attributes
                 Attribute.Mul mul = Attribute.Mul.SINGLE;
                 WCSAttributeType type = null;
@@ -147,7 +147,7 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                 if(parentLink != null) {
                     cDef.addParent(IdBeautifier.generateUniqueDefId(parentLink.value().getSimpleName()), parentLink.required(), parentLink.multiple());
                 }
-                for(Field f : dc.getKey().getDeclaredFields()) {
+                for(Field f : getInheritedFields(dc.getKey())) {
                     boolean isRequired = false;
                     String attrDesc = null;
                     AssetAttribute assetAttribute = null;
