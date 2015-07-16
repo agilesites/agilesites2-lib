@@ -27,7 +27,7 @@ public class PageDefinitionLoader extends DefinitionLoader {
     @Override
     public void saveAttributes(AttributeModelBase modelBase) {
         initialize();
-        HashSet<DefinitionContainer> defList = new LinkedHashSet<DefinitionContainer>();
+        Map<String,DefinitionContainer> defContMap = new LinkedHashMap<String, DefinitionContainer>();
         for(Class<? extends WCSDefinition> clazz : classList) {
             for(Field f : getInheritedFields(clazz)) {
                 // Loop through field attributes
@@ -64,10 +64,18 @@ public class PageDefinitionLoader extends DefinitionLoader {
                                 mul,
                                 editorName,
                                 assetTypeName, assetSubtypeNames);
-                defList.add(dc);
+
+                DefinitionContainer same = defContMap.get(dc.getName());
+                if (same != null && !same.equals(dc)) {
+                    throw new IllegalStateException("an attribute of '"+this.toString()+"' attribute is conflicting with another definition.");
+                }
+                else {
+                    defContMap.put(dc.getName(), dc);
+                }
+
             }
         }
-        for(DefinitionContainer dc : defList) {
+        for(DefinitionContainer dc : defContMap.values()) {
             // TODO Add another method for only supplying dc object, so it doesn't have to be specified 3 times.
             Attribute a = modelBase.attribute(dc.getType().toString(), dc, dc.getMul(), true, true);
             // Set AssetType is set

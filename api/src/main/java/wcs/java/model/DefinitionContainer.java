@@ -3,6 +3,8 @@ package wcs.java.model;
 
 import wcs.java.model.enums.AttributeTypeEnum;
 
+import java.util.Arrays;
+
 /**
  * WCS Definition container, used for data keeping of attributes and asset definitions.
  *
@@ -103,21 +105,34 @@ public class DefinitionContainer {
         this.assetType = assetType;
     }
 
-    /**
-     * Name has to be unique
-     * @param obj the object to compare to
-     */
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || this.getClass() != obj.getClass()) {
-            return false;
-        }
-        return this.name.equals(((DefinitionContainer)obj).getName());
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DefinitionContainer that = (DefinitionContainer) o;
+
+        if (!name.equals(that.name)) return false;
+        if (type != that.type) return false;
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (mul != that.mul) return false;
+        if (editor != null ? !editor.equals(that.editor) : that.editor != null) return false;
+        if (assetType != null ? !assetType.equals(that.assetType) : that.assetType != null) return false;
+        if (!Arrays.equals(assetSubtypes, that.assetSubtypes)) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return 31 + ((name == null) ? 0 : name.hashCode());
+        int result = name.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + type.hashCode();
+        result = 31 * result + (mul != null ? mul.hashCode() : 0);
+        result = 31 * result + (editor != null ? editor.hashCode() : 0);
+        result = 31 * result + (assetType != null ? assetType.hashCode() : 0);
+        result = 31 * result + (assetSubtypes != null ? Arrays.hashCode(assetSubtypes) : 0);
+        return result;
     }
 
     public String toString() {

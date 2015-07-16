@@ -8,6 +8,7 @@ import wcs.api.Element;
 import wcs.api.Log;
 import wcs.api.Router;
 import COM.FutureTense.Interfaces.ICS;
+import wcs.core.exception.ElementException;
 
 public class Dispatcher {
 
@@ -59,7 +60,8 @@ public class Dispatcher {
     /**
      * New dispatcher looking for a given jar
      *
-     * @param jar
+     * @param jarDir
+     * @param assetJarDir
      */
     public Dispatcher(File jarDir, File assetJarDir) {
         log.debug("[Dispatcher.<init>] jarDir=%s assetJarDir=%s", jarDir, assetJarDir);
@@ -72,7 +74,6 @@ public class Dispatcher {
     /**
      * New dispatcher looking for a given jar
      *
-     * @param jar
      */
     public Dispatcher() {
         log.debug("[Dispatcher.<init>] static loader");
@@ -117,12 +118,18 @@ public class Dispatcher {
             }
             return "<h1>Not Found Element " + className + "<h1>";
 
-        } catch (Exception e) {
-            log.debug("[Dispacher.dispach] exception loading " + className
-                    + ":" + e.getMessage());
-            e.printStackTrace();
+        } catch (ElementException e1) {
+            throw  e1;
+        }
+        catch (Exception e2) {
+            String message = "[Dispacher.dispach] exception loading " + className
+                    + ":" + e2.getMessage();
+            log.error(message);
+            throw new ElementException(message, e2);
+/*
             return "<h1>Exception</h1><p>Class: " + className
                     + "</p>\n<p>Message: " + e.getMessage() + "</p>\n";
+*/
         }
 
     }
@@ -130,8 +137,7 @@ public class Dispatcher {
     /**
      * Load a class from the classloader
      *
-     * @param ics
-     * @param name
+     * @param className
      * @return
      */
     public Class<?> loadClass(String className) {

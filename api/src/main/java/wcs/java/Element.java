@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import COM.FutureTense.Interfaces.ICS;
+import wcs.core.exception.ElementException;
 import wcs.java.util.StringUtils;
 
 /**
@@ -53,10 +54,13 @@ public abstract class Element implements wcs.api.Element {
 			String msg = ex.getMessage();
 			msg = msg == null ? "NULL" : msg;
 			log.error(ex, msg);
+            throw new ElementException(ex);
+/*
 			return "<div style='font-color: red'>" //
 					+ msg //
 					+ "<span style='display: none'>" + ex2str(ex) //
 					+ "</span></div>";
+*/
 		}
 	}
 
@@ -96,8 +100,8 @@ public abstract class Element implements wcs.api.Element {
 	/**
 	 * The method to be overriden by an implementing template
 	 * 
-	 * @param env
-	 * @return
+	 * @param e
+	 * @return rendered template html
 	 */
 	abstract public String apply(wcs.api.Env e);
 

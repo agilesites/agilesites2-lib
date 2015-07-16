@@ -18,6 +18,7 @@ import com.fatwire.assetapi.site.SiteInfo;
 import com.fatwire.assetapi.site.SiteManager;
 import com.fatwire.system.Session;
 import com.fatwire.system.SessionFactory;
+import wcs.core.exception.ElementException;
 
 
 /**
@@ -83,9 +84,13 @@ public class WCS {
 				log.error("[WCS.dispatch] Not found jar.");
 				return "[WCS.dispatch] Not found jar";
 			}
-		} catch (Exception ex) {
-			log.warn(ex, "[WCS.dispatch]Cannot dispatch!");
-			return "[WCS.dispatch] Cannot dispatch: " + ex.getMessage();
+		} catch (ElementException e1) {
+            throw e1;
+        }
+        catch (Exception ex) {
+			log.error(ex, "[WCS.dispatch]Cannot dispatch!");
+			//return "[WCS.dispatch] Cannot dispatch: " + ex.getMessage();
+            throw new ElementException( "[WCS.dispatch]Cannot dispatch!", ex);
 		}
 	}
 
@@ -106,9 +111,13 @@ public class WCS {
                 log.error("[WCS.dispatch] Not found jar.");
                 return "[WCS.dispatch] Not found jar";
             }
-        } catch (Exception ex) {
-            log.warn(ex, "[WCS.dispatch]Cannot dispatch!");
-            return "[WCS.dispatch] Cannot dispatch: " + ex.getMessage();
+        } catch (ElementException e1) {
+            throw e1;
+        }
+        catch (Exception ex) {
+            log.error(ex, "[WCS.dispatch]Cannot dispatch!");
+            throw new ElementException("[WCS.dispatch]Cannot dispatch!", ex);
+            //return "[WCS.dispatch] Cannot dispatch: " + ex.getMessage();
         }
     }
 
@@ -187,7 +196,7 @@ public class WCS {
 	/**
 	 * Load the config for the current site
 	 * 
-	 * @param site
+	 * @param ics
 	 * @return
 	 */
 	public static Config getConfig(ICS ics) {
@@ -203,7 +212,8 @@ public class WCS {
 	/**
 	 * Load an env class initializing it with an ICS
 	 * 
-	 * @param site
+	 * @param ics
+     * @param className
 	 * @return
 	 */
 	public static wcs.api.Env getEnv(ICS ics, String className) {

@@ -74,7 +74,7 @@ abstract public class ModelBase {
 				ad.getAttributeData("description").setData(
 						data.getDescription());
 /*
-				clearing the data in Attributes in ad to insert a fresh definitions defined in the definitions. So that the removed/unspecified attributes will be movied out from the definition.
+				clearing the data in Attributes in ad to insert a fresh definitions defined in the definitions. So that the removed/unspecified attributes will be moved out from the definition.
 				The below check is made by :bharath
 				*/
                 if( ad.getAttributeData("Attributes") != null ){

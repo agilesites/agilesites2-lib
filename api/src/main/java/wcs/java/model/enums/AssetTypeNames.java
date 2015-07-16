@@ -12,6 +12,7 @@ public enum AssetTypeNames {
     PAGE("Page"),
     DIMENSION("Dimension"),
     DIMENSION_SET("DimensionSet"),
+    QUERY("Query"),
     ADV_COLS("AdvCols"),
     SEGMENTS("Segments"),
     SCALAR_VALS("ScalarVals");
