@@ -68,8 +68,8 @@ public class AssetDefinitionLoader extends DefinitionLoader {
                                 mul,
                                 editorName, assetTypeName, assetSubtypeNames);
                 DefinitionContainer same = defContMap.get(dc.getName());
-                if (same != null && !same.equals(dc)) {
-                    throw new IllegalStateException(String.format("attribute %s of definition %s is conflicting with same attribute of another definition", dc.getName(), clazz.getName()));
+                if (same != null && !dc.equals(same)) {
+                    throw new IllegalStateException(String.format("property %s of attribute %s in definition %s is conflicting with same attribute of another definition", dc.getConflictValue(), dc.getName(), clazz.getName()));
                 }
                 else {
                     defContMap.put(dc.getName(), dc);

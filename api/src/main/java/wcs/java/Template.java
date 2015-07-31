@@ -53,8 +53,8 @@ public class Template extends AssetSetup {
 	 * 
 	 * @param subtype
 	 * @param name
-	 * @param description
-	 * @param element
+	 * @param ttype
+	 * @param forSubtype
 	 */
 	public Template(String subtype, String name, char ttype, String forSubtype,
 			Class<?> elementClass) {

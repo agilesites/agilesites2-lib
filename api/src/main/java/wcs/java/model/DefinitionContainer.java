@@ -20,6 +20,7 @@ public class DefinitionContainer {
     private AttributeEnum editor;
     private String assetType;
     private String assetSubtypes[];
+    private String conflictValue;
 
     /**
      * Constructor for asset definition
@@ -113,12 +114,12 @@ public class DefinitionContainer {
         DefinitionContainer that = (DefinitionContainer) o;
 
         if (!name.equals(that.name)) return false;
-        if (type != that.type) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (mul != that.mul) return false;
-        if (editor != null ? !editor.equals(that.editor) : that.editor != null) return false;
-        if (assetType != null ? !assetType.equals(that.assetType) : that.assetType != null) return false;
-        if (!Arrays.equals(assetSubtypes, that.assetSubtypes)) return false;
+        if (type != that.type) {conflictValue = "type"; return false;}
+        if (description != null ? !description.equals(that.description) : that.description != null)  {that.conflictValue = "description"; return false;}
+        if (mul != that.mul) {conflictValue = "mul"; return false;}
+        if (editor != null ? !editor.equals(that.editor) : that.editor != null) {conflictValue = "editor"; return false;}
+        if (assetType != null ? !assetType.equals(that.assetType) : that.assetType != null) {conflictValue = "assetType"; return false;}
+        if (!Arrays.equals(assetSubtypes, that.assetSubtypes)) {conflictValue = "assetSubtypes"; return false;}
 
         return true;
     }
@@ -205,5 +206,9 @@ public class DefinitionContainer {
 
     public String[] getAssetSubtypes() {
         return assetSubtypes;
+    }
+
+    public String getConflictValue() {
+        return conflictValue;
     }
 }

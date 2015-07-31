@@ -66,8 +66,8 @@ public class PageDefinitionLoader extends DefinitionLoader {
                                 assetTypeName, assetSubtypeNames);
 
                 DefinitionContainer same = defContMap.get(dc.getName());
-                if (same != null && !same.equals(dc)) {
-                    throw new IllegalStateException("an attribute of '"+this.toString()+"' attribute is conflicting with another definition.");
+                if (same != null && !dc.equals(same)) {
+                    throw new IllegalStateException(String.format("property %s of attribute %s in definition %s is conflicting with same attribute of another definition", dc.getConflictValue(), dc.getName(), clazz.getName()));
                 }
                 else {
                     defContMap.put(dc.getName(), dc);

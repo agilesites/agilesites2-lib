@@ -38,8 +38,8 @@ public class AttributeEditor implements HasSetData {
 
 	@Override
 	public void setData(AssetData ad) {
-		BlobObject blob = new BlobObjectImpl("AttrTypes", name.toLowerCase()
-				+ ".xml", //
+		BlobObject blob = new BlobObjectImpl(name.toLowerCase()
+				+ ".xml", "AttrTypes",
 				xml.getBytes());
 		ad.getAttributeData("urlxml").setData(blob);
 		//System.out.println(blob);

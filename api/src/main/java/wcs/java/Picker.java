@@ -65,8 +65,8 @@ public class Picker {
 	/**
 	 * Get a picker form a given resource in the classpath
 	 * 
-	 * @param resource
-	 * @param cssq
+	 * @param resource the resource
+	 * @param cssq the selector
 	 * @return a new picker
 	 */
 	public static Picker load(String resource, String cssq) {
@@ -78,8 +78,7 @@ public class Picker {
 	 * Get a picker form a given resource in the classpath and select the given
 	 * query
 	 * 
-	 * @param resource
-	 * @param cssq
+	 * @param resource the resource
 	 * @return a new picker
 	 */
 	public static Picker load(String resource) {
@@ -90,8 +89,7 @@ public class Picker {
 	/**
 	 * Get a picker from a string
 	 * 
-	 * @param resource
-	 * @param cssq
+	 * @param html  the resource
 	 * @return a new picker
 	 */
 	public static Picker create(String html) {
@@ -101,8 +99,8 @@ public class Picker {
 	/**
 	 * Get a picker from a string and select the given query
 	 * 
-	 * @param resource
-	 * @param cssq
+	 * @param html  the resource
+	 * @param cssq the selector
 	 * @return a new picker
 	 */
 	public static Picker create(String html, String cssq) {
@@ -152,9 +150,8 @@ public class Picker {
 	/**
 	 * Select a new element and return a new Picker
 	 * 
-	 * @param where
-	 * @return
-	 * @throws Exception
+	 * @param where the selector
+	 * @return the Picker
 	 */
 	public Picker select(String where) {
 		Elements selected = top.select(where);
@@ -172,7 +169,6 @@ public class Picker {
 	/**
 	 * Return to the precedent selected element
 	 * 
-	 * @param where
 	 * @return
 	 */
 	public Picker up() {
@@ -270,13 +266,25 @@ public class Picker {
 	/**
 	 * Empty the current node
 	 * 
-	 * @param where
 	 * @return
 	 */
 	public Picker empty() {
 		top.empty();
 		return this;
 	}
+
+    /**
+     * Returns the parent or the selected node
+     *
+     * @param where
+     * @return
+     */
+    public Picker parent(String where) {
+        select(where);
+        push(top.parent());
+        return this;
+    }
+
 
 	/**
 	 * Print the current selected node as a string
@@ -314,6 +322,7 @@ public class Picker {
 	public String html(Content... content) {
 		return moustache(bottom.html(), content) + warnings();
 	}
+
 
 	/**
 	 * Alias for html(...)
@@ -370,7 +379,6 @@ public class Picker {
 	/**
 	 * Append the node as a children to the current node
 	 * 
-	 * @param where
 	 * @param what
 	 * @return
 	 */
@@ -408,6 +416,15 @@ public class Picker {
 	}
 
     /**
+     * Add a class
+     *
+     */
+    public Picker addClass(String what) {
+        top.addClass(what);
+        return this;
+    }
+
+    /**
      * Remove a class
      *
      */
@@ -416,11 +433,20 @@ public class Picker {
         return this;
     }
 
+    /**
+     * Remove a class
+     *
+     */
+    public Picker removeClass(String what) {
+        top.removeClass(what);
+        return this;
+    }
+
 	/**
 	 * Convenience method to dump the html of the current node - embedded calls
 	 * are decoded.
 	 * 
-	 * @param stream
+	 * @param log
 	 * @return itself
 	 */
 	public Picker dump(Log log) {
@@ -432,7 +458,7 @@ public class Picker {
 	/**
 	 * Convenience method to dump a generic html are decoded.
 	 * 
-	 * @param stream
+	 * @param log
 	 * @return
 	 */
 	public static void dump(Log log, String html) {
@@ -444,7 +470,7 @@ public class Picker {
 	 * Convenience method to dump the outer html of the current node - embedded
 	 * calls are decoded.
 	 * 
-	 * @param stream
+	 * @param log
 	 * @return
 	 */
 	public Picker odump(Log log) {
@@ -475,4 +501,10 @@ public class Picker {
 
 	}
 
+    public Picker clearWarnings() {
+        if (warnings.length() > 0) {
+            warnings = new StringBuffer();
+        }
+        return this;
+    }
 }

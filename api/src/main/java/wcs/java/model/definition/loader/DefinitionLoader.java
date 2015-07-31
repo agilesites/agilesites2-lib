@@ -37,7 +37,7 @@ public abstract class DefinitionLoader {
         this.classList = (Class<? extends WCSDefinition>[]) Util.classesFromResource(site, "definitions.txt");
     }
 
-    public static void addEditor(AttributeEnum editorType) {
+    public void addEditor(AttributeEnum editorType) {
         editors.put(editorType.getDescription(),editorType);
     }
 
