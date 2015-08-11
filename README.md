@@ -1,3 +1,5 @@
+# Development from this branch moved to nglib
+
 ## AgileSites Libraries
 
 To build core and api you need 
