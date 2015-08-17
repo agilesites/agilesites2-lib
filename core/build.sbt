@@ -20,6 +20,7 @@ def settingsByVersion(ver: String) = bintrayPublishSettings ++ Seq(
   libraryDependencies ++= Seq(
        // "com.novocode" % "junit-interface" % "0.9" % "test",
        // "org.xeustechnologies" % "jcl-core" % "2.2.1",
+       "javax.servlet" % "servlet-api" % "2.5",
        "commons-io" % "commons-io" % "1.4",
        "log4j" % "log4j" % "1.2.16" % "provided",
        "com.oracle.sites" % "cs-core" % ver % "provided",
