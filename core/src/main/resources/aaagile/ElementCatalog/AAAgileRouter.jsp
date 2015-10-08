@@ -4,10 +4,12 @@
 %><%@ page import="wcs.core.*,wcs.api.*"
 %><cs:ftcs><%! final static Log log = wcs.api.Log.getLog("jsp.wcs.api.Router");
 %><%
-  Call c = WCS.route(ics, 
-   ics.GetVar("site"), 
-   ics.GetVar("url"),
-   request.getQueryString());
+  String remote = request.getHeader("X-Forwarded-For");
+  if(remote!=null) ics.SetVar("remoteaddr", remote);
+  Call c = WCS.route(ics,
+          ics.GetVar("site"),
+          ics.GetVar("url"),
+          request.getQueryString());
    log.trace(c.toString());
 %><ics:callelement  element='<%= c.getOnce("element") %>'><%
  for(String k: c.keysLeft()) {

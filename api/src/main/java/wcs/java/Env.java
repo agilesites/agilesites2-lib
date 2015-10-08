@@ -574,10 +574,10 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		return getUrl(new Id(c, cid), args);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see wcs.java.IEnv#find(java.lang.String, wcs.core.Arg)
+	/**
+	 * Find all the assets of a given type.
+	 * <p/>
+	 * You can specify the order with arg("_order_", <field>)
 	 */
 	@Override
 	public List<Id> find(String type, Arg... args) {
@@ -586,38 +586,57 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 		String ls = tmp();
 		list.type(type).list(ls);
 		list.pubid(getSiteId());
-		list.excludevoided("true");
 		int n = 1;
+		String order = null;
 		for (Arg arg : args) {
-			switch (n) {
-			case 1:
-				list.field1(arg.name);
-				list.value1(arg.value);
-				break;
-			case 2:
-				list.field2(arg.name);
-				list.value2(arg.value);
-				break;
-			case 3:
-				list.field3(arg.name);
-				list.value3(arg.value);
-				break;
-			case 4:
-				list.field4(arg.name);
-				list.value4(arg.value);
-				break;
-			case 5:
-				list.field5(arg.name);
-				list.value5(arg.value);
-				break;
-			default:
-				log.warn("too many arguments for find, argument >5 ignored");
+			if (arg.name.equals("_order_")) {
+				order = arg.value;
+			} else switch (n) {
+				case 1:
+					list.field1(arg.name);
+					list.value1(arg.value);
+					break;
+				case 2:
+					list.field2(arg.name);
+					list.value2(arg.value);
+					break;
+				case 3:
+					list.field3(arg.name);
+					list.value3(arg.value);
+					break;
+				case 4:
+					list.field4(arg.name);
+					list.value4(arg.value);
+					break;
+				case 5:
+					list.field5(arg.name);
+					list.value5(arg.value);
+					break;
+				case 6:
+					list.field6(arg.name);
+					list.value6(arg.value);
+					break;
+				case 7:
+					list.field7(arg.name);
+					list.value7(arg.value);
+					break;
+				case 8:
+					list.field8(arg.name);
+					list.value8(arg.value);
+					break;
+				case 9:
+					list.field9(arg.name);
+					list.value9(arg.value);
+					break;
+				default:
+					log.warn("too many arguments for find, argument >5 ignored");
 			}
 			n++;
 		}
-
+		if (order != null)
+			list.order(order);
 		list.run(ics);
-		List<Id> result = new ArrayList<>();
+		List<Id> result = new ArrayList<Id>();
 		for (Integer pos : getRange(ls)) {
 			result.add(new Id(type, getLong(ls, pos, "id")));
 		}
