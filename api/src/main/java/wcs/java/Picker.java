@@ -223,7 +223,7 @@ public class Picker {
 	}
 
 	/**
-	 * Remove specified attributes
+	 * Remove specified attributes of a node
 	 * 
 	 * @param where
 	 * @return
@@ -297,7 +297,7 @@ public class Picker {
 	}
 
 	/**
-	 * Return the inner html of the selected nod. Replace the content of all the
+	 * Return the inner html of the selected node. Replace the content of all the
 	 * variables between {{ }}
 	 */
 	public String html(Content... content) {
@@ -319,7 +319,7 @@ public class Picker {
 	}
 
 	/**
-	 * Add before a given node
+	 * Add a node before a given node
 	 * 
 	 * @param where
 	 * @param what
@@ -332,7 +332,7 @@ public class Picker {
 	}
 
 	/**
-	 * Add after a given node
+	 * Add a node after a given node
 	 * 
 	 * @param where
 	 * @param what
@@ -369,7 +369,7 @@ public class Picker {
 	}
 
 	/**
-	 * Set attribute
+	 * Set an attribute at a given position
 	 */
 	public Picker attr(String where, String attr, String what) {
 		top.select(where).attr(attr, nn(what));
@@ -377,7 +377,7 @@ public class Picker {
 	}
 
     /**
-     * Get attribute
+     * Get attribute from a given position
      */
     public String getAttr(String where, String attr) {
         return top.select(where).attr(attr);
@@ -395,7 +395,7 @@ public class Picker {
 	}
 
 	/**
-	 * Add a class
+	 * Add a class name to the class attribute of the specified node
 	 * 
 	 */
 	public Picker addClass(String where, String what) {

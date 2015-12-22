@@ -21,10 +21,16 @@ public class AttrTypes extends AssetSetup {
 		this.urlxml = urlxml;
 	}
 
+	/**
+	 * Return the list of attributes
+	 */ 
 	public List<String> getAttributes() {
 		return Util.listString("name", "description", "urlxml");
 	}
 
+	/**
+	 * Set the asset data
+	 */ 
 	void setData(MutableAssetData data) {
 
 		// blob

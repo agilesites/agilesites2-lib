@@ -239,7 +239,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	/**
 	 * Check if the attribute exist
 	 * 
-	 * @param attribute
+	 * @param attribute	
 	 * @return
 	 */
 	public boolean isAttribute(String attribute) {
@@ -486,7 +486,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Return the nth attribute of the the attribute list as an int, or null if
+	 * Return the nth attribute of the the attribute list as a long, or null if
 	 * not found
 	 * 
 	 * @param attribute
@@ -543,7 +543,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Id of the first associated asset
+	 * Return the Id of the first associated asset as long
 	 */
 	@Override
 	public Long getAssocId(String assoc) {
@@ -551,7 +551,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Id of the nth associated asset
+	 * Return the Id of the nth associated asset as long
 	 */
 	@Override
 	public Long getAssocId(String assoc, int pos) {
@@ -559,7 +559,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Type of the first associated asset
+	 * Return the Type of the first associated asset
 	 */
 	@Override
 	public String getAssocType(String assoc) {
@@ -567,7 +567,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Type of the nth associated asset
+	 * Return the Type of the nth associated asset
 	 */
 	@Override
 	public String getAssocType(String assoc, int pos) {
@@ -587,7 +587,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * String get blob url of the first attribute
+	 * Return the blob url of the first attribute as string
 	 * 
 	 */
 	@Override
@@ -596,7 +596,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * String get blob url of the first attribute
+	 * Return the blob url of the first attribute of specified mimetype as string
 	 * 
 	 */
 	@Override
@@ -605,7 +605,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * String get blob url of the nth attribute
+	 * Return the blob url of the nth attribute of specified mimetype as string
 	 */
 	@Override
 	public String getBlobUrl(String attribute, int pos, String mimeType,
@@ -644,6 +644,9 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return blobUrl + "/" + filename;
 	}
 
+	/**
+	* Return the filename of the blob of nth attribute 
+	*/
 	private String getBlobFilename(String attribute, int pos) {
 		Long blobWhere = this.getCid(attribute, pos);
 		if (blobWhere == null)
@@ -661,6 +664,9 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return normalizeFilename(filename);
 	}
 
+	/**
+	* Return the filename of the file of specified filepath
+	*/
 	private String normalizeFilename(String filepath) {
 		filepath = filepath.replace("\\", "/");
 		String filename = filepath;
@@ -679,6 +685,9 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		return filename;
 	}
 
+	/*
+	* Return the mimetype of blob of file based on filename
+	*/
 	private String getBlobMimetype(String filename) {
 		if (filename == null || filename.length() < 3)
 			return null;
@@ -874,7 +883,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 
 	/**
 	 * 
-	 * Edit a field with parameters
+	 * Edit a field of nth attribute with parameters
 	 * 
 	 * @param attribute
 	 * @param index
@@ -919,7 +928,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Dump the core fields of the asset
+	 * Return the Dump the core fields of the asset
 	 */
 	@Override
 	public String dump() {
@@ -927,7 +936,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 	}
 
 	/**
-	 * Dump the attribute with the given name
+	 * Return Dump the attribute with the given name
 	 */
 	@Override
 	public String dump(String name) {

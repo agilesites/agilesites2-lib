@@ -61,7 +61,7 @@ public abstract class Element implements wcs.api.Element {
 	}
 
 	/**
-	 * Generic CallElement
+	 * Calls the cselement to execute the code with in the element
 	 * 
 	 * @param name
 	 * @param args

@@ -28,6 +28,10 @@ abstract public class Router implements wcs.api.Router {
 		this.site = site;
 	}
 	
+	/**
+	 * Return the current site
+	 * 
+	 */
 	public String getSite() {
 		return site;
 	}

@@ -16,6 +16,9 @@ public abstract class AssetSetup extends AssetBase {
 
 	private AssetSetup nextSetup = null;
 
+	/**
+	 * Create an asset with a given type, subtype and name.
+	 */
 	public AssetSetup(String type, String subtype, String name) {
 		super(type, subtype, name);
 	}
@@ -25,12 +28,18 @@ public abstract class AssetSetup extends AssetBase {
 		return Util.normalizedName(getSite(), super.getName());
 	}
 
+	/**
+	 * Set the subtype of asset
+	 */ 
 	public void setTypeSubtype(String type, String subtype) {
 		this.c = type;
 		this.subtype = subtype;
 		id = null;
 	}
 
+	/**
+	 * Set the cid of asset
+	 */ 
 	public void setCid(long cid) {
 		this.cid = cid;
 		id = null;

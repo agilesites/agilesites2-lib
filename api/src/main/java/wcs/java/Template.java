@@ -110,7 +110,6 @@ public class Template extends AssetSetup {
      * @param sscache
      * @return
      */
-
     public Template cache(String cscache, String sscache) {
         this.cscache = cscache;
         this.sscache = sscache;
@@ -123,19 +122,31 @@ public class Template extends AssetSetup {
     }
 
 
+    /**
+    * sets cache criteria
+    */
     public Template cacheCriteria(String criteria) {
         this.cacheCriteria.add(criteria);
         return this;
     }
 
+    /**
+    * Returns the value of the rootelement attribute
+    */
     public String getElement() {
         return rootelement;
     }
 
+    /**
+    * Returns the value of csCache
+    */
     public String getCscache() {
         return cscache;
     }
 
+    /**
+    * Returns the value of ssCache
+    */
     public String getSscache() {
         return sscache;
     }

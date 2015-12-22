@@ -62,10 +62,16 @@ public class CSElement extends AssetSetup {
 		setNextSetup(nextSetup);
 	}
 
+	/**
+	 * Return the name of cselement
+	 */ 
 	public String getElementName() {
 		return elementName;
 	}
 
+	/**
+	 * Return the list of attributes name
+	 */ 
 	public List<String> getAttributes() {
 		return Util.listString("name", "description", "elementname",
 				"rootelement", "url", "resdetails1", "resdetails2");
@@ -75,6 +81,9 @@ public class CSElement extends AssetSetup {
 		return Util.getResource("/Streamer.jsp").replaceAll("%CLASS%", clazz).replaceAll("%POLL%", ""+poll);
 	}
 
+	/**
+	 * Set the cselement data from another data set
+	 */ 
 	void setData(MutableAssetData data) {
 		String elementName = null;
 		String elementJsp = null;
@@ -113,7 +122,7 @@ public class CSElement extends AssetSetup {
 	}
 
 	/**
-	 * Fluent description setter
+	 * Set the description
 	 * 
 	 * @param description
 	 * @return

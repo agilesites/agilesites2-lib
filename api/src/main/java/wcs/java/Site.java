@@ -158,7 +158,7 @@ public class Site {
 	}
 
 	/**
-	 * Set site data
+	 * Sets the data of the current site
 	 * 
 	 * @param data
 	 */
@@ -171,10 +171,17 @@ public class Site {
 			attrs.setDataAsList(Util.listString(name));
 	}
 
+	/**
+	* Returns the name of the current site.
+	*/
 	public String getName() {
 		return name;
 	}
 
+
+	/**
+	* Returns a string of combination of name and id of the current site.
+	*/
 	public String toString() {
 		return "Site(" + site.getName() + ":" + site.getId() + ")";
 	}

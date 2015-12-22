@@ -50,14 +50,21 @@ public class SiteEntry extends AssetSetup {
 		this.wrapper = wrapper;
 	}
 
+
 	public String getElement() {
 		return null;
 	}
 
+	/**
+	* Returns true if the siteEntry is a wrapper element and false if it is not wrapper.
+	*/
 	public boolean isWrapper() {
 		return wrapper;
 	}
 
+	/**
+	* Returns the list of attribute names for an SiteEntry 
+	*/
 	public List<String> getAttributes() {
 		return Util.listString("name", "description", "category", "pagename",
 				"cs_wrapper", "cselement_id", "acl", "cscacheinfo",

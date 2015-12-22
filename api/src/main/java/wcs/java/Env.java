@@ -575,7 +575,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	}
 
 	/**
-	 * Find all the assets of a given type.
+	 * Find all the assets of a given type and returns in a list.
 	 * <p/>
 	 * You can specify the order with arg("_order_", <field>)
 	 */
@@ -644,7 +644,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
 	}
 
 	/**
-	 * Find one assets
+	 * Find one asset based on the type and arguments
 	 */
 	@Override
 	public Asset findOne(String type, Arg... args) {

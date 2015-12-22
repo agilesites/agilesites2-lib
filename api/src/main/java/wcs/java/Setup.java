@@ -61,7 +61,7 @@ abstract public class Setup implements wcs.core.Setup {
 	// private SiteManager sim;
 
 	/**
-	 * Execute the setup creating the assets using the Asset API
+	 * Execute the setup to create the assets using the Asset API
 	 * 
 	 * @param username
 	 * @param password
@@ -188,7 +188,7 @@ abstract public class Setup implements wcs.core.Setup {
 	}
 
 	/**
-	 * Insert or update
+	 * Insert or update an asset. If asset already exists, then it will be updated. Otherwise the asset will be created.
 	 * 
 	 * @param ics
 	 * @param setup
@@ -220,6 +220,9 @@ abstract public class Setup implements wcs.core.Setup {
 		}
 	}
 
+	/**
+	 * Insert an asset. 
+	 */
 	String insert(AssetSetup asset, long id) throws AssetAccessException {
 		log.debug("inserting " + asset);
 
@@ -243,6 +246,9 @@ abstract public class Setup implements wcs.core.Setup {
 		return "INSERT OK";
 	}
 
+	/**
+	 * Update an asset. 
+	 */	
 	String update(AssetSetup asset, MutableAssetData data)
 			throws AssetAccessException {
 		log.debug("update " + asset);

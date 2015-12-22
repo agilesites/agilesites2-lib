@@ -54,7 +54,7 @@ public abstract class AssetBase {
 	}
 
 	/**
-	 * Retun current site
+	 * Retun the name of current site
 	 * 
 	 * @return
 	 */
@@ -124,6 +124,9 @@ public abstract class AssetBase {
 		return description;
 	}
 
+	/*
+	* Set the description of the asset
+	*/
 	protected void setDescription(String description) {
 		if (description == null)
 			this.description = name;
