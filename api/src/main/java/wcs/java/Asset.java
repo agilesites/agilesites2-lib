@@ -7,7 +7,7 @@ import static wcs.Api.tmp;
 import static wcs.Api.toDate;
 import static wcs.Api.toInt;
 import static wcs.Api.toLong;
-import static wcs.Api.toDouble;
+import static wcs.Api.toDouble; 
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -106,6 +106,7 @@ public class Asset extends AssetBase implements wcs.api.Asset, wcs.api.Content {
 		}
 		return attrList;
 	}
+
 
 	/**
 	 * Return the association lazily loading all the attributes on the first
