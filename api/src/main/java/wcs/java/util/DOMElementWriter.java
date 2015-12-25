@@ -394,7 +394,7 @@ public class DOMElementWriter {
 	}
 
 	/**
-	 * Writes a DOM tree to a stream.
+	 * Writes the closing tag - corresponding to a DOM element.
 	 * 
 	 * @param element
 	 *            the Root DOM element of the tree
@@ -577,7 +577,7 @@ public class DOMElementWriter {
 	}
 
 	/**
-	 * Is the given character allowed inside an XML document?
+	 * Checks if the given character is allowed inside an XML document?
 	 * 
 	 * <p>
 	 * See XML 1.0 2.2 <a
