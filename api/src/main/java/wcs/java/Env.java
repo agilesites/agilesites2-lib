@@ -476,7 +476,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
                     dfi.setDimensonPreference(Util.list(dim));
                     Session session = SessionFactory.getSession(ics());
                     DimensionableAssetManager dm = (DimensionableAssetManager) session.getManager(DimensionableAssetManager.class.getName());
-                    Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
+					Collection<AssetId> list  = dm.getRelatives(new AssetIdImpl(c,cid), dfi);
                     for (AssetId assetId : list) {
                         cid = assetId.getId();
                         c = assetId.getType();
@@ -647,44 +647,7 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
     @Override
     public List<Id> find(String type, String orderField, Arg... args) {
         // load all the pages with a given name
-        AssetTag.List list = AssetTag.list();
-        String ls = tmp();
-        list.type(type).list(ls);
-        list.pubid(getSiteId());
-        if (orderField != null) {
-            list.order(orderField);
-        }
-        list.excludevoided("true");
-        int n = 1;
-        for (Arg arg : args) {
-            switch (n) {
-                case 1:
-                    list.field1(arg.name);
-                    list.value1(arg.value);
-                    break;
-                case 2:
-                    list.field2(arg.name);
-                    list.value2(arg.value);
-                    break;
-                case 3:
-                    list.field3(arg.name);
-                    list.value3(arg.value);
-                    break;
-                case 4:
-                    list.field4(arg.name);
-                    list.value4(arg.value);
-                    break;
-                case 5:
-                    list.field5(arg.name);
-                    list.value5(arg.value);
-                    break;
-                default:
-                    log.warn("too many arguments for find, argument >5 ignored");
-            }
-            n++;
-        }
-
-        list.run(ics);
+        String ls = getList(type, orderField, args);
         List<Id> result = new ArrayList<Id>();
         for (Integer pos : getRange(ls)) {
             result.add(new Id(type, getLong(ls, pos, "id")));
@@ -692,14 +655,54 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
         return result;
     }
 
+	/*
+    * (non-Javadoc)
+    *
+    * @see wcs.java.IEnv#findLocalized(java.lang.String, java.lang.String, wcs.core.Arg)
+    */
+	@Override
+	public List<Id> findLocalized(String type, String locale, Arg... args) {
+		return findLocalized(type, locale, null, args);
+	}
+
     /*
      * (non-Javadoc)
      *
-     * @see wcs.java.IEnv#find(java.lang.String, wcs.core.Arg)
+    * @see wcs.java.IEnv#findLocalized(java.lang.String, java.lang.String, java.lang.String, wcs.core.Arg)
      */
     @Override
-    public List<Id> findLocalized(String type, String orderField, String locale, Arg... args) {
-        // load all the pages with a given name
+    public List<Id> findLocalized(String type, String locale, String orderField, Arg... args) {
+        String ls = getList(type,orderField,args);
+        // FIXME find a way to load the correct DimensionSet instead of getting just the first
+		List<Id> result = new ArrayList<Id>();
+		try {
+			Asset dimSet = findOne("DimensionSet");
+			Collection<AssetId> results;
+			if (dimSet != null) {
+				AssetTag.load().type("DimensionSet").name("dimSet").objectid("" + dimSet.getCid()).run(ics);
+				DimensionSetInstanceImpl dsi = (DimensionSetInstanceImpl) ics.GetObj("dimSet");
+				DimensionFilterInstance dfi = dsi.getFilter();
+                String dimName = tmp();
+                AssetTag.load().type("Dimension").name(dimName).field("name").value(locale).run(ics);
+                Dimension dim = (Dimension) ics.GetObj(dimName);
+				dfi.setDimensonPreference(Collections.singletonList(dim));
+                List<AssetId> assetIdList = new ArrayList<AssetId>();
+                for (Integer pos : getRange(ls)) {
+                    assetIdList.add(new AssetIdImpl(type, getLong(ls, pos, "id")));
+                }
+				results = dfi.filterAssets(assetIdList);
+				for (AssetId assetId : results) {
+					result.add(new Id(assetId.getType(), assetId.getId()));
+				}
+			}
+		} catch (DimensionException e) {
+			e.printStackTrace();
+		}
+        return result;
+
+    }
+
+    private String getList(String type, String orderField, Arg[] args) {
         AssetTag.List list = AssetTag.list();
         String ls = tmp();
         list.type(type).list(ls);
@@ -738,22 +741,9 @@ public class Env extends wcs.core.ICSProxyJ implements Content, wcs.api.Env {
         }
 
         list.run(ics);
-        String dimName = tmp();
-        String filtered = tmp();
-        AssetTag.load().type("Dimension").name(dimName).field("name").value(locale).run(ics);
-        Dimension dim = (Dimension) ics.GetObj(dimName);
-        // FIXME find a way to load the correct DimensionSet instead of getting just the first
-        Asset dimSet = findOne("DimensionSet");
-        if (dimSet != null) {
-            AssetTag.load().type("DimensionSet").name("dimSet").objectid("" + dimSet.getCid()).run(ics);
-            DimensionsetTag.filter().list(ls).tofilter(filtered).name("dimSet").set("assettype", dim.getId().getType()).set("assetid", Long.toString(dim.getId().getId())).run(ics);
-        }
-        List<Id> result = new ArrayList<Id>();
-        for (Integer pos : getRange(filtered)) {
-            result.add(new Id(type, getLong(ls, pos, "id")));
-        }
-        return result;
+        return ls;
     }
+
 	/**
 	 * Find one assets
 	 */

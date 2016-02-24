@@ -521,6 +521,6 @@ public interface Asset extends Content {
 			String emptyText, Arg... args) throws IllegalArgumentException;
 
 
-    public abstract Asset getLocale();
+    public abstract String getLocale();
 
 }
