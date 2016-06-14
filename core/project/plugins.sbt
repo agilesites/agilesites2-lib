@@ -4,7 +4,7 @@ resolvers += "sciabarra" at "http://dl.bintray.com/content/sciabarra/maven"
 
 addSbtPlugin("com.sciabarra" % "agilesites2-build" % "2.0.1")
 
-val plugin = project.in(file(".")).dependsOn( (file("..") / "plugin").toURI)
+val plugin1 = project.in(file(".")).dependsOn( (file("..") / "plugin").toURI)
 
 addSbtPlugin("me.lessis" % "bintray-sbt" % "0.1.2")
 
