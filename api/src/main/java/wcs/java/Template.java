@@ -165,6 +165,11 @@ public class Template extends AssetSetup {
     @Override
     @SuppressWarnings({ "rawtypes", "unchecked" })
     void setData(MutableAssetData data) {
+        Collections.sort(cacheCriteria);
+        StringBuffer cacheCriteriaJoined = new StringBuffer();
+        for(String s: cacheCriteria)
+            cacheCriteriaJoined.append(s).append(",");
+        cacheCriteriaJoined.setLength(cacheCriteriaJoined.length()-1);
 
         // log.info(Util.dump(data));
         // String rootelement = getSubtype() + "/" + getName();
@@ -199,9 +204,9 @@ public class Template extends AssetSetup {
                 attrString("resdetails2",
                         "agilesites=" + System.currentTimeMillis()));
         mapElement.put("csstatus", attrString("csstatus", "live"));
-
         mapElement.put("cscacheinfo", attrString("cscacheinfo", cscache));
         mapElement.put("sscacheinfo", attrString("sscacheinfo", sscache));
+        mapElement.put("pagecriteria", attrString("pagecriteria", cacheCriteriaJoined.toString()));
 
         mapElement.put("url", blob);
 
