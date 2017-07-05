@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		.compile("^.*?/(ContentServer|BlobServer|Satellite)(/([a-z0-9]+)(/(.*))?)$");
 	private Pattern flexBlobs = Pattern.compile("^/[a-z0-9]+/(\\d{6,})/.*$");
 	private Pattern staticBlobs = Pattern.compile("^.*\\.(\\w+)$");
-	private Pattern hashedBlob = Pattern.compile("^.*_([a-h0-9]{32})\\..*$");
+	private Pattern hashedBlob = Pattern.compile("^.*/(.*?)_([a-h0-9]{32})(\\..*$)");
 	private Set<String> staticSet;
 
 	public Assembler() {
@@ -178,7 +179,8 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	// http://localhost:8080/ss/Satellite?blobkey=id&blobnocache=true&blobwhere=1251873748810&blobheader=image%2Fpng&blobcol=urldata&blobtable=StaticFile
 	// http://localhost:8080/ss/Satellite/urldata/id/1251873748810/StaticFile/true/hello.png
 	private Definition blobDef(URI uri, String key, boolean isSt, String mimeType) {
-	    // hashedBlob: "^.*_[a-h0-9]{32}\\..*$"
+		// val hashedBlob = Pattern.compile("^.*/(.*?)_([a-h0-9]{32})(\\..*$)")
+		// val key = "/telmore/img/tlmOGLogo_400x400_84a759a5c4f0ac92773dc221150154c8.png"
 		Simple def = new Simple(false, //
 				Definition.SatelliteContext.SATELLITE_SERVER, //
 				Definition.ContainerType.SERVLET, //
@@ -189,7 +191,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
 		Matcher m = hashedBlob.matcher(key);
 		boolean isHash = m.find();
-		String blobwhere = isSt? (isHash? m.group(1) : key) : key ;
+		String blobwhere = isSt? (isHash? m.group(2) : key) : key ;
 		String blobcol = isSt? "url" : "urldata";
 		String blobkey = isSt ? (isHash ? "hash" : "filepath") : "id";
 		String blobtable = isSt ? "Static" : "MungoBlobs" ;
@@ -202,6 +204,11 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		def.setQueryStringParameter("ssbinary", "true");
 		//def.setQueryStringParameter("blobnocache", "true");
 		def.setQueryStringParameter("blobheader", blobheader);
+		if(isHash) {
+			String filename = m.group(1)+m.group(3);
+			def.setQueryStringParameter("blobheadername1", "Content-Disposition");
+			def.setQueryStringParameter("blobheadervalue1", "attachment; filename="+filename);
+		}
 
 		if (log.trace())
 			log.trace("/cs/BlobServer?blobcol=%s&blobkey=%s&blobwhere=%s&blobtable=%s&blobheader=%s",
