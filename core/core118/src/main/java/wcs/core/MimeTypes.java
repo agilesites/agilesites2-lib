@@ -1,10 +1,11 @@
 package wcs.core;
 
 import java.util.HashMap;
-
+import java.io.FileReader;
+import java.util.Properties;
 /**
  * Mime Type Map
- * 
+ *
  * @author msciab
  *
  */
@@ -502,6 +503,7 @@ public class MimeTypes {
 			put("sv4crc", "application/x-sv4crc");
 			put("svf", "image/vnd.dwg");
 			// put("svf","image/x-dwg");
+			put("svg", "image/svg+xml");
 			put("svr", "application/x-world");
 			// put("svr","x-world/x-svr");
 			put("swf", "application/x-shockwave-flash");
@@ -658,10 +660,27 @@ public class MimeTypes {
 			// put("zip","multipart/x-zip");
 			put("zoo", "application/octet-stream");
 			put("zsh", "text/x-script.zsh");
-		}
+
+			// load extra mime types
+			//System.setProperty("telmore.extra-mime", "extra-mime.properties")
+			String extraMime = System.getProperty("telmore.extra-mime");
+			if(extraMime != null) {
+						Properties extra = new Properties();
+						try {
+							FileReader fr = new FileReader(extraMime);
+							extra.load(fr);
+							fr.close();
+							for(String k: extra.stringPropertyNames()) {
+								//System.out.println(k+"="+extra.get(k));
+								put(k,extra.getProperty(k));
+							}
+						} catch(Exception ex) {
+							ex.printStackTrace();
+						}
+				}
+			}
 	};
 
-	
 	public static String mimeType(String filename) {
 		int pos = filename.lastIndexOf(".");
 		String ext = filename;
@@ -672,4 +691,9 @@ public class MimeTypes {
 			return "application%2Funknown";
 		return res;
 	}
+
+	public static void main(String[] args) {
+		System.out.println(mimeType(args[0]));
+	}
+
 }
