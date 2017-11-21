@@ -82,7 +82,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	public void setProperties(Properties prp) {
 		// log.debug("Satellite.setProperties=" + prp);
 		initStaticSet(prp.getProperty("agilesites.statics"));
-	
+
 		try {
 			// look for sites
 			Enumeration<?> keys = prp.keys();
@@ -179,7 +179,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 	// http://localhost:8080/ss/Satellite?blobkey=id&blobnocache=true&blobwhere=1251873748810&blobheader=image%2Fpng&blobcol=urldata&blobtable=StaticFile
 	// http://localhost:8080/ss/Satellite/urldata/id/1251873748810/StaticFile/true/hello.png
 	private Definition blobDef(URI uri, String key, boolean isSt, String mimeType) {
-		// val hashedBlob = Pattern.compile("^.*/(.*?)_([a-h0-9]{32})(\\..*$)")
+		// val hashedBlob = Pattern.compile("^.*/(.*?)_([a-h0-9]{32})(\\..*$)");
 		// val key = "/telmore/img/tlmOGLogo_400x400_84a759a5c4f0ac92773dc221150154c8.png"
 		Simple def = new Simple(false, //
 				Definition.SatelliteContext.SATELLITE_SERVER, //
@@ -205,7 +205,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 		//def.setQueryStringParameter("blobnocache", "true");
 		def.setQueryStringParameter("blobheader", blobheader);
 		if(isHash) {
-			String filename = m.group(1)+m.group(3);
+			String filename = m.group(1)+"_"+m.group(2)+m.group(3);
 			def.setQueryStringParameter("blobheadername1", "Content-Disposition");
 			def.setQueryStringParameter("blobheadervalue1", "attachment; filename="+filename);
 		}
@@ -220,7 +220,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
 	/**
 	 * Disassemble blob - null if it is not possible
-	 * 
+	 *
 	 * @param subpath without the site prefix
 	 * @return
 	 */
@@ -239,7 +239,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 
 	/**
 	 * Disassemble static - null if it is not possible
-	 * 
+	 *
 	 * @param path including the site prefix
 	 *
 	 * @return
@@ -296,7 +296,7 @@ public class Assembler implements com.fatwire.cs.core.uri.Assembler {
 					log.debug("*** static found ***");
 				return result;
 			}
-	
+
 			// then check for site
 			if (siteName.containsKey(site) && sitePrefix.containsKey(site)) {
 				if (log.debug())
