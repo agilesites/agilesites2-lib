@@ -17,6 +17,7 @@ def settingsByVersion(ver: String) = bintrayPublishSettings ++ Seq(
   publishMavenStyle := true,
   unmanagedSourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "java",
   unmanagedResourceDirectories in Compile += baseDirectory.value.getParentFile / "src" / "main" / "resources",
+  javacOptions ++= Seq("-g", "-Xlint:unchecked", "-source", "1.7", "-target", "1.7"),
   libraryDependencies ++= Seq(
        // "com.novocode" % "junit-interface" % "0.9" % "test",
        // "org.xeustechnologies" % "jcl-core" % "2.2.1",

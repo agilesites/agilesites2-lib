@@ -29,18 +29,12 @@ public class Loader {
 
     private File jarDir; // classical jar spool dir
     private File jarAssetDir; // jar storage dir
-    private File tmpDir;
     private File libDir;
     private long lastCheck = 0;
     private long jarTimeStamp;
 
     private ClassLoader parentClassLoader;
     private ClassLoader currentClassLoader = null;
-    private File currentSpoolDir;
-
-    public String getCurrentSpoolDir() {
-        return currentSpoolDir.getAbsolutePath();
-    }
 
     /**
      * Build a loader
@@ -52,29 +46,10 @@ public class Loader {
         jarDir = dir;
         jarAssetDir = assetDir;
         libDir = new File(dir, "lib");
-        try {
-            tmpDir = createTempDirectory("agilesites");
-            tmpDir.mkdirs();
-        } catch (IOException e) {
-            log.error("cannot create temp dir - nothing will work...");
-        }
-
-        // reset spool dir to a known state
-        cleanup();
 
         parentClassLoader = cl;
         currentClassLoader = null;
-        currentSpoolDir = null;
         lastCheck = System.currentTimeMillis();
-    }
-
-    private void cleanup() {
-        for (File sdir : tmpDir.listFiles(onlyTempDirs)) {
-            if (currentSpoolDir != null
-                    && !currentSpoolDir.getAbsolutePath().equals(
-                    sdir.getAbsolutePath()))
-                removeDir(sdir);
-        }
     }
 
     /**
@@ -91,63 +66,7 @@ public class Loader {
         return parentClassLoader;
     }
 
-    private boolean copy(File src, File dst) {
-        try {
-            if (dst.exists())
-                FileUtils.copyFile(src, dst, false);
-                //Files.copy(ps, pd, StandardCopyOption.REPLACE_EXISTING);
-            else
-                FileUtils.copyFile(src, dst, false);
-                //Files.copy(ps, pd, StandardCopyOption.COPY_ATTRIBUTES);
-            dst.setLastModified(System.currentTimeMillis());
-            if (log.trace())
-                log.trace("copied %s", dst.getAbsolutePath());
-            return true;
-        } catch (IOException e) {
-            log.error(e, "Loader.copyJar");
-            return false;
-        }
-    }
-
-    private File copyJarsToTempDir(File[] jars) throws IOException {
-        File spoolDir = new File(tmpDir, wcs.Api.tmp());
-        if (!spoolDir.exists())
-            spoolDir.mkdirs();
-
-        // copy files in the spool dir
-        for (File source : jars) {
-            if (source.isDirectory())
-                continue;
-            if (!source.getName().toLowerCase().endsWith(".jar"))
-                continue;
-
-            File dest = new File(spoolDir, source.getName());
-            if (copy(source, dest)) {
-                if (log.trace())
-                    log.trace("spooling (update) %s", source.getName());
-            } else
-                log.error("cannot copy %s", dest);
-        }
-        return spoolDir;
-    }
-
-    private void removeDir(File dir) {
-        if (dir == null || !dir.exists())
-            return;
-        for (File file : dir.listFiles()) {
-            if (!file.delete()) {
-                log.warn("cannot delete old file %s", file.getAbsolutePath());
-                file.deleteOnExit(); // try to delete on exit anyway
-            } else if (log.trace())
-                log.trace("removing %s", file.getAbsolutePath());
-        }
-        if (!dir.delete()) {
-            log.warn("cannot delete old file %s", dir.getAbsolutePath());
-            dir.deleteOnExit(); // try to delete on exit anyway
-        }
-    }
-
-    public static void orderByTimestap(List<File> files) {
+    public static void orderByTimestamp(List<File> files) {
          /* sort the list putting the file modified more recently first in the list */
         Collections.sort(files, new Comparator<File>() {
             @Override
@@ -159,7 +78,7 @@ public class Loader {
 
     // return the list of the urls , ordered by timestap
     private URL[] toUrlArray(List<File> files) throws MalformedURLException {
-        orderByTimestap(files);
+        orderByTimestamp(files);
         URL[] res = new URL[files.size()];
         int i = 0;
         for (File file : files)
@@ -180,9 +99,10 @@ public class Loader {
         if(currentClassLoader==null)
           jars = getJarsIfSomeIsModifiedAfterInterval(0);
         else
-            jars = getJarsIfSomeIsModifiedAfterInterval(interval);
+          jars = getJarsIfSomeIsModifiedAfterInterval(interval);
 
-        if(jars==null)
+        // curren
+        if(jars==null || jars.length > 1)
             if(currentClassLoader==null)
                 return parentClassLoader;
             else
@@ -191,13 +111,12 @@ public class Loader {
         // update classloader
         synchronized (this) {
             try {
-                // copy jars to a new spooldir
-                File newSpoolDir = copyJarsToTempDir(jars);
-
                 // create a new classloader
                 List<File> list = new LinkedList<File>();
-                for (File f : newSpoolDir.listFiles(onlyJars))
+                for (File f : jars) {
                     list.add(f);
+                    log.info("updated jar %s", f);
+                }
 
                 // adding lib jars
                 for (File f : libDir.listFiles(onlyJars)) {
@@ -212,20 +131,14 @@ public class Loader {
 
                 if (log.debug()) {
                     //System.out.println("Loader: reloader " + newSpoolDir);
-                    log.debug("reloaded from %s", newSpoolDir.toString());
                     if (log.trace()) {
                         for (File f : list)
                             log.trace("jar %s", f.toString());
                     }
                 }
-
                 // create a class loader according the current choice
-
                 //log.error("using JCL classloader without parent");
                 currentClassLoader = new JarClassLoader(toUrlArray(list));
-                currentSpoolDir = newSpoolDir;
-                cleanup();
-
             } catch (Exception ex) {
                 log.error(ex, "[Loader.getClassLoader]");
             }
@@ -377,15 +290,5 @@ public class Loader {
             log.error(ex, "[Loader.loadClass]");
             return null;
         }
-    }
-
-
-    private static File createTempDirectory(String prefix) throws IOException {
-
-        String tmpDir = System.getProperty("java.io.tmpdir");
-        final File tmp = new File(tmpDir + "/" + prefix);
-        tmp.mkdir();
-        FileUtils.forceDeleteOnExit(tmp);
-        return tmp;
     }
 }
